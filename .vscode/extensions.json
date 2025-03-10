@@ -1,0 +1,21 @@
+{
+  "recommendations": [
+    "dbaeumer.vscode-eslint",
+    "esbenp.prettier-vscode",
+    "dsznajder.es7-react-js-snippets",
+    "christian-kohler.path-intellisense",
+    "formulahendry.auto-rename-tag",
+    "editorconfig.editorconfig",
+    "github.copilot",
+    "csstools.postcss",
+    "naumovs.color-highlight",
+    "wix.vscode-import-cost",
+    "ritwickdey.liveserver",
+    "ms-vscode.vscode-typescript-next",
+    "eamodio.gitlens",
+    "ms-vscode.vscode-js-profile-flame",
+    "ms-vsliveshare.vsliveshare",
+    "streetsidesoftware.code-spell-checker"
+  ],
+  "unwantedRecommendations": []
+}

@@ -1,4 +1,4 @@
-# CSK Scoreboard
+# Canoe Scoreboard
 
 A modern, responsive web application for displaying canoe competition scoreboards, compatible with the existing QML control application. This application is designed to work with different display types, including standard horizontal monitors, vertical displays, and custom LED walls.
 
