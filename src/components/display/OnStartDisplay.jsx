@@ -1,13 +1,31 @@
 // OnStartDisplay.jsx
-// Displays competitors at the start
+// Displays competitors at the start with configurable assets
 
-import React from 'react';
-import { useLayout } from '../core/LayoutManager';
-import '../../styles/components/OnStartDisplay.css';
+import React, { useState, useEffect } from "react";
+import { useLayout } from "../core/LayoutManager";
+import {
+  getConfiguredAssetPath,
+  getAssetPath,
+  handleImageError,
+} from "../../utils/assetUtils";
+import "../../styles/components/OnStartDisplay.css";
 
 function OnStartDisplay({ data, visible }) {
   const { displayType } = useLayout();
-  
+  const [bibSrc, setBibSrc] = useState("/assets/bib.png");
+
+  // Load bib image from configuration
+  useEffect(() => {
+    getConfiguredAssetPath("bib")
+      .then((path) => {
+        setBibSrc(path);
+      })
+      .catch(() => {
+        // Fallback to default path if configuration fails
+        setBibSrc("/assets/bib.png");
+      });
+  }, []);
+
   if (!visible || !data || data.length === 0) {
     return null;
   }
@@ -15,7 +33,7 @@ function OnStartDisplay({ data, visible }) {
   // Format time to start
   const formatTimeToStart = (seconds) => {
     const stsToMinutes = seconds / 60;
-    
+
     if (stsToMinutes < 1) {
       return `${seconds} sec`;
     } else if (stsToMinutes < 60) {
@@ -27,17 +45,22 @@ function OnStartDisplay({ data, visible }) {
 
   return (
     <div className={`on-start-display ${displayType}`}>
-      <div className="start-header">
-        Starting Soon
-      </div>
-      
+      <div className="start-header">Starting Soon</div>
+
       <div className="start-body">
         {data.map((competitor, index) => (
           <div key={`start-${index}`} className="start-row">
-            <div className="start-bib">
+            <div
+              className="start-bib"
+              style={{
+                backgroundImage: `url(${bibSrc})`,
+                backgroundRepeat: "no-repeat",
+                backgroundSize: "100%",
+              }}
+            >
               {competitor.Bib}
             </div>
-            
+
             <div className="start-time">
               {formatTimeToStart(competitor.sts)}
             </div>

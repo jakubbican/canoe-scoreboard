@@ -1,38 +1,58 @@
 // App.jsx
-// Updated to include InfoText in the stacked components
+// Updated with asset preloading and improved asset management
 
-import React, { useState, useEffect, useMemo } from 'react';
-import { WebSocketProvider, useWebSocket } from './components/core/WebSocketClient';
-import { LayoutProvider, useLayout } from './components/core/LayoutManager';
-import CurrentCompetitor from './components/display/CurrentCompetitor';
-import ResultsList from './components/display/ResultsList';
-import Top10Display from './components/display/Top10Display';
-import OnCourseDisplay from './components/display/OnCourseDisplay';
-import OnStartDisplay from './components/display/OnStartDisplay';
-import ScheduleDisplay from './components/display/ScheduleDisplay';
-import EventInfo, { InfoText } from './components/display/EventInfo';
-import TimeDisplay from './components/display/TimeDisplay';
-import Footer from './components/display/Footer';
-import ConnectionStatus from './components/ui/ConnectionStatus';
-import ConfigPanel from './components/config/ConfigPanel';
+import React, { useState, useEffect, useMemo } from "react";
+import {
+  WebSocketProvider,
+  useWebSocket,
+} from "./components/core/WebSocketClient";
+import { LayoutProvider, useLayout } from "./components/core/LayoutManager";
+import { preloadConfiguredAssets } from "./utils/assetUtils";
+import CurrentCompetitor from "./components/display/CurrentCompetitor";
+import ResultsList from "./components/display/ResultsList";
+import Top10Display from "./components/display/Top10Display";
+import OnCourseDisplay from "./components/display/OnCourseDisplay";
+import OnStartDisplay from "./components/display/OnStartDisplay";
+import ScheduleDisplay from "./components/display/ScheduleDisplay";
+import EventInfo, { InfoText } from "./components/display/EventInfo";
+import TimeDisplay from "./components/display/TimeDisplay";
+import Footer from "./components/display/Footer";
+import ConnectionStatus from "./components/ui/ConnectionStatus";
+import ConfigPanel from "./components/config/ConfigPanel";
 
 // Get WebSocket server URL from URL parameter or default
 const getServerUrl = () => {
   const params = new URLSearchParams(window.location.search);
-  return params.get('server') || 'ws://localhost:8081/';
+  return params.get("server") || "ws://localhost:8081/";
 };
 
 // Determine if we should show the config panel
 const shouldShowConfig = () => {
   const params = new URLSearchParams(window.location.search);
-  return params.get('config') === 'true';
+  return params.get("config") === "true";
 };
 
 function App() {
   // Use initial state to avoid unnecessary state updates
   const [showConfig, setShowConfig] = useState(shouldShowConfig());
   const [serverUrl, setServerUrl] = useState(getServerUrl());
-  
+  const [assetsPreloaded, setAssetsPreloaded] = useState(false);
+
+  // Preload configured assets on component mount
+  useEffect(() => {
+    // Preload assets from configuration
+    preloadConfiguredAssets()
+      .then(() => {
+        console.log("Assets preloaded successfully");
+        setAssetsPreloaded(true);
+      })
+      .catch((error) => {
+        console.warn("Asset preloading failed, will load on demand:", error);
+        // Still set as true to continue app loading even if preloading fails
+        setAssetsPreloaded(true);
+      });
+  }, []);
+
   // Handle server URL change
   const handleServerChange = (newUrl) => {
     setServerUrl(newUrl);
@@ -40,34 +60,55 @@ function App() {
   };
 
   // Use a memoized WebSocketProvider to prevent unnecessary reconnections
-  const webSocketProvider = useMemo(() => (
-    <WebSocketProvider serverUrl={serverUrl}>
-      <LayoutProvider>
-        <ScoreboardContent />
-        {showConfig && (
-          <ConfigPanel 
-            onClose={() => setShowConfig(false)}
-            currentServer={serverUrl}
-            onServerChange={handleServerChange}
-          />
-        )}
-        <ConnectionStatus />
-      </LayoutProvider>
-    </WebSocketProvider>
-  ), [serverUrl, showConfig]);
-  
+  const webSocketProvider = useMemo(
+    () => (
+      <WebSocketProvider serverUrl={serverUrl}>
+        <LayoutProvider>
+          <ScoreboardContent />
+          {showConfig && (
+            <ConfigPanel
+              onClose={() => setShowConfig(false)}
+              currentServer={serverUrl}
+              onServerChange={handleServerChange}
+            />
+          )}
+          <ConnectionStatus />
+        </LayoutProvider>
+      </WebSocketProvider>
+    ),
+    [serverUrl, showConfig]
+  );
+
   // Handle keyboard shortcuts
   useEffect(() => {
     const handleKeyPress = (e) => {
       // Alt+C to toggle config panel
-      if (e.altKey && e.key === 'c') {
-        setShowConfig(prev => !prev);
+      if (e.altKey && e.key === "c") {
+        setShowConfig((prev) => !prev);
       }
     };
-    
-    window.addEventListener('keydown', handleKeyPress);
-    return () => window.removeEventListener('keydown', handleKeyPress);
+
+    window.addEventListener("keydown", handleKeyPress);
+    return () => window.removeEventListener("keydown", handleKeyPress);
   }, []);
+
+  // Show loading indicator while assets are being preloaded
+  if (!assetsPreloaded) {
+    return (
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          height: "100vh",
+          fontFamily: "Rajdhani, sans-serif",
+          fontSize: "24px",
+        }}
+      >
+        Loading assets...
+      </div>
+    );
+  }
 
   return webSocketProvider;
 }
@@ -84,76 +125,55 @@ function ScoreboardContent() {
     onStartData,
     dayTimeData,
     infoTextData,
-    titleData
+    titleData,
   } = useWebSocket();
 
   return (
     <>
-      <EventInfo 
-        title={titleData.text} 
+      <EventInfo
+        title={titleData.text}
         infoText={null} // No info text here, it's moved to stacked components
-        visibleTitle={isVisible('title')}
+        visibleTitle={isVisible("title")}
         visibleInfo={false} // Always false here
-        visibleTopBar={isVisible('topBar')}
+        visibleTopBar={isVisible("topBar")}
       />
-      
-      <TimeDisplay 
-        time={dayTimeData.time} 
-        visible={isVisible('dayTime')} 
-      />
-      
+
+      <TimeDisplay time={dayTimeData.time} visible={isVisible("dayTime")} />
+
       {/* Flexbox container for vertical stacking - now including InfoText */}
       <div className="stacked-components">
         {/* InfoText is now part of the stacked components */}
-        {isVisible('infoText') && (
-          <InfoText 
-            infoText={infoTextData.text}
-            visible={true}
-          />
+        {isVisible("infoText") && (
+          <InfoText infoText={infoTextData.text} visible={true} />
         )}
-        
-        {isVisible('current') && (
-          <CurrentCompetitor 
-            data={competitorData} 
-            visible={true}
-          />
+
+        {isVisible("current") && (
+          <CurrentCompetitor data={competitorData} visible={true} />
         )}
-        
-        {isVisible('onCourse') && (
-          <OnCourseDisplay 
-            data={onCourseData} 
-            visible={true}
-          />
+
+        {isVisible("onCourse") && (
+          <OnCourseDisplay data={onCourseData} visible={true} />
         )}
-        
-        {isVisible('top') && (
-          <ResultsList 
-            data={topResults} 
+
+        {isVisible("top") && (
+          <ResultsList
+            data={topResults}
             visible={true}
             highlightBib={parseInt(topResults.HighlightBib) || 0}
           />
         )}
       </div>
-      
+
       {/* Other components */}
-      <Top10Display 
-        data={top10Results} 
-        visible={isVisible('top10')} 
-      />
-      
-      <OnStartDisplay 
-        data={onStartData} 
-        visible={isVisible('onStart')} 
-      />
-      
-      <ScheduleDisplay 
-        data={scheduleData} 
-        visible={isVisible('schedule')} 
-      />
-      
-      <Footer 
-        visible={isVisible('footer')} 
-        className={!isVisible('footer') ? 'hidden' : ''}
+      <Top10Display data={top10Results} visible={isVisible("top10")} />
+
+      <OnStartDisplay data={onStartData} visible={isVisible("onStart")} />
+
+      <ScheduleDisplay data={scheduleData} visible={isVisible("schedule")} />
+
+      <Footer
+        visible={isVisible("footer")}
+        className={!isVisible("footer") ? "hidden" : ""}
       />
     </>
   );
