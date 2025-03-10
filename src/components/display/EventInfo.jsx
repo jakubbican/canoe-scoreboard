@@ -78,15 +78,13 @@ function EventInfo({
                 onError={(e) => handleImageError(e, getAssetPath("logo"))}
               />
             </div>
-            {displayType !== "ledwall" && (
-              <div className="partners">
-                <img
-                  src={partnersSrc}
-                  alt="Partners"
-                  onError={(e) => handleImageError(e, getAssetPath("partners"))}
-                />
-              </div>
-            )}
+            <div className="partners">
+              <img
+                src={partnersSrc}
+                alt="Partners"
+                onError={(e) => handleImageError(e, getAssetPath("partners"))}
+              />
+            </div>
           </div>
         )}
 

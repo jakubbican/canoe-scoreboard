@@ -55,7 +55,11 @@
   letter-spacing: 1px;
   text-transform: uppercase;
   z-index: 15;
-  background: linear-gradient(135deg, var(--text-primary) 0%, var(--accent-teal) 100%);
+  background: linear-gradient(
+    135deg,
+    var(--text-primary) 0%,
+    var(--accent-teal) 100%
+  );
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   animation: titleGlow 3s infinite alternate;
@@ -66,8 +70,12 @@
 }
 
 @keyframes titleGlow {
-  from { text-shadow: 0 0 10px rgba(138, 43, 226, 0.7); }
-  to { text-shadow: 0 0 20px rgba(138, 43, 226, 1); }
+  from {
+    text-shadow: 0 0 10px rgba(138, 43, 226, 0.7);
+  }
+  to {
+    text-shadow: 0 0 20px rgba(138, 43, 226, 1);
+  }
 }
 
 /* Updated Info text marquee to fit into stacked components */
@@ -77,7 +85,7 @@
   z-index: 15;
   box-sizing: border-box;
   padding: 0;
-  margin: 0 !important; 
+  margin: 0 !important;
   height: 45px !important;
   min-height: 0 !important;
   background-color: rgba(18, 18, 18, 0.7);
@@ -168,7 +176,7 @@
 
 /* LED wall layout specifics */
 .top-bar.ledwall {
-  justify-content: flex-start;
+  justify-content: space-between;
 }
 
 .top-bar.ledwall .logo {
@@ -182,7 +190,18 @@
 }
 
 .top-bar.ledwall .partners {
-  display: none;
+  padding: 4px;
+  margin-right: 8px;
+  height: 90%;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.top-bar.ledwall .partners img {
+  max-width: 120px;
+  max-height: 45px;
+  object-fit: contain;
 }
 
 .event-title.ledwall {
