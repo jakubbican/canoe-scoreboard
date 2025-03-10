@@ -259,7 +259,7 @@ For optimal display across different screen sizes, use these recommended dimensi
 | Asset        | Recommended Size | Format | Description                                          |
 | ------------ | ---------------- | ------ | ---------------------------------------------------- |
 | logo.png     | 300px × 80px     | PNG    | Main logo in header area                             |
-| partners.png | 800px × 60px     | PNG    | Partner logos in header area                         |
+| partners.png | 300px × 60px     | PNG    | Partner logos in header area                         |
 | footer.png   | 1920px × 120px   | PNG    | Footer with sponsor logos                            |
 | bib.png      | 80px × 80px      | PNG    | Background for competitor bib numbers                |
 | flags/\*.bmp | 60px × 40px      | BMP    | Country flags (named by country code, e.g., CZE.bmp) |

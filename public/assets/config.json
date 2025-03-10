@@ -1,12 +1,12 @@
 {
   "assets": {
     "logo": {
-      "path": "skvscb_logo_genzcolor.svg",
+      "path": "skvscb_logo_orig.svg",
       "type": "image/svg+xml",
       "description": "Main logo displayed in the top bar"
     },
     "partners": {
-      "path": "partners.png",
+      "path": "logo-csk.png",
       "type": "image/png",
       "description": "Partners/sponsors logos displayed in the top bar"
     },
