@@ -3,40 +3,40 @@
 
 /* Define local fonts */
 @font-face {
-  font-family: 'Rajdhani';
-  src: url('../fonts/Rajdhani-Light.ttf') format('truetype');
+  font-family: "Rajdhani";
+  src: url("../fonts/Rajdhani-Light.ttf") format("truetype");
   font-weight: 300;
   font-style: normal;
   font-display: swap;
 }
 
 @font-face {
-  font-family: 'Rajdhani';
-  src: url('../fonts/Rajdhani-Regular.ttf') format('truetype');
+  font-family: "Rajdhani";
+  src: url("../fonts/Rajdhani-Regular.ttf") format("truetype");
   font-weight: 400;
   font-style: normal;
   font-display: swap;
 }
 
 @font-face {
-  font-family: 'Rajdhani';
-  src: url('../fonts/Rajdhani-Medium.ttf') format('truetype');
+  font-family: "Rajdhani";
+  src: url("../fonts/Rajdhani-Medium.ttf") format("truetype");
   font-weight: 500;
   font-style: normal;
   font-display: swap;
 }
 
 @font-face {
-  font-family: 'Rajdhani';
-  src: url('../fonts/Rajdhani-SemiBold.ttf') format('truetype');
+  font-family: "Rajdhani";
+  src: url("../fonts/Rajdhani-SemiBold.ttf") format("truetype");
   font-weight: 600;
   font-style: normal;
   font-display: swap;
 }
 
 @font-face {
-  font-family: 'Rajdhani';
-  src: url('../fonts/Rajdhani-Bold.ttf') format('truetype');
+  font-family: "Rajdhani";
+  src: url("../fonts/Rajdhani-Bold.ttf") format("truetype");
   font-weight: 700;
   font-style: normal;
   font-display: swap;
@@ -44,43 +44,47 @@
 
 :root {
   /* Color palette - Modern Gen-Z Dark Theme */
-  --primary-color: #121212;       /* Near-black background */
-  --primary-light: #1E1E1E;       /* Slightly lighter background */
-  --secondary-color: #E0E0E0;     /* Light gray (instead of pure white) */
-  --accent-color: #8A2BE2;        /* Vibrant purple */
-  --highlight-color: #FF6B8B;     /* Coral pink */
-  --error-color: #FF4563;         /* Bright red */
-  
+  --primary-color: #121212; /* Near-black background */
+  --primary-light: #1e1e1e; /* Slightly lighter background */
+  --secondary-color: #e0e0e0; /* Light gray (instead of pure white) */
+  --accent-color: #8a2be2; /* Vibrant purple */
+  --highlight-color: #ff6b8b; /* Coral pink */
+  --error-color: #ff4563; /* Bright red */
+
   /* Text colors */
-  --text-primary: #F5F5F5;        /* Off-white text */
-  --text-secondary: #121212;      /* Dark text */
-  
+  --text-primary: #f5f5f5; /* Off-white text */
+  --text-secondary: #121212; /* Dark text */
+
   /* Additional accent colors for Gen-Z vibes */
-  --accent-teal: #00CED1;         /* Bright teal */
-  --accent-yellow: #FFA400;       /* Amber yellow */
-  --accent-green: #4EE58B;        /* Bright mint green */
-  --accent-blue: #3498FF;         /* Electric blue */
-  --accent-gradient: linear-gradient(135deg, var(--accent-color) 0%, var(--accent-blue) 100%); /* Purple to blue gradient */
-  
+  --accent-teal: #00ced1; /* Bright teal */
+  --accent-yellow: #ffa400; /* Amber yellow */
+  --accent-green: #4ee58b; /* Bright mint green */
+  --accent-blue: #3498ff; /* Electric blue */
+  --accent-gradient: linear-gradient(
+    135deg,
+    var(--accent-color) 0%,
+    var(--accent-blue) 100%
+  ); /* Purple to blue gradient */
+
   /* Font sizes - Default values for horizontal layout */
   --header-size: 48px;
   --body-size: 32px;
   --small-size: 24px;
-  
+
   /* Spacing */
   --spacing-unit: 10px;
-  
+
   /* Layout dimensions - Default values for horizontal layout */
   --content-width: 1920px;
   --content-height: 1080px;
-  
+
   /* Results grid template - Default values for horizontal layout */
   --results-grid: 120px 80px 1fr 80px 70px 150px 150px; /* Increased width for time columns */
   --row-height: 80px;
-  
+
   /* Font family */
-  --font-primary: 'Rajdhani', 'Arial', sans-serif;
-  --font-display: 'Rajdhani', 'Arial', sans-serif;
+  --font-primary: "Rajdhani", "Arial", sans-serif;
+  --font-display: "Rajdhani", "Arial", sans-serif;
 }
 
 /* CSS Reset */
@@ -138,8 +142,8 @@ body {
   --content-width: 768px;
   --content-height: 384px;
   --header-size: 32px; /* Increased from 30px for better visibility from distance */
-  --body-size: 28px;   /* Increased from 24px for better visibility from distance */
-  --small-size: 24px;  /* Increased from 20px for better visibility from distance */
+  --body-size: 28px; /* Increased from 24px for better visibility from distance */
+  --small-size: 24px; /* Increased from 20px for better visibility from distance */
   --spacing-unit: 6px;
   --results-grid: 60px 55px 1fr 70px 60px 110px 90px; /* Adjusted columns widths */
   --row-height: 44px;
@@ -182,7 +186,7 @@ body {
 }
 
 .neon-border::after {
-  content: '';
+  content: "";
   position: absolute;
   top: 0;
   left: 0;
@@ -196,28 +200,56 @@ body {
 }
 
 @keyframes fadeIn {
-  from { opacity: 0; transform: translateY(10px); }
-  to { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 @keyframes fadeOut {
-  from { opacity: 1; transform: translateY(0); }
-  to { opacity: 0; transform: translateY(-10px); }
+  from {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
 }
 
 @keyframes slideInRight {
-  from { transform: translateX(100%); opacity: 0; }
-  to { transform: translateX(0); opacity: 1; }
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
 }
 
 @keyframes slideOutLeft {
-  from { transform: translateX(0); opacity: 1; }
-  to { transform: translateX(-100%); opacity: 0; }
+  from {
+    transform: translateX(0);
+    opacity: 1;
+  }
+  to {
+    transform: translateX(-100%);
+    opacity: 0;
+  }
 }
 
 @keyframes neonGlow {
-  from { box-shadow: 0 0 5px var(--accent-color), inset 0 0 5px var(--accent-color); }
-  to { box-shadow: 0 0 20px var(--accent-color), inset 0 0 10px var(--accent-color); }
+  from {
+    box-shadow: 0 0 5px var(--accent-color), inset 0 0 5px var(--accent-color);
+  }
+  to {
+    box-shadow: 0 0 20px var(--accent-color), inset 0 0 10px var(--accent-color);
+  }
 }
 
 /* Config panel */
@@ -264,7 +296,7 @@ body {
   letter-spacing: 0.5px;
 }
 
-.config-panel input, 
+.config-panel input,
 .config-panel select {
   width: 100%;
   padding: 10px;
@@ -277,7 +309,7 @@ body {
   box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.2);
 }
 
-.config-panel input:focus, 
+.config-panel input:focus,
 .config-panel select:focus {
   border-color: var(--accent-color);
   outline: none;
@@ -310,17 +342,28 @@ body {
   box-shadow: 0 2px 5px rgba(138, 43, 226, 0.3);
 }
 
-/* Connection status indicator - Moved to upper right */
+/* Connection status indicator - Base styles */
 .connection-status {
   position: fixed;
-  top: 40px; /* Position below time display */
-  right: 20px; /* Align with right edge */
-  width: 15px;
-  height: 15px;
+  top: 4px; /* Default position below time display */
+  right: 4px; /* Default align with right edge */
+  width: 8px;
+  height: 8px;
   border-radius: 50%;
   z-index: 1000;
   padding: 0;
   transition: all 0.3s ease;
+}
+
+/* Special positioning for ledwall layout - we add a class directly in ConnectionStatus component */
+.layout-ledwall ~ .connection-status,
+.connection-status.ledwall-mode {
+  top: 5px;
+  left: 7px; /* Move to top-left corner for ledwall */
+  right: auto;
+  width: 8px; /* Smaller size */
+  height: 48px; /* Smaller size */
+  opacity: 0.8; /* Slightly transparent */
 }
 
 .connection-status.connected {
@@ -338,15 +381,33 @@ body {
 }
 
 @keyframes pulseLight {
-  0% { opacity: 0.7; box-shadow: 0 0 5px var(--accent-green); }
-  50% { opacity: 1; box-shadow: 0 0 15px var(--accent-green); }
-  100% { opacity: 0.7; box-shadow: 0 0 5px var(--accent-green); }
+  0% {
+    opacity: 0.7;
+    box-shadow: 0 0 5px var(--accent-green);
+  }
+  50% {
+    opacity: 1;
+    box-shadow: 0 0 15px var(--accent-green);
+  }
+  100% {
+    opacity: 0.7;
+    box-shadow: 0 0 5px var(--accent-green);
+  }
 }
 
 @keyframes disconnectedLight {
-  0% { opacity: 0.7; box-shadow: 0 0 5px var(--error-color); }
-  50% { opacity: 1; box-shadow: 0 0 15px var(--error-color); }
-  100% { opacity: 0.7; box-shadow: 0 0 5px var(--error-color); }
+  0% {
+    opacity: 0.7;
+    box-shadow: 0 0 5px var(--error-color);
+  }
+  50% {
+    opacity: 1;
+    box-shadow: 0 0 15px var(--error-color);
+  }
+  100% {
+    opacity: 0.7;
+    box-shadow: 0 0 5px var(--error-color);
+  }
 }
 
 .connection-status .indicator,
@@ -364,9 +425,9 @@ body {
 }
 
 /* Performance optimizations */
-.fade-in, 
-.fade-out, 
-.slide-in-right, 
+.fade-in,
+.fade-out,
+.slide-in-right,
 .slide-out-left,
 .competitor-pen,
 .event-title,
@@ -435,7 +496,9 @@ body {
 }
 
 .stacked-components .on-course-display:not(.ledwall):first-child,
-.stacked-components .info-text:not(.ledwall) + .on-course-display:not(.ledwall) {
+.stacked-components
+  .info-text:not(.ledwall)
+  + .on-course-display:not(.ledwall) {
   margin-top: 42px !important; /* Space for tab */
 }
 
@@ -460,7 +523,6 @@ body {
   margin-top: 10px !important; /* Less space for LED wall */
   margin-bottom: 2px !important;
 }
-
 
 .stacked-components .info-text.ledwall:first-child,
 .stacked-components .current-competitor.ledwall:first-child,

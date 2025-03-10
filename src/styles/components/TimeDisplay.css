@@ -3,21 +3,23 @@
 
 .time-display {
   position: absolute;
-  font-family: var(--font-primary, 'Rajdhani', Arial, sans-serif);
+  font-family: var(--font-primary, "Rajdhani", Arial, sans-serif);
   font-weight: 600;
   z-index: 20;
   background-color: transparent;
   color: var(--accent-yellow);
   padding: 2px 2px;
   border: none;
-  top: 8px;
-  right: 8px;
+  top: 90px;
+  right: 20px;
   text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
 }
 
 /* Horizontal layout specifics */
 .time-display.horizontal {
   font-size: 32px;
+  top: 40px;
+  right: 130px;
 }
 
 /* Vertical layout specifics */
@@ -27,7 +29,10 @@
 
 /* LED wall layout specifics */
 .time-display.ledwall {
-  font-size: 24px;
-  top: 5px;
-  right: 10px;
+  font-size: 36px;
+  top: 16px;
+  left: auto; /* Repositioned to near the title */
+  right: 100px; /* Remove right positioning */
+  color: var(--accent-yellow);
+  text-shadow: 0 0 8px rgba(255, 164, 0, 0.7);
 }

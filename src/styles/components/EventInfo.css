@@ -206,7 +206,7 @@
 
 .event-title.ledwall {
   top: 18px;
-  left: 150px;
+  left: 85px; /* Moved closer to the logo */
   width: 65%;
   font-size: 36px;
   font-weight: 700;
