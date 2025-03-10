@@ -1,0 +1,216 @@
+/* OnCourseDisplay.css */
+/* Matched to CurrentCompetitor styling */
+
+.on-course-display {
+  position: relative;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  font-family: var(--font-primary);
+  color: var(--text-primary);
+  transition: all 0.3s ease;
+  z-index: 9;
+  background-color: rgba(18, 18, 18, 0.7);
+  backdrop-filter: blur(10px);
+  border: none;
+  box-shadow: none;
+  overflow: visible;
+  height: 40px !important;
+  min-height: 0 !important;
+  box-sizing: border-box;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+/* Tab for on-course athletes */
+.course-tab {
+  position: absolute;
+  top: -22px;
+  left: 20px;
+  padding: 4px 12px;
+  background-color: var(--accent-yellow);
+  color: var(--text-secondary);
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  font-weight: bold;
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+  box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.2);
+  z-index: 11;
+  height: 22px;
+  line-height: 14px;
+  white-space: nowrap;
+}
+
+/* Hide tab for LED wall */
+.ledwall .course-tab {
+  display: none;
+}
+
+/* Grid layout for the course row */
+.course-row {
+  display: grid;
+  align-items: center;
+  background: linear-gradient(135deg, var(--primary-light) 85%, var(--accent-color) 150%);
+  transition: all 0.3s ease;
+  border-left: 3px solid var(--accent-yellow);
+  padding: 0 !important;
+  margin: 0 !important;
+  height: 45px !important;
+  min-height: 0 !important;
+}
+
+/* Cell styling */
+.course-bib {
+  text-align: center;
+  white-space: nowrap;
+  font-weight: bold;
+}
+
+.course-name {
+  text-align: left;
+  padding-left: 15px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-weight: bold;
+}
+
+.course-gates-container {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 3px;
+}
+
+/* Gate penalties */
+.course-gate-penalty {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  font-size: calc(var(--small-size) - 8px);
+  font-weight: bold;
+  margin-right: 2px;
+  border-radius: 4px;
+  opacity: 0.9;
+}
+
+.course-penalty-2 {
+  color: var(--text-secondary);
+  background-color: rgba(255, 164, 0, 0.8);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+.course-penalty-50 {
+  color: var(--text-primary);
+  background-color: rgba(255, 69, 99, 0.8);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+.course-pen {
+  text-align: right;
+  white-space: nowrap;
+  font-weight: bold;
+  padding: 0 10px;
+  margin-left: 5px;
+  color: var(--text-primary);
+}
+
+/* Penalty exists */
+.course-pen.has-penalty {
+  background-color: var(--error-color);
+  animation: penaltyPulse 1.5s infinite;
+}
+
+/* No penalty */
+.course-pen.no-penalty {
+  background-color: rgba(78, 229, 139, 0.6);
+  color: var(--text-secondary);
+}
+
+@keyframes penaltyPulse {
+  0% { background-color: var(--error-color); }
+  50% { background-color: rgba(255, 69, 99, 0.7); }
+  100% { background-color: var(--error-color); }
+}
+
+.course-total {
+  text-align: right;
+  white-space: nowrap;
+  font-weight: bold;
+  color: var(--accent-yellow);
+  padding: 0 15px;
+}
+
+/* Layout specific adjustments - grid columns and sizes */
+.on-course-display.horizontal .course-row {
+  grid-template-columns: 100px minmax(200px, 1fr) minmax(100px, auto) 150px;
+  height: 45px !important;
+}
+
+.on-course-display.horizontal .course-row > div {
+  font-size: 26px;
+  padding: 0 10px;
+}
+
+/* Vertical layout adjustments */
+.on-course-display.vertical .course-row {
+  grid-template-columns: 80px minmax(200px, 1fr) minmax(100px, auto) 160px;
+  height: 40px !important;
+}
+
+.on-course-display.vertical .course-row > div {
+  font-size: 32px;
+  padding: 0 10px;
+}
+
+.on-course-display.vertical .course-gate-penalty {
+  width: 28px;
+  height: 28px;
+  font-size: calc(var(--small-size) - 8px);
+}
+
+/* LED Wall layout adjustments - enhanced for visibility */
+.on-course-display.ledwall .course-row {
+  grid-template-columns: 70px minmax(150px, 1fr) minmax(100px, auto) 110px;
+  height: 50px !important; /* Increased height */
+  background: linear-gradient(135deg, rgba(255, 164, 0, 0.1) 0%, rgba(138, 43, 226, 0.2) 100%); /* More visible gradient */
+  border-left: 5px solid var(--accent-yellow); /* Thicker border */
+  border-bottom: 1px solid var(--accent-yellow); /* Bottom border for emphasis */
+}
+
+.on-course-display.ledwall .course-row > div {
+  font-size: 28px; /* Larger font */
+  padding: 0 8px;
+  font-weight: 700; /* Bolder text */
+}
+
+.on-course-display.ledwall .course-total {
+  font-size: 30px; /* Larger time */
+  font-weight: 700;
+  color: #FFFFFF; /* Pure white for visibility */
+  text-shadow: 0 0 8px var(--accent-yellow); /* Glow effect */
+}
+
+.on-course-display.ledwall .course-gate-penalty {
+  width: 24px;
+  height: 24px;
+  font-size: 16px;
+}
+
+/* Ensure proper stacking in the container */
+.stacked-components .on-course-display {
+  margin: 0 !important;
+  padding: 0 !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+
+/* Add margin between stacked on-course competitors */
+.stacked-components .on-course-display + .on-course-display {
+  margin-top: 2px !important;
+}

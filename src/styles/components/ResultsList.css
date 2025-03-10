@@ -1,0 +1,261 @@
+/* ResultsList.css */
+/* Styling for the results list component */
+
+.results-list {
+  position: relative;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  font-family: var(--font-primary);
+  color: var(--text-primary);
+  z-index: 8;
+  background-color: rgba(18, 18, 18, 0.6);
+  backdrop-filter: blur(10px);
+  overflow: visible;
+  border: none;
+  box-shadow: none;
+  transition: opacity 0.3s ease;
+}
+
+/* Tab for results */
+.results-tab {
+  position: absolute;
+  top: -22px;
+  left: 20px;
+  padding: 4px 12px;
+  background-color: var(--accent-green);
+  color: var(--text-secondary);
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  font-weight: bold;
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+  box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.2);
+  z-index: 9;
+  height: 22px;
+  line-height: 14px;
+  white-space: nowrap;
+  max-width: 400px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: block !important; /* Ensure tab is visible */
+}
+
+/* Only hide tab for LED wall */
+.ledwall .results-tab {
+  display: none !important;
+}
+
+/* Ensure there's space for the tab */
+.horizontal .results-list:not(.ledwall),
+.vertical .results-list:not(.ledwall) {
+  margin-top: 22px !important; /* Space for tab */
+}
+
+/* Keep ledwall without margin */
+.ledwall.results-list {
+  margin-top: 0 !important;
+}
+
+/* Results body */
+.results-body {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  position: relative;
+  overflow: visible;
+}
+
+/* Individual result row */
+.result-row {
+  display: grid;
+  align-items: center;
+  background-color: rgba(30, 30, 30, 0.7);
+  transition: all 0.3s ease;
+  padding: 0;
+  margin: 2px 0;
+}
+
+.result-row:hover {
+  background-color: rgba(78, 229, 139, 0.1);
+  transform: translateY(-2px);
+}
+
+/* Alternating row colors with green left borders to differentiate from on-course */
+.result-row:nth-child(even) {
+  background: linear-gradient(to bottom, var(--primary-color) 90%, rgba(0, 0, 0, 0.7));
+  backdrop-filter: blur(10px);
+  border-left: 3px solid var(--accent-green);
+}
+
+.result-row:nth-child(odd) {
+  background: linear-gradient(to bottom, var(--primary-light) 90%, rgba(0, 0, 0, 0.7));
+  backdrop-filter: blur(10px);
+  border-left: 3px solid #00AA55;
+}
+
+/* Highlighted competitor (just finished) */
+.result-row.highlight {
+  background: var(--accent-gradient);
+  color: var(--text-primary);
+  border-left: 3px solid var(--accent-yellow);
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0% { box-shadow: 0 0 0 0 rgba(138, 43, 226, 0.4); }
+  70% { box-shadow: 0 0 0 10px rgba(138, 43, 226, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(138, 43, 226, 0); }
+}
+
+/* Results cells */
+.result-rank {
+  text-align: center;
+  white-space: nowrap;
+  font-weight: bold;
+  padding-left: 15px;
+}
+
+.result-bib {
+  text-align: center;
+  white-space: nowrap;
+  font-weight: bold;
+}
+
+.result-name {
+  text-align: left;
+  padding-left: 15px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-weight: bold;
+}
+
+.result-pen {
+  text-align: right;
+  white-space: nowrap;
+  font-weight: bold;
+  padding: 0 10px;
+  margin-left: 5px;
+  color: var(--text-primary);
+}
+
+.result-total {
+  text-align: right;
+  white-space: nowrap;
+  font-weight: bold;
+  color: var(--text-primary);
+  padding: 0 15px;
+}
+
+.result-behind {
+  text-align: right;
+  white-space: nowrap;
+  color: rgba(245, 245, 245, 0.7);
+  font-size: 0.85em;
+  font-weight: normal;
+  padding-right: 15px;
+  font-style: italic;
+}
+
+/* Horizontal layout */
+.results-list.horizontal .result-row {
+  height: 45px;
+  grid-template-columns: 80px 80px minmax(120px, 1fr) 80px 140px 150px;
+}
+
+.results-list.horizontal .result-row > div {
+  font-size: 26px;
+  padding: 0 10px;
+}
+
+.results-list.horizontal .result-behind {
+  font-size: 20px;
+}
+
+/* Vertical layout */
+.results-list.vertical .result-row {
+  height: 40px;
+  grid-template-columns: 60px 60px minmax(80px, 1fr) 80px 140px 140px;
+}
+
+.results-list.vertical .result-row > div {
+  font-size: 32px;
+  padding: 0 5px;
+}
+
+.results-list.vertical .result-behind {
+  font-size: 24px;
+  padding-right: 20px;
+  white-space: nowrap;
+}
+
+/* LED Wall layout - enhanced */
+.results-list.ledwall {
+  background-color: rgba(18, 18, 18, 0.8); /* Slightly darker for better contrast */
+}
+
+.results-list.ledwall .result-row {
+  height: 40px;
+  grid-template-columns: 50px 60px minmax(60px, 1fr) 60px 100px 120px;
+  border-left: 4px solid var(--accent-green); /* Thicker border */
+}
+
+.results-list.ledwall .result-row:nth-child(even) {
+  background: linear-gradient(to right, rgba(0, 0, 0, 0), rgba(78, 229, 139, 0.1)); /* Subtle gradient */
+}
+
+.results-list.ledwall .result-row:nth-child(odd) {
+  background: rgba(18, 18, 18, 0.9);
+}
+
+.results-list.ledwall .result-row > div {
+  font-size: 24px;
+  padding: 0 5px;
+  font-weight: 600;
+}
+
+.results-list.ledwall .result-rank {
+  font-weight: 700;
+  color: #FFFFFF; /* Pure white for rank */
+}
+
+.results-list.ledwall .result-total {
+  font-size: 26px;
+  font-weight: 700;
+  color: #FFFFFF; /* Pure white for time */
+}
+
+.results-list.ledwall .result-behind {
+  font-size: 18px;
+  color: rgba(245, 245, 245, 0.85); /* More visible */
+  padding-right: 15px;
+}
+
+/* Enhanced highlighting for LED wall */
+.results-list.ledwall .result-row.highlight {
+  background: linear-gradient(to right, rgba(255, 164, 0, 0.5), rgba(138, 43, 226, 0.7)); 
+  color: #FFFFFF;
+  border-left: 5px solid #FFFFFF;
+  border-right: 5px solid #FFFFFF;
+  box-shadow: 0 0 15px rgba(255, 255, 255, 0.7);
+  animation: ledHighlightPulse 1.5s infinite alternate;
+  font-weight: bold;
+}
+
+.results-list.ledwall .result-row.highlight > div {
+  font-weight: 800;
+  text-shadow: 0 0 8px rgba(255, 255, 255, 0.5);
+}
+
+@keyframes ledHighlightPulse {
+  0% { 
+    background: linear-gradient(to right, rgba(255, 164, 0, 0.5), rgba(138, 43, 226, 0.7));
+    box-shadow: 0 0 15px rgba(255, 255, 255, 0.7);
+  }
+  100% { 
+    background: linear-gradient(to right, rgba(255, 164, 0, 0.7), rgba(138, 43, 226, 0.9));
+    box-shadow: 0 0 25px rgba(255, 255, 255, 0.9);
+  }
+}

@@ -1,0 +1,203 @@
+/* ScheduleDisplay.css */
+/* Styling for the schedule display component */
+
+.schedule-display {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  flex-direction: column;
+  font-family: var(--font-display);
+  transition: all 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+  z-index: 10;
+  backdrop-filter: blur(15px);
+  border-radius: 10px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+  overflow: hidden;
+  border: 1px solid rgba(138, 43, 226, 0.3);
+  animation: scheduleAppear 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes scheduleAppear {
+  from { 
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.9);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+  }
+  to { 
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+  }
+}
+
+/* Header section */
+.schedule-header {
+  padding: 15px 20px;
+  background: var(--accent-gradient);
+  color: var(--text-primary);
+  font-size: var(--body-size);
+  text-align: center;
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+  font-weight: bold;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 4px 15px rgba(138, 43, 226, 0.3);
+}
+
+.schedule-header::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: linear-gradient(
+    transparent, 
+    rgba(255, 255, 255, 0.05), 
+    transparent
+  );
+  transform: rotate(45deg);
+  animation: shimmer 3s infinite;
+}
+
+@keyframes shimmer {
+  0% { transform: translateX(-100%) rotate(45deg); }
+  100% { transform: translateX(100%) rotate(45deg); }
+}
+
+/* Body section */
+.schedule-body {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Row styling */
+.schedule-row {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr;
+  align-items: center;
+}
+
+.schedule-row.header {
+  height: 30px;
+}
+
+.schedule-row:not(.header) {
+  height: 40px;
+}
+
+/* Alternating row colors */
+.schedule-row:not(.header):nth-child(even) {
+  background-color: rgba(18, 18, 18, 0.7);
+  border-left: 3px solid var(--accent-blue);
+}
+
+.schedule-row:not(.header):nth-child(odd) {
+  background-color: rgba(30, 30, 30, 0.7);
+  border-left: 3px solid var(--accent-teal);
+}
+
+.schedule-row:not(.header) {
+  transition: all 0.3s ease;
+}
+
+.schedule-row:not(.header):hover {
+  background-color: rgba(138, 43, 226, 0.15);
+  transform: translateX(5px);
+}
+
+/* Column styling */
+.schedule-col {
+  padding: 5px 10px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.schedule-row.header .schedule-col {
+  font-size: calc(var(--small-size) - 4px);
+  font-weight: bold;
+  background-color: var(--primary-color);
+  color: var(--accent-yellow);
+  text-align: center;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.schedule-row:not(.header) .schedule-col {
+  font-size: calc(var(--body-size) - 4px);
+  color: var(--text-primary);
+}
+
+.schedule-col.competition {
+  text-align: left;
+}
+
+.schedule-col.boats {
+  text-align: center;
+}
+
+.schedule-col.start-time,
+.schedule-col.end-time {
+  text-align: right;
+  color: var(--accent-teal);
+  font-weight: bold;
+}
+
+/* Footer section */
+.schedule-footer {
+  padding: 8px;
+  background: var(--accent-gradient);
+  color: var(--text-primary);
+  font-size: calc(var(--small-size) - 6px);
+  text-align: center;
+  border-bottom-left-radius: 10px;
+  border-bottom-right-radius: 10px;
+  font-weight: bold;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  box-shadow: 0 -4px 15px rgba(138, 43, 226, 0.3);
+}
+
+/* Layout specific adjustments */
+.schedule-display.horizontal {
+  width: 800px;
+}
+
+.schedule-display.vertical {
+  width: 700px;
+}
+
+.schedule-display.vertical .schedule-row:not(.header) {
+  height: 50px;
+}
+
+.schedule-display.vertical .schedule-row:not(.header) .schedule-col {
+  font-size: var(--body-size);
+}
+
+.schedule-display.ledwall {
+  width: 600px;
+  transform: translate(-50%, -50%) scale(0.85);
+}
+
+.schedule-display.ledwall .schedule-row.header {
+  height: 25px;
+}
+
+.schedule-display.ledwall .schedule-row:not(.header) {
+  height: 35px;
+}
+
+.schedule-display.ledwall .schedule-row.header .schedule-col {
+  font-size: calc(var(--small-size) - 6px);
+}
+
+.schedule-display.ledwall .schedule-row:not(.header) .schedule-col {
+  font-size: calc(var(--small-size) - 2px);
+}

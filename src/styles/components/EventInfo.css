@@ -1,0 +1,223 @@
+/* EventInfo.css */
+/* Final adjustments - reduced spacing and removed orange border */
+
+/* Top bar with logos */
+.top-bar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: transparent;
+  z-index: 10;
+  width: 100%;
+  height: var(--top-bar-height);
+  padding: 0 10px;
+  box-sizing: border-box;
+}
+
+.top-bar .logo {
+  height: 100%;
+  padding: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.top-bar .logo img {
+  height: auto;
+  max-height: 100%;
+  object-fit: contain;
+}
+
+.top-bar .partners {
+  height: 100%;
+  padding: 5px;
+  display: flex;
+  align-items: center;
+}
+
+.top-bar .partners img {
+  height: auto;
+  max-height: 100%;
+  object-fit: contain;
+  max-width: 300px;
+}
+
+/* Event title */
+.event-title {
+  position: absolute;
+  font-family: var(--font-display);
+  font-weight: bold;
+  color: var(--text-primary);
+  text-shadow: 0 2px 10px rgba(138, 43, 226, 0.7);
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  z-index: 15;
+  background: linear-gradient(135deg, var(--text-primary) 0%, var(--accent-teal) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: titleGlow 3s infinite alternate;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  text-align: left;
+}
+
+@keyframes titleGlow {
+  from { text-shadow: 0 0 10px rgba(138, 43, 226, 0.7); }
+  to { text-shadow: 0 0 20px rgba(138, 43, 226, 1); }
+}
+
+/* Updated Info text marquee to fit into stacked components */
+.info-text {
+  position: relative;
+  width: 100%;
+  z-index: 15;
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0 !important; 
+  height: 45px !important;
+  min-height: 0 !important;
+  background-color: rgba(18, 18, 18, 0.7);
+  backdrop-filter: blur(10px);
+}
+
+.info-marquee {
+  font-family: var(--font-display);
+  color: var(--accent-yellow);
+  white-space: nowrap;
+  text-shadow: 0 0 15px rgba(255, 164, 0, 0.8);
+  letter-spacing: 2px;
+  background-color: transparent;
+  padding: 0;
+  width: 100%;
+  font-weight: 800;
+  text-transform: uppercase;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  /* Removed orange border */
+}
+
+/* Tab for info text to match other components */
+.info-tab {
+  position: absolute;
+  top: -22px;
+  left: 20px;
+  padding: 4px 12px;
+  background-color: var(--accent-yellow);
+  color: var(--text-secondary);
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  font-weight: bold;
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+  box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.2);
+  z-index: 11;
+  height: 22px;
+  line-height: 14px;
+  white-space: nowrap;
+}
+
+/* Hide tab for LED wall */
+.ledwall .info-tab {
+  display: none;
+}
+
+/* Force font sizes for marquee element */
+.info-marquee marquee {
+  font-size: inherit !important;
+  line-height: 1.2 !important;
+  height: 100%;
+}
+
+/* Horizontal layout specifics */
+.event-title.horizontal {
+  top: 10px;
+  left: 180px;
+  width: 65%;
+  font-size: 56px;
+}
+
+.info-marquee.horizontal {
+  font-size: 36px;
+}
+
+.info-marquee.horizontal marquee {
+  font-size: 36px !important;
+}
+
+/* Vertical layout specifics */
+.event-title.vertical {
+  top: 24px;
+  left: 150px;
+  width: 65%;
+  font-size: 48px;
+}
+
+.info-marquee.vertical {
+  font-size: 32px;
+}
+
+.info-marquee.vertical marquee {
+  font-size: 32px !important;
+}
+
+/* LED wall layout specifics */
+.top-bar.ledwall {
+  justify-content: flex-start;
+}
+
+.top-bar.ledwall .logo {
+  width: 140px;
+  padding-right: 0;
+}
+
+.top-bar.ledwall .logo img {
+  max-width: 120px;
+  max-height: 55px;
+}
+
+.top-bar.ledwall .partners {
+  display: none;
+}
+
+.event-title.ledwall {
+  top: 18px;
+  left: 150px;
+  width: 65%;
+  font-size: 36px;
+  font-weight: 700;
+}
+
+.info-marquee.ledwall {
+  font-size: 28px;
+  font-weight: 800;
+  letter-spacing: 4px;
+}
+
+.info-marquee.ledwall marquee {
+  font-size: 28px !important;
+}
+
+/* Ensure proper stacking in the container */
+.stacked-components .info-text {
+  margin: 0 !important;
+  padding: 0 !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+
+/* Add margin between stacked components */
+.stacked-components .info-text + div,
+.stacked-components div + .info-text {
+  margin-top: 2px !important;
+}
+
+/* Reduce space between top bar/title and first stacked component */
+.stacked-components {
+  top: calc(var(--top-bar-height) + 5px) !important; /* Reduced from 10px */
+}

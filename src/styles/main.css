@@ -1,0 +1,486 @@
+/* main.css */
+/* Main styling for the canoe scoreboard application */
+
+/* Define local fonts */
+@font-face {
+  font-family: 'Rajdhani';
+  src: url('../fonts/Rajdhani-Light.ttf') format('truetype');
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Rajdhani';
+  src: url('../fonts/Rajdhani-Regular.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Rajdhani';
+  src: url('../fonts/Rajdhani-Medium.ttf') format('truetype');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Rajdhani';
+  src: url('../fonts/Rajdhani-SemiBold.ttf') format('truetype');
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Rajdhani';
+  src: url('../fonts/Rajdhani-Bold.ttf') format('truetype');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+:root {
+  /* Color palette - Modern Gen-Z Dark Theme */
+  --primary-color: #121212;       /* Near-black background */
+  --primary-light: #1E1E1E;       /* Slightly lighter background */
+  --secondary-color: #E0E0E0;     /* Light gray (instead of pure white) */
+  --accent-color: #8A2BE2;        /* Vibrant purple */
+  --highlight-color: #FF6B8B;     /* Coral pink */
+  --error-color: #FF4563;         /* Bright red */
+  
+  /* Text colors */
+  --text-primary: #F5F5F5;        /* Off-white text */
+  --text-secondary: #121212;      /* Dark text */
+  
+  /* Additional accent colors for Gen-Z vibes */
+  --accent-teal: #00CED1;         /* Bright teal */
+  --accent-yellow: #FFA400;       /* Amber yellow */
+  --accent-green: #4EE58B;        /* Bright mint green */
+  --accent-blue: #3498FF;         /* Electric blue */
+  --accent-gradient: linear-gradient(135deg, var(--accent-color) 0%, var(--accent-blue) 100%); /* Purple to blue gradient */
+  
+  /* Font sizes - Default values for horizontal layout */
+  --header-size: 48px;
+  --body-size: 32px;
+  --small-size: 24px;
+  
+  /* Spacing */
+  --spacing-unit: 10px;
+  
+  /* Layout dimensions - Default values for horizontal layout */
+  --content-width: 1920px;
+  --content-height: 1080px;
+  
+  /* Results grid template - Default values for horizontal layout */
+  --results-grid: 120px 80px 1fr 80px 70px 150px 150px; /* Increased width for time columns */
+  --row-height: 80px;
+  
+  /* Font family */
+  --font-primary: 'Rajdhani', 'Arial', sans-serif;
+  --font-display: 'Rajdhani', 'Arial', sans-serif;
+}
+
+/* CSS Reset */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background-color: #000000;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  font-family: var(--font-primary);
+  color: var(--text-primary);
+}
+
+/* Main scoreboard container */
+.scoreboard-layout {
+  position: relative;
+  width: var(--content-width);
+  height: var(--content-height);
+  background-color: var(--primary-color);
+  color: var(--text-primary);
+  overflow: hidden;
+  transform-origin: top left;
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
+}
+
+/* Different layouts */
+.layout-horizontal {
+  --content-width: 1920px;
+  --content-height: 1080px;
+  --header-size: 48px;
+  --body-size: 32px;
+  --small-size: 24px;
+  --spacing-unit: 10px;
+  --results-grid: 120px 80px 1fr 80px 70px 150px 150px; /* Increased width for time columns */
+  --row-height: 80px;
+}
+
+.layout-vertical {
+  --content-width: 1080px;
+  --content-height: 1920px;
+  --header-size: 56px;
+  --body-size: 44px;
+  --small-size: 32px;
+  --spacing-unit: 12px;
+  --results-grid: 70px 50px 1fr 120px 70px 160px 130px; /* Adjusted columns widths */
+  --row-height: 48px;
+}
+
+.layout-ledwall {
+  --content-width: 768px;
+  --content-height: 384px;
+  --header-size: 32px; /* Increased from 30px for better visibility from distance */
+  --body-size: 28px;   /* Increased from 24px for better visibility from distance */
+  --small-size: 24px;  /* Increased from 20px for better visibility from distance */
+  --spacing-unit: 6px;
+  --results-grid: 60px 55px 1fr 70px 60px 110px 90px; /* Adjusted columns widths */
+  --row-height: 44px;
+}
+
+.layout-custom {
+  /* Custom layout uses values set in LayoutManager.jsx */
+}
+
+/* Animation classes */
+.fade-in {
+  animation: fadeIn 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  will-change: transform, opacity;
+}
+
+.fade-out {
+  animation: fadeOut 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  will-change: transform, opacity;
+}
+
+.slide-in-right {
+  animation: slideInRight 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  will-change: transform, opacity;
+}
+
+.slide-out-left {
+  animation: slideOutLeft 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  will-change: transform, opacity;
+}
+
+.glass-effect {
+  background: rgba(18, 18, 18, 0.7);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+}
+
+.neon-border {
+  position: relative;
+}
+
+.neon-border::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  border: 2px solid var(--accent-color);
+  border-radius: inherit;
+  box-shadow: 0 0 15px var(--accent-color), inset 0 0 15px var(--accent-color);
+  pointer-events: none;
+  animation: neonGlow 2s infinite alternate;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeOut {
+  from { opacity: 1; transform: translateY(0); }
+  to { opacity: 0; transform: translateY(-10px); }
+}
+
+@keyframes slideInRight {
+  from { transform: translateX(100%); opacity: 0; }
+  to { transform: translateX(0); opacity: 1; }
+}
+
+@keyframes slideOutLeft {
+  from { transform: translateX(0); opacity: 1; }
+  to { transform: translateX(-100%); opacity: 0; }
+}
+
+@keyframes neonGlow {
+  from { box-shadow: 0 0 5px var(--accent-color), inset 0 0 5px var(--accent-color); }
+  to { box-shadow: 0 0 20px var(--accent-color), inset 0 0 10px var(--accent-color); }
+}
+
+/* Config panel */
+.config-panel {
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: 300px;
+  height: 100vh;
+  background-color: rgba(18, 18, 18, 0.9);
+  color: var(--text-primary);
+  padding: 20px;
+  z-index: 1000;
+  overflow-y: auto;
+  box-shadow: -5px 0 20px rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(10px);
+  border-left: 1px solid var(--accent-color);
+}
+
+.config-panel h2 {
+  margin-bottom: 20px;
+  font-family: var(--font-display);
+  color: var(--accent-color);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  border-bottom: 1px solid var(--accent-color);
+  padding-bottom: 10px;
+  text-shadow: 0 0 10px rgba(138, 43, 226, 0.5);
+}
+
+.config-panel .form-group {
+  margin-bottom: 20px;
+  background-color: rgba(30, 30, 30, 0.5);
+  padding: 15px;
+  border-radius: 8px;
+  border-left: 3px solid var(--accent-teal);
+}
+
+.config-panel label {
+  display: block;
+  margin-bottom: 8px;
+  color: var(--accent-yellow);
+  font-weight: bold;
+  letter-spacing: 0.5px;
+}
+
+.config-panel input, 
+.config-panel select {
+  width: 100%;
+  padding: 10px;
+  border-radius: 6px;
+  border: 1px solid rgba(138, 43, 226, 0.3);
+  background-color: rgba(18, 18, 18, 0.8);
+  color: var(--text-primary);
+  font-family: var(--font-primary);
+  transition: all 0.3s ease;
+  box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.config-panel input:focus, 
+.config-panel select:focus {
+  border-color: var(--accent-color);
+  outline: none;
+  box-shadow: 0 0 10px rgba(138, 43, 226, 0.5);
+}
+
+.config-panel button {
+  padding: 10px 20px;
+  margin-top: 15px;
+  margin-right: 10px;
+  border: none;
+  border-radius: 6px;
+  background: var(--accent-gradient);
+  color: white;
+  cursor: pointer;
+  font-weight: bold;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 10px rgba(138, 43, 226, 0.3);
+}
+
+.config-panel button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 15px rgba(138, 43, 226, 0.5);
+}
+
+.config-panel button:active {
+  transform: translateY(1px);
+  box-shadow: 0 2px 5px rgba(138, 43, 226, 0.3);
+}
+
+/* Connection status indicator - Moved to upper right */
+.connection-status {
+  position: fixed;
+  top: 40px; /* Position below time display */
+  right: 20px; /* Align with right edge */
+  width: 15px;
+  height: 15px;
+  border-radius: 50%;
+  z-index: 1000;
+  padding: 0;
+  transition: all 0.3s ease;
+}
+
+.connection-status.connected {
+  background-color: var(--accent-green);
+  box-shadow: 0 0 10px var(--accent-green);
+  border: none;
+  animation: pulseLight 2s infinite;
+}
+
+.connection-status.disconnected {
+  background-color: var(--error-color);
+  box-shadow: 0 0 10px var(--error-color);
+  border: none;
+  animation: disconnectedLight 1.5s infinite;
+}
+
+@keyframes pulseLight {
+  0% { opacity: 0.7; box-shadow: 0 0 5px var(--accent-green); }
+  50% { opacity: 1; box-shadow: 0 0 15px var(--accent-green); }
+  100% { opacity: 0.7; box-shadow: 0 0 5px var(--accent-green); }
+}
+
+@keyframes disconnectedLight {
+  0% { opacity: 0.7; box-shadow: 0 0 5px var(--error-color); }
+  50% { opacity: 1; box-shadow: 0 0 15px var(--error-color); }
+  100% { opacity: 0.7; box-shadow: 0 0 5px var(--error-color); }
+}
+
+.connection-status .indicator,
+.connection-status .status-text {
+  display: none; /* Hide text and inner indicator */
+}
+
+/* Utility classes */
+.hidden {
+  display: none !important;
+}
+
+.transparent {
+  opacity: 0 !important;
+}
+
+/* Performance optimizations */
+.fade-in, 
+.fade-out, 
+.slide-in-right, 
+.slide-out-left,
+.competitor-pen,
+.event-title,
+.info-marquee {
+  will-change: transform, opacity;
+  transform: translateZ(0);
+}
+
+/* Reduce layout thrashing by defining explicit dimensions */
+.competitor-details,
+.result-row,
+.top10-row {
+  contain: layout;
+}
+
+/* Stacked components container - complete section */
+.stacked-components {
+  position: absolute;
+  top: calc(var(--top-bar-height) + 5px);
+  left: 0;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  z-index: 5;
+}
+
+/* Layout-specific top spacing */
+.layout-horizontal .stacked-components,
+.layout-vertical .stacked-components {
+  top: calc(var(--top-bar-height) + 15px);
+}
+
+.layout-ledwall .stacked-components {
+  top: calc(var(--top-bar-height) + 5px);
+}
+
+/* Direct children of stacked-components - base styles */
+.stacked-components > div {
+  margin: 0;
+  padding: 0;
+}
+
+/* ===== COMPONENT SPECIFIC SPACING ===== */
+
+/* InfoText spacing */
+.stacked-components .info-text {
+  margin-bottom: 12px !important;
+}
+
+.stacked-components .info-text:not(.ledwall):first-child {
+  margin-top: 22px !important; /* Space for tab */
+}
+
+/* CurrentCompetitor spacing */
+.stacked-components .current-competitor {
+  margin-bottom: 12px !important;
+}
+
+.stacked-components .current-competitor:first-child {
+  margin-top: 42px !important; /* Space for tab */
+}
+
+/* OnCourseDisplay spacing */
+.stacked-components .on-course-display {
+  margin-bottom: 12px !important;
+}
+
+.stacked-components .on-course-display:not(.ledwall):first-child,
+.stacked-components .info-text:not(.ledwall) + .on-course-display:not(.ledwall) {
+  margin-top: 42px !important; /* Space for tab */
+}
+
+/* ResultsList spacing - extra space above */
+.stacked-components .results-list {
+  margin-top: 34px !important; /* Extra space above results */
+}
+
+.stacked-components .results-list:not(.ledwall) {
+  padding-top: 0 !important;
+}
+
+/* LED wall specific adjustments */
+.stacked-components .info-text.ledwall,
+.stacked-components .current-competitor.ledwall,
+.stacked-components .on-course-display.ledwall {
+  margin-top: 4px !important; /* Less space for LED wall */
+  margin-bottom: 6px !important;
+}
+
+.stacked-components .results-list.ledwall {
+  margin-top: 10px !important; /* Less space for LED wall */
+  margin-bottom: 2px !important;
+}
+
+
+.stacked-components .info-text.ledwall:first-child,
+.stacked-components .current-competitor.ledwall:first-child,
+.stacked-components .on-course-display.ledwall:first-child,
+.stacked-components .results-list.ledwall:first-child {
+  margin-top: 0 !important;
+}
+
+/* Ensure tab positioning is correct */
+.stacked-components .info-tab,
+.stacked-components .course-tab,
+.stacked-components .competitor-tab,
+.stacked-components .results-tab {
+  top: -22px !important;
+}
+
+/* Hide tabs for ledwall */
+.stacked-components .ledwall .info-tab,
+.stacked-components .ledwall .course-tab,
+.stacked-components .ledwall .competitor-tab,
+.stacked-components .ledwall .results-tab {
+  display: none !important;
+}

@@ -1,0 +1,54 @@
+/* Footer.css */
+/* Styling for the footer component */
+
+.footer {
+  position: fixed; /* Fixed to bottom */
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  z-index: 10;
+  background-color: rgba(18, 18, 18, 0.8);
+  backdrop-filter: blur(10px);
+  border-top: 1px solid rgba(138, 43, 226, 0.3);
+  box-shadow: 0 -5px 20px rgba(0, 0, 0, 0.4);
+}
+
+/* Hide footer if not visible */
+.footer.hidden {
+  display: none;
+}
+
+.footer-content {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.sponsor-logo {
+  width: 100%;
+  height: auto;
+  object-fit: contain;
+  filter: drop-shadow(0 2px 5px rgba(0, 0, 0, 0.3));
+  transition: all 0.3s ease;
+}
+
+.sponsor-logo:hover {
+  filter: drop-shadow(0 3px 8px rgba(138, 43, 226, 0.5));
+  transform: translateY(-2px);
+}
+
+/* Specific layouts */
+.footer.horizontal {
+  height: 120px;
+}
+
+.footer.vertical {
+  height: 120px;
+}
+
+/* Hide footer for LED wall display as requested */
+.footer.ledwall {
+  display: none;
+}

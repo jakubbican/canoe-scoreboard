@@ -1,0 +1,193 @@
+/* Top10Display.css */
+/* Styling for the Top 10 competitors display */
+
+.top10-display {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  max-width: 960px;
+  display: flex;
+  flex-direction: column;
+  font-family: var(--font-display);
+  color: var(--text-primary);
+  transition: top 1s, opacity 1s;
+  transition-timing-function: ease-in-out;
+  border-spacing: 0;
+  z-index: 10;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+}
+
+/* Header section */
+.top10-header {
+  background-image: var(--accent-gradient);
+  padding: 15px 20px;
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+  text-align: center;
+  box-shadow: 0 4px 20px rgba(138, 43, 226, 0.3);
+}
+
+.top10-header h2 {
+  font-size: var(--header-size);
+  margin: 0;
+  text-transform: uppercase;
+}
+
+.top10-header p {
+  font-size: calc(var(--body-size) - 4px);
+  margin: 5px 0 0 0;
+  opacity: 0.9;
+}
+
+/* Body section */
+.top10-body {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Individual result row */
+.top10-row {
+  display: grid;
+  grid-template-columns: 60px 2fr 60px 60px 140px 100px;
+  align-items: center;
+  height: 50px;
+  background-color: var(--primary-light);
+  border-left: 3px solid var(--accent-teal);
+  transition: all 0.3s ease;
+}
+
+.top10-row:hover {
+  transform: translateX(5px);
+  background-color: rgba(0, 206, 209, 0.1);
+  border-left: 3px solid var(--accent-color);
+}
+
+/* Cells styling */
+.top10-row > div {
+  padding: 5px 10px;
+  font-size: calc(var(--body-size) - 2px);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.top10-rank {
+  text-align: center;
+  border-bottom-left-radius: 10px;
+}
+
+.top10-name {
+  text-align: left;
+  border-bottom-right-radius: 10px;
+}
+
+.top10-nat {
+  text-align: center;
+}
+
+.top10-nat img {
+  height: 35px;
+  vertical-align: middle;
+}
+
+.top10-pen {
+  text-align: center;
+  background-image: linear-gradient(rgba(255,0,0,1), rgba(255,0,0,0.5));
+  color: var(--text-primary);
+  border-bottom-right-radius: 10px;
+}
+
+.top10-pen:empty {
+  display: block;
+  background-image: none;
+}
+
+.top10-total {
+  text-align: right;
+  min-width: 140px; /* Ensure full time is visible */
+  border-bottom-right-radius: 10px;
+}
+
+.top10-behind {
+  text-align: right;
+  min-width: 100px; /* Ensure full time is visible */
+  border-bottom-right-radius: 10px;
+}
+
+/* Footer section */
+.top10-footer {
+  padding: 10px;
+  background-color: var(--accent-color);
+  border-bottom-left-radius: 10px;
+  border-bottom-right-radius: 10px;
+  text-align: center;
+  font-size: calc(var(--small-size) - 4px);
+  font-weight: bold;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  box-shadow: 0 -4px 20px rgba(138, 43, 226, 0.3);
+}
+
+/* Display type specific adjustments */
+.top10-display.vertical {
+  max-width: 800px;
+}
+
+.top10-display.vertical .top10-row {
+  height: 60px;
+  grid-template-columns: 60px 2fr 60px 60px 160px 110px; /* Wider time columns */
+}
+
+.top10-display.vertical .top10-row > div {
+  font-size: var(--body-size);
+}
+
+.top10-display.vertical .top10-total {
+  min-width: 160px; /* Ensure full time is visible */
+}
+
+.top10-display.vertical .top10-behind {
+  min-width: 110px; /* Ensure full time is visible */
+}
+
+.top10-display.ledwall {
+  max-width: 700px; /* Larger to be more visible from distance */
+}
+
+.top10-display.ledwall .top10-header h2 {
+  font-size: 38px; /* Larger for visibility */
+  font-weight: 700; /* Bolder for visibility */
+}
+
+.top10-display.ledwall .top10-header p {
+  font-size: 28px; /* Larger for visibility */
+}
+
+.top10-display.ledwall .top10-row {
+  height: 50px;
+  grid-template-columns: 60px 2fr 60px 60px 140px 100px;
+}
+
+.top10-display.ledwall .top10-row > div {
+  font-size: 28px; /* Larger for visibility from distance */
+  font-weight: 600; /* Bolder for visibility */
+  padding: 5px 10px;
+}
+
+.top10-display.ledwall .top10-nat img {
+  height: 30px;
+}
+
+.top10-display.ledwall .top10-total {
+  min-width: 140px; /* Ensure full time is visible */
+}
+
+.top10-display.ledwall .top10-behind {
+  min-width: 100px; /* Ensure full time is visible */
+}
+
+/* Hide footer for LED wall as requested */
+.top10-display.ledwall .top10-footer {
+  display: none;
+}

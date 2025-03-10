@@ -1,0 +1,80 @@
+// CurrentCompetitor.jsx
+// Displays the current competitor's data with a tab labeled "CURRENT ATHLETE"
+
+import React from 'react';
+import { useLayout } from '../core/LayoutManager';
+import '../../styles/components/CurrentCompetitor.css';
+
+function CurrentCompetitor({ data, visible }) {
+  const { displayType } = useLayout();
+  
+  if (!visible || !data || !data.Bib) {
+    return null;
+  }
+  
+  // Process gates penalties if available
+  const gatesPenalties = data.Gates ? 
+    data.Gates.split(',').map((penalty, index) => {
+      if (!penalty || penalty === "0") return null;
+      
+      // Determine penalty class (50 second penalty or 2 second penalty)
+      const penaltyClass = parseInt(penalty, 10) >= 50 ? 'penalty-50' : 'penalty-2';
+      
+      // Ensure double-digit gate numbers display properly
+      const gateNumber = index + 1;
+      
+      return (
+        <span key={index} className={`gate-penalty ${penaltyClass}`}>
+          {gateNumber}
+        </span>
+      );
+    }).filter(Boolean) : [];
+  
+  // Format competitor name
+  const formatName = (name) => {
+    if (!name) return '';
+    
+    // Handle double events (e.g. "SMITH John/JONES Mike")
+    const nameArr = name.split('/');
+    if (nameArr.length < 2) return name;
+    
+    // For doubles, just show the family names
+    const firstNameArr = nameArr[0].split(' ');
+    const secondNameArr = nameArr[1].split(' ');
+    return `${firstNameArr[0]}/${secondNameArr[0]}`;
+  };
+
+  // Check if there are penalties
+  const hasPenalties = data.Pen && data.Pen !== "0";
+  const penaltyValue = hasPenalties ? data.Pen : "0";
+  
+  return (
+    <div className={`current-competitor ${displayType}`}>
+      {/* Tab for Current Athlete */}
+      <div className="competitor-tab">aktuální</div>
+      
+      <div className="competitor-row">
+        <div className="competitor-bib">
+          {data.Bib}
+        </div>
+        
+        <div className="competitor-name">
+          {formatName(data.Name)}
+        </div>
+        
+        <div className="competitor-gates-container">
+          {gatesPenalties}
+          <div className={`competitor-pen ${hasPenalties ? 'has-penalty' : 'no-penalty'}`}>
+            {penaltyValue}
+          </div>
+        </div>
+        
+        <div className="competitor-total">
+          {data.Total}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export default CurrentCompetitor;

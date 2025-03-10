@@ -1,0 +1,33 @@
+/* TimeDisplay.css */
+/* Styling for the time display component - similar to competitor time */
+
+.time-display {
+  position: absolute;
+  font-family: var(--font-primary, 'Rajdhani', Arial, sans-serif);
+  font-weight: 600;
+  z-index: 20;
+  background-color: transparent;
+  color: var(--accent-yellow);
+  padding: 2px 2px;
+  border: none;
+  top: 8px;
+  right: 8px;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+}
+
+/* Horizontal layout specifics */
+.time-display.horizontal {
+  font-size: 32px;
+}
+
+/* Vertical layout specifics */
+.time-display.vertical {
+  font-size: 30px;
+}
+
+/* LED wall layout specifics */
+.time-display.ledwall {
+  font-size: 24px;
+  top: 5px;
+  right: 10px;
+}

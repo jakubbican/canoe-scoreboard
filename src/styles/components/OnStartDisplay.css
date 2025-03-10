@@ -1,0 +1,167 @@
+/* OnStartDisplay.css */
+/* Styling for the competitors at the start display */
+
+.on-start-display {
+  position: absolute;
+  right: 1vw;
+  display: flex;
+  flex-direction: column;
+  font-family: var(--font-primary);
+  transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  z-index: 10;
+  backdrop-filter: blur(10px);
+  border-radius: 10px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+  overflow: hidden;
+  border: 1px solid rgba(0, 206, 209, 0.2);
+}
+
+.start-header {
+  padding: 5px 10px;
+  background-color: var(--accent-teal);
+  color: var(--text-primary);
+  text-align: center;
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  font-weight: bold;
+  box-shadow: 0 4px 10px rgba(0, 206, 209, 0.5);
+}
+
+.start-body {
+  display: flex;
+  flex-direction: column;
+}
+
+.start-row {
+  display: flex;
+  align-items: center;
+  transition: all 0.3s ease;
+}
+
+.start-row:hover {
+  background-color: rgba(0, 206, 209, 0.1);
+  transform: translateX(-5px);
+}
+
+/* First row styling */
+.start-row:first-child .start-time {
+  border-top-right-radius: 5px;
+}
+
+/* Last row styling */
+.start-row:last-child .start-time {
+  border-bottom-right-radius: 5px;
+}
+
+/* Cell styling */
+.start-bib {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 40px;
+  height: 40px;
+  text-align: center;
+  background-image: url('/assets/bib.png');
+  background-repeat: no-repeat;
+  background-size: 100%;
+  opacity: 0.8;
+  font-weight: bold;
+  color: var(--text-secondary);
+  position: relative;
+  z-index: 1;
+}
+
+.start-bib::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 206, 209, 0.2);
+  border-radius: inherit;
+  z-index: -1;
+}
+
+.start-time {
+  padding: 0 15px;
+  height: 40px;
+  line-height: 40px;
+  text-align: right;
+  min-width: 90px;
+  background-color: var(--primary-light);
+  color: var(--accent-teal);
+  font-weight: bold;
+  box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.2);
+}
+
+/* Layout specific adjustments */
+.on-start-display.horizontal {
+  top: 100px; /* Aligned with OnCourseDisplay */
+  right: 2vw;
+  font-size: var(--small-size);
+}
+
+.on-start-display.horizontal .start-header {
+  font-size: calc(var(--small-size) - 4px);
+}
+
+.on-start-display.horizontal .start-bib {
+  font-size: calc(var(--small-size) - 6px);
+}
+
+.on-start-display.vertical {
+  top: 120px; /* Aligned with OnCourseDisplay */
+  right: 2vw;
+}
+
+.on-start-display.vertical .start-header {
+  font-size: calc(var(--small-size) - 2px);
+}
+
+.on-start-display.vertical .start-bib,
+.on-start-display.vertical .start-time {
+  height: 45px;
+  line-height: 45px;
+}
+
+.on-start-display.vertical .start-bib {
+  font-size: calc(var(--small-size) - 4px);
+}
+
+.on-start-display.vertical .start-time {
+  min-width: 100px;
+  font-size: calc(var(--small-size) + 2px);
+}
+
+.on-start-display.ledwall {
+  top: 70px; /* Positioned below top bar but not overlapping with OnCourseDisplay */
+  right: 10px;
+  border: 2px solid rgba(0, 206, 209, 0.5); /* More visible border */
+}
+
+.on-start-display.ledwall .start-header {
+  font-size: 26px; /* Larger for visibility from distance */
+  padding: 8px 15px; /* Larger padding for better visibility */
+  font-weight: 700; /* Bolder for visibility */
+}
+
+.on-start-display.ledwall .start-bib,
+.on-start-display.ledwall .start-time {
+  height: 40px;
+  line-height: 40px;
+}
+
+.on-start-display.ledwall .start-bib {
+  width: 45px; /* Larger for visibility */
+  height: 45px;
+  font-size: 26px; /* Larger for visibility */
+}
+
+.on-start-display.ledwall .start-time {
+  min-width: 90px; /* Ensure full time is visible */
+  font-size: 26px; /* Larger for visibility */
+  padding: 0 20px; /* More padding for visibility */
+}

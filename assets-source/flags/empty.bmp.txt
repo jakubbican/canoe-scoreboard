@@ -1,0 +1,1 @@
+Please add an empty.bmp file here - this is needed as a fallback when country flags are not found.
