@@ -69,25 +69,29 @@
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3); /* Slightly stronger shadow */
 }
 
-/* Active indicator - small arrow glyph */
+/* Active indicator - double arrow glyph */
 .competitor-row::before {
-  content: "►"; /* Unicode triangle character */
+  content: "►"; /* Double arrow without button background */
   position: absolute;
   left: 5px;
   color: var(--accent-yellow);
   font-size: 14px;
-  animation: pulseGlyph 2s infinite;
+  text-shadow: 0 0 5px rgba(255, 196, 0, 0.7);
+  animation: pulseGlyph 1.5s infinite;
 }
 
 @keyframes pulseGlyph {
   0% {
     opacity: 0.7;
+    text-shadow: 0 0 3px rgba(255, 196, 0, 0.5);
   }
   50% {
     opacity: 1;
+    text-shadow: 0 0 8px rgba(255, 196, 0, 0.8), 0 0 12px rgba(255, 196, 0, 0.4);
   }
   100% {
     opacity: 0.7;
+    text-shadow: 0 0 3px rgba(255, 196, 0, 0.5);
   }
 }
 
