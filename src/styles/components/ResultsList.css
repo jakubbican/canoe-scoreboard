@@ -9,8 +9,8 @@
   font-family: var(--font-primary);
   color: var(--text-primary);
   z-index: 8;
-  background-color: rgba(18, 18, 18, 0.6);
-  backdrop-filter: blur(10px);
+  background-color: rgba(34, 34, 34, 0.9);
+  /* Removed backdrop filter for gen-x style */
   overflow: visible;
   border: none;
   box-shadow: none;
@@ -84,29 +84,37 @@
 
 /* Alternating row colors with green left borders to differentiate from on-course */
 .result-row:nth-child(even) {
-  background: linear-gradient(to bottom, var(--primary-color) 90%, rgba(0, 0, 0, 0.7));
-  backdrop-filter: blur(10px);
-  border-left: 3px solid var(--accent-green);
+  background-color: var(--primary-color);
+  /* Removed gradient and backdrop filter for gen-x style */
+  border-left: 2px solid var(--accent-green);
 }
 
 .result-row:nth-child(odd) {
-  background: linear-gradient(to bottom, var(--primary-light) 90%, rgba(0, 0, 0, 0.7));
-  backdrop-filter: blur(10px);
-  border-left: 3px solid #00AA55;
+  background-color: var(--primary-light);
+  /* Removed gradient and backdrop filter for gen-x style */
+  border-left: 2px solid var(--accent-green);
 }
 
-/* Highlighted competitor (just finished) */
+/* Highlighted competitor (just finished) - consistent gen-x style */
 .result-row.highlight {
-  background: var(--accent-gradient);
+  background-color: rgba(51, 102, 153, 0.4); /* Muted navy from gen-x palette */
   color: var(--text-primary);
   border-left: 3px solid var(--accent-yellow);
-  animation: pulse 2s infinite;
+  border-right: 1px solid var(--accent-yellow);
+  /* Subtle animation for gen-x style */
+  animation: subtlePulse 3s infinite;
 }
 
-@keyframes pulse {
-  0% { box-shadow: 0 0 0 0 rgba(138, 43, 226, 0.4); }
-  70% { box-shadow: 0 0 0 10px rgba(138, 43, 226, 0); }
-  100% { box-shadow: 0 0 0 0 rgba(138, 43, 226, 0); }
+@keyframes subtlePulse {
+  0% {
+    background-color: rgba(51, 102, 153, 0.4);
+  }
+  50% {
+    background-color: rgba(51, 102, 153, 0.6);
+  }
+  100% {
+    background-color: rgba(51, 102, 153, 0.4);
+  }
 }
 
 /* Results cells */
@@ -191,23 +199,24 @@
   white-space: nowrap;
 }
 
-/* LED Wall layout - enhanced */
+/* LED Wall layout - gen-x styled */
 .results-list.ledwall {
-  background-color: rgba(18, 18, 18, 0.8); /* Slightly darker for better contrast */
+  background-color: rgba(34, 34, 34, 0.9); /* Darker for better contrast */
 }
 
 .results-list.ledwall .result-row {
   height: 40px;
   grid-template-columns: 50px 60px minmax(60px, 1fr) 60px 100px 120px;
-  border-left: 4px solid var(--accent-green); /* Thicker border */
+  border-left: 3px solid var(--accent-green);
 }
 
 .results-list.ledwall .result-row:nth-child(even) {
-  background: linear-gradient(to right, rgba(0, 0, 0, 0), rgba(78, 229, 139, 0.1)); /* Subtle gradient */
+  background-color: var(--primary-color);
+  /* Removed gradient for gen-x style */
 }
 
 .results-list.ledwall .result-row:nth-child(odd) {
-  background: rgba(18, 18, 18, 0.9);
+  background-color: var(--primary-light);
 }
 
 .results-list.ledwall .result-row > div {
@@ -218,13 +227,13 @@
 
 .results-list.ledwall .result-rank {
   font-weight: 700;
-  color: #FFFFFF; /* Pure white for rank */
+  color: #ffffff; /* Pure white for rank */
 }
 
 .results-list.ledwall .result-total {
   font-size: 26px;
   font-weight: 700;
-  color: #FFFFFF; /* Pure white for time */
+  color: #ffffff; /* Pure white for time */
 }
 
 .results-list.ledwall .result-behind {
@@ -233,29 +242,25 @@
   padding-right: 15px;
 }
 
-/* Enhanced highlighting for LED wall */
+/* Enhanced highlighting for LED wall - consistent with other display types */
 .results-list.ledwall .result-row.highlight {
-  background: linear-gradient(to right, rgba(255, 164, 0, 0.5), rgba(138, 43, 226, 0.7)); 
-  color: #FFFFFF;
-  border-left: 5px solid #FFFFFF;
-  border-right: 5px solid #FFFFFF;
-  box-shadow: 0 0 15px rgba(255, 255, 255, 0.7);
-  animation: ledHighlightPulse 1.5s infinite alternate;
+  background-color: rgba(
+    51,
+    102,
+    153,
+    0.5
+  ); /* Same as standard highlight but slightly stronger */
+  color: var(--text-primary);
+  border-left: 3px solid var(--accent-yellow);
+  border-right: 1px solid var(--accent-yellow);
+  box-shadow: 0 0 5px rgba(204, 153, 51, 0.3); /* Subtle shadow */
+  animation: subtlePulse 3s infinite; /* Same animation as standard highlight */
   font-weight: bold;
 }
 
 .results-list.ledwall .result-row.highlight > div {
-  font-weight: 800;
-  text-shadow: 0 0 8px rgba(255, 255, 255, 0.5);
+  font-weight: 700;
+  /* Removed text shadow for gen-x style */
 }
 
-@keyframes ledHighlightPulse {
-  0% { 
-    background: linear-gradient(to right, rgba(255, 164, 0, 0.5), rgba(138, 43, 226, 0.7));
-    box-shadow: 0 0 15px rgba(255, 255, 255, 0.7);
-  }
-  100% { 
-    background: linear-gradient(to right, rgba(255, 164, 0, 0.7), rgba(138, 43, 226, 0.9));
-    box-shadow: 0 0 25px rgba(255, 255, 255, 0.9);
-  }
-}
+/* Using the same subtlePulse animation for consistency across display types */

@@ -31,8 +31,9 @@
 .time-display.ledwall {
   font-size: 36px;
   top: 16px;
-  left: auto; /* Repositioned to near the title */
-  right: 100px; /* Remove right positioning */
+  left: auto;
+  right: 100px;
   color: var(--accent-yellow);
-  text-shadow: 0 0 8px rgba(255, 164, 0, 0.7);
+  /* Removed glow effect for gen-x style */
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
 }

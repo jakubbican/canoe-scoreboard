@@ -43,28 +43,24 @@
 }
 
 :root {
-  /* Color palette - Modern Gen-Z Dark Theme */
-  --primary-color: #121212; /* Near-black background */
-  --primary-light: #1e1e1e; /* Slightly lighter background */
-  --secondary-color: #e0e0e0; /* Light gray (instead of pure white) */
-  --accent-color: #8a2be2; /* Vibrant purple */
-  --highlight-color: #ff6b8b; /* Coral pink */
-  --error-color: #ff4563; /* Bright red */
+  /* Color palette - Classic Gen-X Theme */
+  --primary-color: #222222; /* Dark gray background */
+  --primary-light: #2d2d2d; /* Slightly lighter background */
+  --secondary-color: #d0d0d0; /* Medium gray (instead of vibrant colors) */
+  --accent-color: #336699; /* Classic navy blue */
+  --highlight-color: #993333; /* Maroon red */
+  --error-color: #cc3333; /* Standard red */
 
   /* Text colors */
-  --text-primary: #f5f5f5; /* Off-white text */
-  --text-secondary: #121212; /* Dark text */
+  --text-primary: #e6e6e6; /* Light gray text */
+  --text-secondary: #222222; /* Dark text */
 
-  /* Additional accent colors for Gen-Z vibes */
-  --accent-teal: #00ced1; /* Bright teal */
-  --accent-yellow: #ffa400; /* Amber yellow */
-  --accent-green: #4ee58b; /* Bright mint green */
-  --accent-blue: #3498ff; /* Electric blue */
-  --accent-gradient: linear-gradient(
-    135deg,
-    var(--accent-color) 0%,
-    var(--accent-blue) 100%
-  ); /* Purple to blue gradient */
+  /* Additional accent colors for Gen-X aesthetic */
+  --accent-teal: #336666; /* Muted teal */
+  --accent-yellow: #cc9933; /* Muted gold */
+  --accent-green: #339966; /* Forest green */
+  --accent-blue: #3366aa; /* Navy blue */
+  --accent-gradient: none; /* No gradient */
 
   /* Font sizes - Default values for horizontal layout */
   --header-size: 48px;
@@ -175,10 +171,10 @@ body {
 }
 
 .glass-effect {
-  background: rgba(18, 18, 18, 0.7);
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+  background: rgba(34, 34, 34, 0.9);
+  /* Removed backdrop filter for gen-x style */
+  border: 1px solid rgba(204, 204, 204, 0.2);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
 }
 
 .neon-border {
@@ -192,11 +188,11 @@ body {
   left: 0;
   right: 0;
   bottom: 0;
-  border: 2px solid var(--accent-color);
+  border: 1px solid var(--accent-color);
   border-radius: inherit;
-  box-shadow: 0 0 15px var(--accent-color), inset 0 0 15px var(--accent-color);
+  /* Removed glow effect for gen-x style */
   pointer-events: none;
-  animation: neonGlow 2s infinite alternate;
+  /* Removed animation for gen-x style */
 }
 
 @keyframes fadeIn {
@@ -243,14 +239,7 @@ body {
   }
 }
 
-@keyframes neonGlow {
-  from {
-    box-shadow: 0 0 5px var(--accent-color), inset 0 0 5px var(--accent-color);
-  }
-  to {
-    box-shadow: 0 0 20px var(--accent-color), inset 0 0 10px var(--accent-color);
-  }
-}
+/* Removed neonGlow animation for gen-x style */
 
 /* Config panel */
 .config-panel {
@@ -277,7 +266,7 @@ body {
   letter-spacing: 1px;
   border-bottom: 1px solid var(--accent-color);
   padding-bottom: 10px;
-  text-shadow: 0 0 10px rgba(138, 43, 226, 0.5);
+  /* Removed text shadow for gen-x style */
 }
 
 .config-panel .form-group {
@@ -321,25 +310,25 @@ body {
   margin-top: 15px;
   margin-right: 10px;
   border: none;
-  border-radius: 6px;
-  background: var(--accent-gradient);
+  border-radius: 4px;
+  background-color: var(--accent-color);
   color: white;
   cursor: pointer;
   font-weight: bold;
   letter-spacing: 0.5px;
   text-transform: uppercase;
   transition: all 0.3s ease;
-  box-shadow: 0 4px 10px rgba(138, 43, 226, 0.3);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
 }
 
 .config-panel button:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 15px rgba(138, 43, 226, 0.5);
+  background-color: #3a7ab3;
+  box-shadow: 0 3px 7px rgba(0, 0, 0, 0.4);
 }
 
 .config-panel button:active {
   transform: translateY(1px);
-  box-shadow: 0 2px 5px rgba(138, 43, 226, 0.3);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
 }
 
 /* Connection status indicator - Base styles */
