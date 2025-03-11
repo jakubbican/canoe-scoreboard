@@ -1,5 +1,6 @@
 # TODO
 
+- update recommended resolution of images in README
 - zobrazení umístění po dojetí v aktivní řádce
 - TOP10 / rolování komplet výsledků
 - true responsivita
