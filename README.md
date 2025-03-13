@@ -1,6 +1,6 @@
 # Canoe Scoreboard
 
-A modern, responsive web application for displaying canoe competition scoreboards, compatible with the existing QML control application. This application is designed to work with different display types, including standard horizontal monitors, vertical displays, and custom LED walls.
+A modern, responsive web application for displaying canoe competition scoreboards, compatible with the existing control application CanoeLiveInterface. This application is designed to work with different display types, including standard horizontal monitors, vertical displays, and custom LED walls.
 
 ## Features
 
@@ -9,7 +9,6 @@ A modern, responsive web application for displaying canoe competition scoreboard
 - **Component-based architecture** for easy maintenance
 - **Configurable theming** via CSS variables
 - **Responsive design** that adapts to different screen sizes
-- **Compatible** with the existing QML control application
 
 ## Installation
 
@@ -23,8 +22,8 @@ A modern, responsive web application for displaying canoe competition scoreboard
 1. Clone the repository:
 
    ```bash
-   git clone https://github.com/jakubbican/csk_scoreboard.git
-   cd csk_scoreboard
+   git clone https://github.com/jakubbican/canoe-scoreboard.git
+   cd canoe-scoreboard
    ```
 
 2. Install dependencies:
@@ -33,7 +32,7 @@ A modern, responsive web application for displaying canoe competition scoreboard
    npm install
    ```
 
-3. Prepare assets:
+3. Prepare assets (optional):
    ```bash
    node scripts/prepare-assets.js
    ```
@@ -68,7 +67,7 @@ npm run preview
 
 ### WebSocket Connection
 
-The scoreboard connects to the QML control application via WebSocket. By default, it connects to `ws://localhost:8081/`, but this can be changed through the configuration panel or URL parameters.
+The scoreboard connects to the control application CanoeLiveInterface via WebSocket. By default, it connects to `ws://localhost:8081/`, but this can be changed through the configuration panel or URL parameters.
 
 ### URL Parameters
 
@@ -99,26 +98,55 @@ Press `Alt+C` to show/hide the configuration panel, which allows you to change s
 
 Deploy the contents of the `dist` directory to any web server.
 
-### Raspberry Pi
+### FullpageOS (Raspberry Pi)
 
-1. Build the application:
+[FullpageOS](https://github.com/guysoft/FullPageOS) is a great and lightweight way to serve Scoreboard to any display through RaspberryPI. Tested with Raspberry Pi 3 A+ and Raspberry Pi 5 (2GB RAM).
 
-   ```bash
-   npm run build
-   ```
+1. Build the application and serve `dist` from web server as usual.
 
-2. Copy the contents of the `dist` directory to the Raspberry Pi.
+2. Deploy [FullpageOS](https://github.com/guysoft/FullPageOS) on your Raspberry PI using RPI Imager or other tool of your choice.
 
-3. Set up a simple web server on the Raspberry Pi (e.g., using [http-server](https://www.npmjs.com/package/http-server)):
+3. Connect to RPI console through SSH to configure it:
 
    ```bash
-   npx http-server ./dist -p 8080
+   ssh pi@[raspberry-pi-ip]
    ```
 
-4. Access the scoreboard via the Raspberry Pi's IP address:
+4. On RPI, set FullpageOS to render served scoreboard:
+
+   ```bash
+   sudo nano /boot/firmware/fullpageos.txt
    ```
-   http://[raspberry-pi-ip]:8080/
+
+   In editor, replace the sample URL address with your served page. Include all URL parameters:
+
    ```
+   http://[your-server-address]:[port]/[some-path]/?type=vertical&server=ws://[CanoeLiveInterface-ip]:8081/
+   ```
+
+5. (Optional) Adjust the screen orientation for vertical displays:
+   ```bash
+   sudo nano /home/timing/scripts/start_gui
+   ```
+   Edit value of `DISPLAY_ORIENTATION`, e.g.:
+   ```
+   DISPLAY_ORIENTATION=left
+   ```
+6. On low-memory RPIs, skip the chromium browser memory check:
+
+   ```bash
+   sudo nano /home/timing/scripts/start_chromium_browser
+   ```
+
+   Add `--no-memcheck` among the flags.
+
+7. Reboot your RPI:
+
+   ```bash
+   sudo reboot
+   ```
+
+8. You shall see Scoreboard displayed to RPI's HDMI output.
 
 ### Pi Signage
 
@@ -139,81 +167,103 @@ Deploy the contents of the `dist` directory to any web server.
 
 4. Configure Pi Signage to display the scoreboard as a web asset.
 
-## Customization
+## Customization and Asset Management
 
-### Images and Logos
+The scoreboard application offers extensive customization options that allow you to personalize the appearance and branding without code changes. These customizations fall into two main categories:
 
-Replace the following files in the `public/assets` directory:
+1. **Visual Assets** - Images, logos, and flags that give the scoreboard its branded appearance
+2. **Style Customizations** - Color schemes, fonts, and sizing adjustments through CSS variables
 
-- `logo.png` - Main logo
-- `footer.png` - Footer with sponsor logos
-- `flags/*.png` - Country flags
+### Visual Assets Overview
 
-### CSS Variables
+The application uses a combination of:
 
-Edit the CSS variables in `src/styles/main.css` to customize colors, fonts, and sizes:
+- **Core UI Assets** - Logo, partner logos, footer images, and competition elements
+- **Country Flags** - Used to display competitor nationalities
+- **Event-specific Graphics** - Can be customized for different competitions
 
-```css
-:root {
-  --primary-color: #003366; /* Dark blue */
-  --primary-light: #0046b8; /* Lighter blue */
-  --secondary-color: #ffffff; /* White */
-  --accent-color: #ffff00; /* Yellow */
-  --highlight-color: #ffc0cb; /* Pink */
-  --error-color: #e32213; /* Red */
-  /* ... other variables ... */
-}
-```
+### How to Customize Visual Assets
 
-## Asset Management
+#### 1. Preparing Your Custom Images
 
-The scoreboard uses an advanced asset management system that balances performance and flexibility:
+The application automatically adapts asset display based on the selected layout. For optimal results, prepare your image files according to these layout-specific recommendations:
 
-1. **Static flag images** are compiled into the application as base64-encoded strings
-2. **Dynamic assets** (logos, footers, etc.) are loaded through a JSON configuration file
+##### Logo and Partner Images
 
-### Asset Processing During Build Time
+| Asset         | File Location                | Layout Type         | Recommended Size | Format | Notes                                       |
+| ------------- | ---------------------------- | ------------------- | ---------------- | ------ | ------------------------------------------- |
+| Main Logo     | `public/assets/logo.png`     | Horizontal/Vertical | 250px × 70px     | PNG    | Height scales to top bar (approx. 80-90px)  |
+|               |                              | LED Wall            | 120px × 55px     | PNG    | Fixed max dimensions in LED wall layout     |
+| Partners Logo | `public/assets/partners.png` | Horizontal/Vertical | 300px × 60px     | PNG    | Width capped at 300px, height scales to fit |
+|               |                              | LED Wall            | 120px × 45px     | PNG    | Smaller size for LED wall layout            |
 
-To prepare assets for the application, follow these steps:
+##### Footer and UI Elements
 
-1. **Initial Asset Setup**
+| Asset          | File Location               | Layout Type         | Recommended Size | Format | Notes                                             |
+| -------------- | --------------------------- | ------------------- | ---------------- | ------ | ------------------------------------------------- |
+| Footer Banner  | `public/assets/footer.png`  | Horizontal/Vertical | 1920px × 120px   | PNG    | Fixed height of 120px across layouts              |
+|                |                             | LED Wall            | Not displayed    | N/A    | Footer is hidden in LED wall layout               |
+| Bib Background | `public/assets/bib.png`     | Horizontal          | 100px × 100px    | PNG    | Matches 100px bib column in horizontal mode       |
+|                |                             | Vertical/LED Wall   | 80px × 80px      | PNG    | Matches 80px bib column in these layouts          |
+| Country Flags  | `public/assets/flags/*.bmp` | All layouts         | 60px × 40px      | BMP    | Named using 3-letter country code (e.g., CZE.bmp) |
 
+**Format and Design Recommendations:**
+
+- Use PNG format for logos and graphics that need transparency
+- For best results on high-resolution displays, consider providing images at 2x the recommended dimensions
+- The application will automatically resize images to fit their containers while maintaining aspect ratio
+- BMP format for flags ensures compatibility with the control system
+- SVG files can be converted to PNG using the included conversion script:
+  ```bash
+  node scripts/simple-svg-to-png.cjs input.svg output.png
+  ```
+
+#### 2. Installing Custom Assets
+
+You have three methods to install your custom assets:
+
+**Method A: Direct Replacement (Simplest)**
+
+1. Navigate to the `public/assets/` directory
+2. Replace the existing files with your custom files using the same filenames
+3. For country flags, place BMP files in `public/assets/flags/` directory with the correct three-letter country code (e.g., `USA.bmp`, `CZE.bmp`)
+
+**Method B: Using the Asset Preparation Script**
+
+1. Place your custom files in the `assets-source/` directory
+2. Run the asset preparation script:
    ```bash
    node scripts/prepare-assets.js
    ```
+3. The script will:
+   - Copy your assets to the correct locations
+   - Create any missing directories
+   - Set up placeholder assets for any missing files
 
-   This script:
+**Method C: Post-Deployment Customization**
 
-   - Creates necessary directories if they don't exist
-   - Copies assets from `assets-source` to `public/assets` if available
-   - Creates placeholder assets if source files aren't available
-   - Sets up required directory structure
+1. After deploying the application, replace image files directly in the deployed `assets/` directory
+2. Edit the `assets/config.json` file to specify new file paths if filenames differ from defaults
+3. Increment the `cacheVersion` value in the config file to force browsers to reload cached assets
 
-2. **Flag Optimization (Optional)**
+#### 3. Country Flag Optimization (Optional)
 
+For production deployments, you can optimize flag loading performance:
+
+1. Ensure all flag images are in the `public/assets/flags/` directory
+2. Run the flag optimization script:
    ```bash
    node scripts/flags-to-base64.cjs
    ```
-
-   This script:
-
-   - Converts all flag images in `public/assets/flags` to base64-encoded strings
-   - Generates `src/utils/flagsBase64.js` with the encoded data
-   - Embeds flags directly in the application bundle
-   - Reduces HTTP requests and improves performance
-
-3. **Image Optimization (Optional)**
+3. This embeds flags directly into the application as base64 strings, eliminating HTTP requests
+4. Rebuild the application after running this script:
    ```bash
-   node scripts/optimizeImages.js
+   npm run build
    ```
-   This script:
-   - Resizes and compresses images for optimal performance
-   - Maintains aspect ratio while limiting dimensions
-   - Optimizes PNG quality settings
 
-### Asset Configuration for Deployment
+#### 4. Advanced: Configuration File Customization
 
-The application uses a JSON configuration file (`public/assets/config.json`) that can be easily edited after deployment without rebuilding the application:
+The application uses a JSON configuration file (`public/assets/config.json`) that can be edited to customize asset paths:
 
 ```json
 {
@@ -246,101 +296,65 @@ The application uses a JSON configuration file (`public/assets/config.json`) tha
 }
 ```
 
-To customize assets after deployment:
+This configuration allows you to:
 
-1. Replace the image files in the `public/assets` directory
-2. Update the paths in `config.json` if using different filenames or formats
-3. Set `cacheVersion` to a new value to force browsers to reload cached assets
+- Change asset filenames or paths
+- Use different image formats by updating both path and type
+- Force cache refresh by incrementing cacheVersion
+- Control preloading behavior
 
-### Recommended Image Sizes
+### Customizing Colors, Fonts and Styling
 
-For optimal display across different screen sizes, use these recommended dimensions:
+The application uses CSS variables for easy styling customization. To change the visual theme:
 
-| Asset        | Recommended Size | Format | Description                                          |
-| ------------ | ---------------- | ------ | ---------------------------------------------------- |
-| logo.png     | 300px × 80px     | PNG    | Main logo in header area                             |
-| partners.png | 300px × 60px     | PNG    | Partner logos in header area                         |
-| footer.png   | 1920px × 120px   | PNG    | Footer with sponsor logos                            |
-| bib.png      | 80px × 80px      | PNG    | Background for competitor bib numbers                |
-| flags/\*.bmp | 60px × 40px      | BMP    | Country flags (named by country code, e.g., CZE.bmp) |
+1. Edit the CSS variables in `src/styles/main.css`:
 
-Notes:
-
-- PNG format supports transparency which is ideal for logos
-- The application will automatically resize images to fit their containers
-- SVG images can be converted to PNG using `scripts/simple-svg-to-png.cjs`
-- Flag images are best provided as BMP files for compatibility with the control system
-
-### Supported Image Formats
-
-With the JSON configuration, you can use various image formats:
-
-- PNG (recommended for logos and graphics with transparency)
-- JPEG (good for photographs or complex images without transparency)
-- WebP (modern format with excellent compression)
-- SVG (vector graphics, ideal for logos that need to scale)
-- BMP (used primarily for flag images)
-
-Simply update the file extension in the configuration paths and ensure the `type` property matches the MIME type.
-
-## Windows Build Instructions
-
-To build and run the application on a Windows computer:
-
-1. Install Node.js:
-
-   - Download and install Node.js from [nodejs.org](https://nodejs.org/)
-   - Choose the LTS (Long Term Support) version
-   - Follow the installation wizard, accepting the default settings
-
-2. Clone or download the repository:
-
-   - If you have Git installed:
-     ```
-     git clone https://github.com/jakubbican/csk_scoreboard.git
-     cd csk_scoreboard
-     ```
-   - Alternatively, download and extract the ZIP file from the repository
-
-3. Open Command Prompt or PowerShell:
-
-   - Navigate to the project directory:
-     ```
-     cd path\to\csk_scoreboard
-     ```
-
-4. Install dependencies:
-
-   ```
-   npm install
+   ```css
+   :root {
+     --primary-color: #003366; /* Dark blue */
+     --primary-light: #0046b8; /* Lighter blue */
+     --secondary-color: #ffffff; /* White */
+     --accent-color: #ffff00; /* Yellow */
+     --highlight-color: #ffc0cb; /* Pink */
+     --error-color: #e32213; /* Red */
+     /* ... other variables ... */
+   }
    ```
 
-5. Prepare assets:
+2. Rebuild the application after making changes:
 
-   ```
-   node scripts\prepare-assets.js
-   ```
-
-6. Development mode:
-
-   ```
-   npm run dev
-   ```
-
-7. Build for production:
-
-   ```
+   ```bash
    npm run build
    ```
 
-8. The production build will be available in the `dist` folder. You can deploy these files to any web server or open the `index.html` file directly in a browser.
+3. Key styling variables include:
+   - Color scheme variables (primary, secondary, accent colors)
+   - Font family and size variables
+   - Spacing and layout variables
+   - Component-specific styling variables
+
+### Image Optimization Tools
+
+For the best performance, especially on lower-powered devices like Raspberry Pi, you can optimize your images:
+
+```bash
+node scripts/optimizeImages.js
+```
+
+This script:
+
+- Automatically resizes oversized images to recommended dimensions
+- Compresses images while maintaining quality
+- Preserves aspect ratios during resizing
+- Optimizes PNG compression settings
 
 ## License
 
-This project is licensed under the MIT License - see the LICENSE file for details.
+This project is licensed under the ?????
 
 ## Acknowledgments
 
-- Original QML scoreboard system by Czech Canoe
+- Standa Ježek from Czech Canoe Union
+- Original CanoeLiveInterface scoreboard system by xxxxx
 - React framework and community
 - Vite.js build tool
