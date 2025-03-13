@@ -1,6 +1,6 @@
 # Canoe Scoreboard
 
-A modern, responsive web application for displaying canoe competition scoreboards, compatible with the existing control application CanoeLiveInterface. This application is designed to work with different display types, including standard horizontal monitors, vertical displays, and custom LED walls.
+A modern, responsive web application for displaying canoe competition scoreboards, compatible with the existing control application CanoeLiveInterface by Martin „Mako“ Šlachta (STiming) . This application is designed to work with different display types, including standard horizontal monitors, vertical displays, and custom LED walls.
 
 ## Features
 
@@ -147,6 +147,8 @@ Deploy the contents of the `dist` directory to any web server.
    ```
 
 8. You shall see Scoreboard displayed to RPI's HDMI output.
+
+Some of those files (namely `/boot/firmware/fullpageos.txt`) can be edited on a SD card in your computer. It is also possible to change splash screen of FullPageOS by adding your splash png to SD card and addressing it in `~/scripts/run_onempageos` file by editing line `feh --bg-center /boot/firmware/your-splash.png`.
 
 ### Pi Signage
 
@@ -355,6 +357,6 @@ This project is licensed under the ?????
 ## Acknowledgments
 
 - Standa Ježek from Czech Canoe Union
-- Original CanoeLiveInterface scoreboard system by xxxxx
+- Original CanoeLiveInterface scoreboard system by Martin „Mako“ Šlachta (STiming)
 - React framework and community
 - Vite.js build tool
