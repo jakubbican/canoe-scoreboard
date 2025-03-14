@@ -225,10 +225,11 @@ The application automatically adapts asset display based on the selected layout.
 - For best results on high-resolution displays, consider providing images at 2x the recommended dimensions
 - The application will automatically resize images to fit their containers while maintaining aspect ratio
 - BMP format for flags ensures compatibility with the control system
-- SVG files can be converted to PNG using the included conversion script:
+- SVG files can be used directly and their colors adjusted using the included script:
   ```bash
-  node scripts/simple-svg-to-png.cjs input.svg output.png
+  node scripts/svg-color-adjuster.cjs input.svg [output.svg] "#8A2BE2"
   ```
+- SVG files can be referenced directly in the config.json file (see Advanced Configuration below)
 
 #### 2. Installing Custom Assets
 
@@ -281,9 +282,9 @@ The application uses a JSON configuration file (`public/assets/config.json`) tha
 {
   "assets": {
     "logo": {
-      "path": "logo.png",
-      "type": "image/png",
-      "description": "Main logo displayed in the top bar"
+      "path": "logo.svg",
+      "type": "image/svg+xml",
+      "description": "Main logo displayed in the top bar - SVG sample"
     },
     "partners": {
       "path": "partners.png",
