@@ -1,6 +1,16 @@
 # Canoe Scoreboard
 
-A modern, responsive web application for displaying canoe competition scoreboards, compatible with the existing control application CanoeLiveInterface by Martin „Mako“ Šlachta (STiming) . This application is designed to work with different display types, including standard horizontal monitors, vertical displays, and custom LED walls.
+A modern, responsive web application for displaying canoe competition scoreboards, compatible with the existing control application CanoeLiveInterface by Martin „Mako" Šlachta (STiming) . This application is designed to work with different display types, including standard horizontal monitors, vertical displays, and custom LED walls.
+
+<div align="center">
+  <a href="preview_lcd.png" target="_blank">
+    <img src="preview_lcd.png" alt="LED WALL Layout" title="Scoreboard in custom LED WALL size mode" width="300" style="margin:10px" />
+  </a>
+  <br>
+  <a href="preview_vertical.png" target="_blank">
+    <img src="preview_vertical.png" alt="Vertical Display Layout" title="Scoreboard in vertical display orientation" width="250" style="margin:10px" />
+  </a>
+</div>
 
 ## Features
 
@@ -357,6 +367,6 @@ This project is licensed under the ?????
 ## Acknowledgments
 
 - Standa Ježek from Czech Canoe Union
-- Original CanoeLiveInterface scoreboard system by Martin „Mako“ Šlachta (STiming)
+- Original CanoeLiveInterface scoreboard system by Martin „Mako" Šlachta (STiming)
 - React framework and community
 - Vite.js build tool

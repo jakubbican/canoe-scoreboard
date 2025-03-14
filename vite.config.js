@@ -31,9 +31,16 @@ export default defineConfig({
     port: 3000,
     // Enable CORS for WebSocket connections
     cors: true,
-    // Automatically open browser on start
-    open: true,
+    // Automatically open browser with specific parameters
+    open: "/?type=vertical&server=ws://localhost:8081/",
     // Listen on all interfaces
     host: "0.0.0.0",
+  },
+
+  // Preview server configuration
+  preview: {
+    port: 4173,
+    open: "/?type=vertical&server=ws://localhost:8081/",
+    cors: true,
   },
 });
