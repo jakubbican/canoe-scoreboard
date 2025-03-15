@@ -1,6 +1,6 @@
 # Canoe Scoreboard
 
-A modern, responsive web application for displaying canoe competition scoreboards, compatible with the existing control application CanoeLiveInterface by Martin „Mako" Šlachta (STiming) . This application is designed to work with different display types, including standard horizontal monitors, vertical displays, and custom LED walls.
+A web application for displaying canoe competition scoreboards, compatible with the existing control application CanoeLiveInterface by Martin „Mako" Šlachta (STiming) . This application is designed to work with different display types, including standard horizontal monitors, vertical displays, and custom LED walls.
 
 <div align="center">
   <a href="preview_lcd.png" target="_blank">
@@ -11,6 +11,34 @@ A modern, responsive web application for displaying canoe competition scoreboard
     <img src="preview_vertical.png" alt="Vertical Display Layout" title="Scoreboard in vertical display orientation" width="250" style="margin:10px" />
   </a>
 </div>
+
+This app has been developed in a unique way - I started without any knowledge of React or modern web development, and partnered with AI models (primarily Anthropic Claude Sonnet 3.7) to generate and evolve the code. It has been a great experience to explore this way of pair-programming with AI! 😊
+
+## Table of Contents
+
+- [Features](#features)
+- [Installation](#installation)
+  - [Prerequisites](#prerequisites)
+  - [Setup](#setup)
+- [Development](#development)
+- [Building for Production](#building-for-production)
+- [Usage](#usage)
+  - [WebSocket Connection](#websocket-connection)
+  - [URL Parameters](#url-parameters)
+  - [Configuration Panel](#configuration-panel)
+- [Deployment](#deployment)
+  - [Web Server](#web-server)
+  - [FullpageOS (Raspberry Pi)](#fullpageos-raspberry-pi)
+  - [Pi Signage](#pi-signage)
+- [Customization and Asset Management](#customization-and-asset-management)
+  - [Visual Assets Overview](#visual-assets-overview)
+  - [How to Customize Visual Assets](#how-to-customize-visual-assets)
+  - [Country Flag Optimization (Optional)](#country-flag-optimization-optional)
+  - [Advanced: Configuration File Customization](#advanced-configuration-file-customization)
+  - [Customizing Colors, Fonts and Styling](#customizing-colors-fonts-and-styling)
+  - [Image Optimization Tools](#image-optimization-tools)
+- [License](#license)
+- [Acknowledgments](#acknowledgments)
 
 ## Features
 
@@ -371,3 +399,4 @@ This project is licensed under the ?????
 - Original CanoeLiveInterface scoreboard system by Martin „Mako" Šlachta (STiming)
 - React framework and community
 - Vite.js build tool
+- ...and especially my AI buddy Claude Sonnet 3.7
