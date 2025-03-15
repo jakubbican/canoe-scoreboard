@@ -1,6 +1,6 @@
 # TODO
 
-- update recommended resolution of images in README
+- klik na status do konfigurace, tvrdý refresh v konfig panelu
 - zobrazení umístění po dojetí v aktivní řádce
 - TOP10 / rolování komplet výsledků
 - true responsivita
@@ -14,6 +14,7 @@
 - OK: kategorie z oncourse do title
 - OK: filtrovat oncourse jen na ty, co mají čas
 - OK: více než 30 výsledků
+- OK: update recommended resolution of images in README
 
 # WON'T DO
 
