@@ -14,7 +14,6 @@
   overflow: visible;
   border: none;
   box-shadow: none;
-  transition: opacity 0.3s ease;
 }
 
 /* Tab for results */
@@ -72,14 +71,8 @@
   display: grid;
   align-items: center;
   background-color: rgba(30, 30, 30, 0.7);
-  transition: all 0.3s ease;
   padding: 0;
   margin: 2px 0;
-}
-
-.result-row:hover {
-  background-color: rgba(78, 229, 139, 0.1);
-  transform: translateY(-2px);
 }
 
 /* Alternating row colors with green left borders to differentiate from on-course */

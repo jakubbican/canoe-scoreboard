@@ -8,7 +8,6 @@
   flex-direction: column;
   font-family: var(--font-primary);
   color: var(--text-primary);
-  transition: all 0.3s ease;
   z-index: 9;
   background-color: rgba(18, 18, 18, 0.7);
   backdrop-filter: blur(10px);
@@ -58,7 +57,6 @@
     153,
     0.2
   ); /* More visible active background */
-  transition: all 0.3s ease;
   border-left: 3px solid var(--accent-yellow);
   border-right: 1px solid var(--accent-yellow); /* Right border to emphasize active status */
   padding: 0 !important;
