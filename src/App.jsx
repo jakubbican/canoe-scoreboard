@@ -72,7 +72,7 @@ function App() {
               onServerChange={handleServerChange}
             />
           )}
-          <ConnectionStatus />
+          <ConnectionStatus onClick={() => setShowConfig((prev) => !prev)} />
         </LayoutProvider>
       </WebSocketProvider>
     ),

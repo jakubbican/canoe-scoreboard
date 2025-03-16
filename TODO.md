@@ -1,7 +1,6 @@
 # TODO
 
-- klik na status do konfigurace, tvrdý refresh v konfig panelu
-- vyhodit hover animace
+- tvrdý refresh v konfig panelu
 - zobrazení umístění po dojetí v aktivní řádce
 - TOP10 / rolování komplet výsledků
 - true responsivita
@@ -16,6 +15,8 @@
 - OK: filtrovat oncourse jen na ty, co mají čas
 - OK: více než 30 výsledků
 - OK: update recommended resolution of images in README
+- OK: vyhodit hover animace
+- OK: klik na status do konfigurace
 
 # WON'T DO
 
