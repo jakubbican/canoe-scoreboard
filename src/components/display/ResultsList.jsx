@@ -1,5 +1,6 @@
 // ResultsList.jsx
 // Refactored for the scrollable container with fixed scrolling
+// Removed tab implementation and transition markup
 
 import React, { useMemo, useEffect, useRef, useState } from "react";
 import { useLayout } from "../core/LayoutManager";
@@ -285,7 +286,6 @@ function ResultsList({ data, visible, highlightBib }) {
   useEffect(() => {
     if (highlightBib && highlightRef.current && !hasScrolledToHighlight) {
       // Use a small delay to ensure the component has fully updated
-      // This fixes the timing issue between OnCourse removal and results scrolling
       const scrollTimer = setTimeout(() => {
         // Use our safe scroll function instead of scrollIntoView
         safeScrollToItem(highlightRef.current);
@@ -301,11 +301,11 @@ function ResultsList({ data, visible, highlightBib }) {
     if (!containerRef.current) return;
 
     const container = containerRef.current;
-    const isAtBottom =
+    const isAtBottomValue =
       container.scrollHeight - container.scrollTop <=
       container.clientHeight + 10;
 
-    setAtBottom(isAtBottom);
+    setAtBottom(isAtBottomValue);
 
     // If user is scrolling, pause auto-scroll
     setIsUserScrolling(true);
@@ -406,10 +406,13 @@ function ResultsList({ data, visible, highlightBib }) {
           resetAutoScrollTimer();
         }
       } else if (e.key === "PageDown") {
-        scrollPageDown();
-        e.preventDefault();
-        setIsUserScrolling(true);
-        resetAutoScrollTimer();
+        if (containerRef.current) {
+          const pageHeight = containerRef.current.clientHeight * 0.9;
+          containerRef.current.scrollTop += pageHeight;
+          e.preventDefault();
+          setIsUserScrolling(true);
+          resetAutoScrollTimer();
+        }
       } else if (e.key === "PageUp") {
         if (containerRef.current) {
           const pageHeight = containerRef.current.clientHeight * 0.9;
@@ -443,26 +446,8 @@ function ResultsList({ data, visible, highlightBib }) {
     return `${firstNameArr[0]}/${secondNameArr[0]}`;
   };
 
-  // Get category title for the tab
-  const getCategoryTitle = () => {
-    // Check if we have a category
-    const prefix = ""; // categoryInfo ? `${categoryInfo} - ` : '';
-
-    if (data.RaceName) {
-      // If there's a race status, add it to the race name
-      return data.RaceStatus
-        ? `${prefix}Výsledky: ${data.RaceName} - ${data.RaceStatus}`
-        : `${prefix}Výsledky: ${data.RaceName}`;
-    }
-
-    return categoryInfo ? `${categoryInfo} - Výsledky` : "Výsledky";
-  };
-
   return (
     <div className={`results-list ${displayType}`} ref={resultRef}>
-      {/* Tab for Results with category title */}
-      <div className="results-tab">{getCategoryTitle()}</div>
-
       <div className="results-body">
         {data.list.map((competitor, index) => {
           // Check if there are penalties

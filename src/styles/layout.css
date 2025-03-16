@@ -1,5 +1,5 @@
 /* layout.css */
-/* New layout styles for the scoreboard application - No Tabs Version with Adjusted Spacing */
+/* Modified to ensure tabs are completely removed */
 
 /* Main container structure */
 .scoreboard-layout {
@@ -124,7 +124,7 @@
   /* No additional margin needed since tabs are removed */
 }
 
-/* Hide all tabs from header components and results */
+/* Explicitly hide all tabs that might still exist in the HTML */
 .competitor-tab,
 .course-tab,
 .info-tab,

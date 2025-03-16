@@ -1,5 +1,6 @@
 // App.jsx
 // Refactored with new layout structure: fixed header, scrollable results, fixed footer
+// Suppresses highlighting in results if the athlete is shown in OnCourse display
 
 import React, { useState, useEffect, useMemo, useRef } from "react";
 import {
@@ -131,50 +132,12 @@ function ScoreboardContent() {
   // State for scroll position in results area
   const [scrollPosition, setScrollPosition] = useState(0);
 
-  // State to track current competitor for highlighting in results
-  const [currentCompetitorBib, setCurrentCompetitorBib] = useState(null);
-  const [transitioningFromCourse, setTransitioningFromCourse] = useState(false);
-
   // Refs for tracking user interaction
   const userActivityTimeoutRef = useRef(null);
   const resultsContainerRef = useRef(null);
 
   // Track whether we're in auto-scroll mode
   const [isAutoScrolling, setIsAutoScrolling] = useState(false);
-
-  // Track previous onCourse athletes to detect transitions
-  const prevOnCourseRef = useRef([]);
-
-  // Update the highlight bib when a competitor finishes
-  useEffect(() => {
-    // When competitorData changes, check if it's different from the current highlight
-    if (competitorData && competitorData.Bib) {
-      const competitorBib = parseInt(competitorData.Bib);
-
-      // Check if this competitor just moved from onCourse to current
-      const wasOnCourse = prevOnCourseRef.current.some(
-        (athlete) => athlete.Bib === competitorData.Bib
-      );
-
-      if (wasOnCourse) {
-        setTransitioningFromCourse(true);
-        // Reset after a short delay to allow animations to complete
-        setTimeout(() => {
-          setTransitioningFromCourse(false);
-        }, 1000);
-      }
-
-      // Update the current competitor bib
-      setCurrentCompetitorBib(competitorBib);
-    }
-  }, [competitorData]);
-
-  // Update the previous onCourse list for reference
-  useEffect(() => {
-    if (onCourseData && Array.isArray(onCourseData)) {
-      prevOnCourseRef.current = [...onCourseData];
-    }
-  }, [onCourseData]);
 
   // Handle scroll events to update header shadow effect
   const handleScroll = (e) => {
@@ -265,21 +228,39 @@ function ScoreboardContent() {
     }
   }, [scrollPosition]);
 
-  // Determine which bib to highlight in results
-  // This should prioritize:
-  // 1. The currently displayed competitor that just transitioned from on-course
-  // 2. The topResults.HighlightBib if available
-  // 3. The currently displayed competitor
+  // Modified function to get highlight bib with suppression for duplicates
+  // Suppresses highlighting if the athlete is already shown in OnCourse display
   const getHighlightBib = () => {
-    if (transitioningFromCourse && currentCompetitorBib) {
-      return currentCompetitorBib;
-    }
-
+    // First check if there's a highlight bib from the server
     if (topResults && topResults.HighlightBib) {
-      return parseInt(topResults.HighlightBib);
+      const highlightBib = parseInt(topResults.HighlightBib);
+
+      // Check if this athlete is in the onCourseData array
+      if (
+        onCourseData &&
+        Array.isArray(onCourseData) &&
+        onCourseData.length > 0
+      ) {
+        // Check if any athlete in onCourseData matches the highlight bib
+        const athleteOnCourse = onCourseData.some((athlete) => {
+          return (
+            athlete.Bib === topResults.HighlightBib ||
+            parseInt(athlete.Bib) === highlightBib
+          );
+        });
+
+        // If the athlete is on course, suppress highlighting in results
+        if (athleteOnCourse) {
+          return null;
+        }
+      }
+
+      // If not shown in OnCourse, return the highlight bib
+      return highlightBib;
     }
 
-    return currentCompetitorBib;
+    // No highlight bib from server
+    return null;
   };
 
   return (

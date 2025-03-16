@@ -2,9 +2,13 @@
 
 - scrollování výsledků
 
+  - oddělit chování LEDWALL
+    - scrolluje jen když není nikdo na trati
+  - zarovnávání scrollu na řádky
+
 - vyčistit TABs z komponent
 - TOP10
--
+
 - ?OnStart
 - Schedule
 - true responsivita

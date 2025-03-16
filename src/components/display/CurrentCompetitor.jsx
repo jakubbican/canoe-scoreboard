@@ -1,5 +1,5 @@
 // CurrentCompetitor.jsx
-// Displays the current competitor's data with a tab labeled "CURRENT ATHLETE"
+// Displays the current competitor's data - simplified without tabs and transition logic
 
 import React, { useEffect, useRef, useState } from "react";
 import { useLayout } from "../core/LayoutManager";
@@ -9,43 +9,12 @@ function CurrentCompetitor({ data, visible }) {
   const { displayType } = useLayout();
   const prevDataRef = useRef(null);
   const [isNewCompetitor, setIsNewCompetitor] = useState(false);
-  const [fromOnCourse, setFromOnCourse] = useState(false);
   const animationTimerRef = useRef(null);
 
-  // Check if this competitor just came from on-course
+  // Check if this is a new competitor
   useEffect(() => {
     // Only run this check when data changes and is valid
     if (!data || !data.Bib) return;
-
-    // Listen for athleteFinished events from OnCourseDisplay
-    const handleAthleteFinished = (event) => {
-      const { athlete } = event.detail;
-      if (athlete && athlete.Bib === data.Bib) {
-        setFromOnCourse(true);
-
-        // Reset the flag after animation duration (5 seconds)
-        if (animationTimerRef.current) {
-          clearTimeout(animationTimerRef.current);
-        }
-
-        animationTimerRef.current = setTimeout(() => {
-          setFromOnCourse(false);
-        }, 5000);
-
-        // Emit a custom event indicating this athlete has moved to current
-        const moveEvent = new CustomEvent("athleteMovedToCurrent", {
-          detail: {
-            athlete: data,
-            fromOnCourse: true,
-            timestamp: new Date().getTime(),
-          },
-        });
-        window.dispatchEvent(moveEvent);
-      }
-    };
-
-    // Add event listener
-    window.addEventListener("athleteFinished", handleAthleteFinished);
 
     // Check if this is a new competitor compared to previous data
     if (prevDataRef.current && prevDataRef.current.Bib !== data.Bib) {
@@ -57,10 +26,9 @@ function CurrentCompetitor({ data, visible }) {
       }, 3000);
 
       // Emit a custom event indicating a new current competitor
-      const newCompEvent = new CustomEvent("newCurrentCompetitor", {
+      const newCompEvent = new CustomEvent("athleteFinished", {
         detail: {
-          athlete: data,
-          previousAthlete: prevDataRef.current,
+          athlete: prevDataRef.current,
           timestamp: new Date().getTime(),
         },
       });
@@ -72,7 +40,6 @@ function CurrentCompetitor({ data, visible }) {
 
     // Cleanup
     return () => {
-      window.removeEventListener("athleteFinished", handleAthleteFinished);
       if (animationTimerRef.current) {
         clearTimeout(animationTimerRef.current);
       }
@@ -135,16 +102,12 @@ function CurrentCompetitor({ data, visible }) {
     "current-competitor",
     displayType,
     isNewCompetitor ? "new-competitor" : "",
-    fromOnCourse ? "from-on-course" : "",
   ]
     .filter(Boolean)
     .join(" ");
 
   return (
     <div className={competitorClasses}>
-      {/* Tab for Current Athlete */}
-      <div className="competitor-tab">aktuální</div>
-
       <div className="competitor-row">
         <div className="competitor-bib">{data.Bib}</div>
 

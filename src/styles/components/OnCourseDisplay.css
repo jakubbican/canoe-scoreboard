@@ -1,5 +1,5 @@
 /* OnCourseDisplay.css */
-/* Matched to CurrentCompetitor styling */
+/* Matched to CurrentCompetitor styling - removed tabs */
 
 .on-course-display {
   position: relative;
@@ -19,32 +19,6 @@
   box-sizing: border-box;
   margin: 0 !important;
   padding: 0 !important;
-}
-
-/* Tab for on-course athletes */
-.course-tab {
-  position: absolute;
-  top: -22px;
-  left: 20px;
-  padding: 4px 12px;
-  background-color: var(--accent-yellow);
-  color: var(--text-secondary);
-  font-size: 12px;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  font-weight: bold;
-  border-top-left-radius: 5px;
-  border-top-right-radius: 5px;
-  box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.2);
-  z-index: 11;
-  height: 22px;
-  line-height: 14px;
-  white-space: nowrap;
-}
-
-/* Hide tab for LED wall */
-.ledwall .course-tab {
-  display: none;
 }
 
 /* Grid layout for the course row - enhanced as active row */

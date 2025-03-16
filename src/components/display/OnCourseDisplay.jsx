@@ -1,5 +1,5 @@
 // OnCourseDisplay.jsx
-// Displays competitors currently on the course with same styling as CurrentCompetitor
+// Displays competitors currently on the course - simplified without tabs and transition logic
 // Filters out athletes with zero time
 
 import React, { useMemo, useEffect, useRef } from "react";
@@ -118,9 +118,6 @@ function OnCourseDisplay({ data, visible }) {
           key={`oncourse-${index}`}
           className={`on-course-display ${displayType}`}
         >
-          {/* Tab only for the first competitor */}
-          {index === 0 && <div className="course-tab">na trati</div>}
-
           <div className="course-body">
             <div className="course-row">
               <div className="course-bib">{competitor.Bib}</div>
