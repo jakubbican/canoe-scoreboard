@@ -1,0 +1,280 @@
+/* layout.css */
+/* New layout styles for the scoreboard application - No Tabs Version with Adjusted Spacing */
+
+/* Main container structure */
+.scoreboard-layout {
+  position: relative;
+  width: var(--content-width);
+  height: var(--content-height);
+  background-color: var(--primary-color);
+  color: var(--text-primary);
+  overflow: hidden;
+  transform-origin: top left;
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
+  display: flex;
+  flex-direction: column;
+}
+
+/* Scoreboard container with flexbox layout */
+.scoreboard-container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+
+/* HEADER SECTION */
+.scoreboard-header {
+  position: relative;
+  flex-shrink: 0;
+  width: 100%;
+  z-index: 20;
+  background-color: var(--primary-color);
+  transition: box-shadow 0.3s ease;
+}
+
+/* Add subtle shadow when scrolled to indicate header separation */
+.scoreboard-header.shadowed {
+  box-shadow: 0 4px 8px var(--header-shadow-color, rgba(0, 0, 0, 0.3));
+}
+
+/* Header components container */
+.header-components {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  padding-bottom: 2px;
+  margin-top: var(
+    --header-components-margin-top,
+    100px
+  ); /* Default offset from top elements */
+}
+
+/* Container for EventInfo, Title, TopBar */
+.header-top {
+  position: relative;
+  width: 100%;
+  z-index: 21;
+}
+
+/* RESULTS SECTION - scrollable */
+.scoreboard-results {
+  flex-grow: 1;
+  width: 100%;
+  overflow-y: auto;
+  overflow-x: hidden;
+  position: relative;
+  scrollbar-width: thin;
+  scrollbar-color: var(--accent-color) var(--primary-light);
+  z-index: 8;
+  padding-top: var(
+    --results-top-padding,
+    15px
+  ); /* Added padding before results */
+  margin-top: var(--results-top-margin, 10px); /* Added margin before results */
+  /* Smooth scrolling for better user experience and auto-scroll */
+  scroll-behavior: smooth;
+}
+
+/* Custom scrollbar styling */
+.scoreboard-results::-webkit-scrollbar {
+  width: var(--scrollbar-width, 8px);
+}
+
+.scoreboard-results::-webkit-scrollbar-track {
+  background: var(--primary-light);
+  border-radius: 4px;
+}
+
+.scoreboard-results::-webkit-scrollbar-thumb {
+  background-color: var(--accent-color);
+  border-radius: 4px;
+  border: 2px solid var(--primary-light);
+}
+
+/* Hover effect for scrollbar */
+.scoreboard-results:hover::-webkit-scrollbar-thumb {
+  background-color: var(--accent-blue);
+}
+
+/* Active effect for scrollbar */
+.scoreboard-results::-webkit-scrollbar-thumb:active {
+  background-color: var(--accent-yellow);
+}
+
+/* Ensure the results list takes full width */
+.scoreboard-results .results-list {
+  width: 100%;
+}
+
+/* Remove the stacked components container that's no longer needed */
+.stacked-components {
+  display: none !important;
+}
+
+/* Adjust the results-list to work in the new container */
+.results-list {
+  position: relative;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  background-color: rgba(34, 34, 34, 0.9);
+  z-index: 8;
+  /* No additional margin needed since tabs are removed */
+}
+
+/* Hide all tabs from header components and results */
+.competitor-tab,
+.course-tab,
+.info-tab,
+.results-tab {
+  display: none !important;
+}
+
+/* Without tabs, we don't need space for them */
+.header-components .current-competitor,
+.header-components .on-course-display,
+.header-components .info-text {
+  margin-bottom: 0 !important;
+  z-index: 10;
+  margin-top: 0 !important; /* No space needed for tabs */
+}
+
+/* Layout-specific adjustments */
+/* Horizontal layout */
+.layout-horizontal .scoreboard-header {
+  /* Size based on content but with a minimum */
+  min-height: calc(var(--top-bar-height) + 10px);
+}
+
+.layout-horizontal .header-components {
+  margin-top: var(--header-components-margin-top, 100px);
+}
+
+.layout-horizontal .scoreboard-results {
+  margin-top: 15px; /* Extra space before results in horizontal layout */
+}
+
+/* Vertical layout */
+.layout-vertical .scoreboard-header {
+  min-height: calc(var(--top-bar-height) + 10px);
+}
+
+.layout-vertical .header-components {
+  margin-top: var(
+    --header-components-margin-top,
+    140px
+  ); /* Increased offset from top */
+}
+
+.layout-vertical .scoreboard-results {
+  margin-top: 20px; /* More space before results in vertical layout */
+}
+
+/* LED wall layout */
+.layout-ledwall .scoreboard-header {
+  min-height: calc(var(--top-bar-height) + 5px);
+}
+
+.layout-ledwall .header-components {
+  margin-top: var(--header-components-margin-top, 60px);
+}
+
+.layout-ledwall .scoreboard-results {
+  margin-top: 5px; /* Minimal space for LED wall */
+}
+
+/* Ensure footer is fixed at bottom */
+.footer {
+  position: sticky;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  z-index: 10;
+  flex-shrink: 0;
+}
+
+/* Maintain original minimal spacing between components */
+.header-components > div + div {
+  margin-top: 1px !important;
+}
+
+/* Special tight spacing for ledwall */
+.layout-ledwall .header-components > div + div {
+  margin-top: 0 !important;
+  margin-bottom: 0 !important;
+}
+
+/* Help with scrolling indicators */
+.scoreboard-results::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 20px;
+  background: linear-gradient(to top, var(--primary-color), transparent);
+  pointer-events: none;
+  opacity: 0.7;
+  z-index: 9;
+}
+
+/* Adjustments for the result item height based on layout */
+.layout-horizontal .result-row {
+  height: 45px;
+  min-height: 45px;
+}
+
+.layout-vertical .result-row {
+  height: 40px;
+  min-height: 40px;
+}
+
+.layout-ledwall .result-row {
+  height: 40px;
+  min-height: 40px;
+}
+
+/* Animation for new results */
+@keyframes newRowHighlight {
+  0% {
+    background-color: rgba(204, 153, 51, 0.5);
+  }
+  100% {
+    background-color: inherit;
+  }
+}
+
+.result-row.new-entry {
+  animation: newRowHighlight 3s ease-out forwards;
+}
+
+/* Animation for position changes */
+@keyframes positionUp {
+  0%,
+  20% {
+    background-color: rgba(51, 153, 102, 0.3);
+  }
+  100% {
+    background-color: inherit;
+  }
+}
+
+@keyframes positionDown {
+  0%,
+  20% {
+    background-color: rgba(204, 51, 51, 0.3);
+  }
+  100% {
+    background-color: inherit;
+  }
+}
+
+.result-row.position-up {
+  animation: positionUp 3s ease-out forwards;
+}
+
+.result-row.position-down {
+  animation: positionDown 3s ease-out forwards;
+}
