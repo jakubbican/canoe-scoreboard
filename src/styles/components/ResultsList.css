@@ -1,5 +1,5 @@
 /* ResultsList.css */
-/* Styling for the results list component - removed tab and transition classes */
+/* Styling for the results list component - with scroll snap for row alignment */
 
 .results-list {
   position: relative;
@@ -16,6 +16,14 @@
   box-shadow: none;
 }
 
+/* Container for scrollable results - Add scroll snap type */
+.scoreboard-results {
+  /* Add scroll-snap to ensure rows align properly when scrolling */
+  scroll-snap-type: y mandatory;
+  /* Keep smooth scrolling for better user experience */
+  scroll-behavior: smooth;
+}
+
 /* Results body */
 .results-body {
   display: flex;
@@ -25,7 +33,7 @@
   overflow: visible;
 }
 
-/* Individual result row */
+/* Individual result row - Add scroll snap align */
 .result-row {
   display: grid;
   align-items: center;
@@ -33,6 +41,8 @@
   padding: 0;
   margin: 2px 0;
   transition: background-color 0.3s ease;
+  /* This ensures rows snap into place when scrolling */
+  scroll-snap-align: start;
 }
 
 /* Alternating row colors with green left borders to differentiate from on-course */

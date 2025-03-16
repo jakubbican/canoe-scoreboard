@@ -1,5 +1,5 @@
 /* layout.css */
-/* Modified to ensure tabs are completely removed */
+/* Modified to ensure tabs are completely removed and add scroll snap support */
 
 /* Main container structure */
 .scoreboard-layout {
@@ -58,7 +58,7 @@
   z-index: 21;
 }
 
-/* RESULTS SECTION - scrollable */
+/* RESULTS SECTION - scrollable with snap scrolling */
 .scoreboard-results {
   flex-grow: 1;
   width: 100%;
@@ -73,6 +73,10 @@
     15px
   ); /* Added padding before results */
   margin-top: var(--results-top-margin, 10px); /* Added margin before results */
+
+  /* Scroll snap behavior to align rows */
+  scroll-snap-type: y mandatory;
+
   /* Smooth scrolling for better user experience and auto-scroll */
   scroll-behavior: smooth;
 }

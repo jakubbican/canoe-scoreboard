@@ -4,7 +4,8 @@
 
   - oddělit chování LEDWALL
     - scrolluje jen když není nikdo na trati
-  - zarovnávání scrollu na řádky
+  - optimalizovat logování
+  - počáteční animace results - vzhled a sprvní scroll?
 
 - vyčistit TABs z komponent
 - TOP10

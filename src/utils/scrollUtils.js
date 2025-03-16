@@ -1,5 +1,6 @@
 // scrollUtils.js
 // Utilities for handling scrolling in the results container
+// Updated to support snap scrolling
 
 /**
  * Initializes keyboard and mouse wheel scroll handling for the results container
@@ -29,8 +30,15 @@ export function initScrollHandling(containerId, options = {}) {
       scrollAmount = e.deltaY;
     }
 
-    // Apply scroll
-    container.scrollTop += scrollAmount;
+    // Scroll according to snap behavior
+    if (Math.abs(e.deltaY) > 0) {
+      // Using snap scrolling, we move to the next row or previous row
+      // Let the browser's built-in snap scrolling handle the exact position
+      container.scrollBy({
+        top: Math.sign(e.deltaY) * 50, // Just enough movement to trigger snap scrolling
+        behavior: "smooth",
+      });
+    }
 
     // Call onScroll callback if provided
     if (onScroll && typeof onScroll === "function") {
@@ -47,45 +55,107 @@ export function initScrollHandling(containerId, options = {}) {
     const container = document.getElementById(containerId);
     if (!container) return;
 
-    let scrollAmount = 0;
+    // Get all rows for better navigation
+    const rows = container.querySelectorAll(".result-row");
+    if (!rows || rows.length === 0) return;
+
+    // Get row height from the first row
+    const rowHeight = rows[0].offsetHeight;
+    const containerHeight = container.clientHeight;
+    const rowsPerPage = Math.floor(containerHeight / rowHeight);
+
+    let targetRow = null;
 
     // Handle Page Up/Down keys
     if (e.key === "PageUp") {
-      scrollAmount = -container.clientHeight * pageScrollFactor;
+      // Find visible rows
+      const visibleRowIndex = findFirstVisibleRowIndex(container, rows);
+      if (visibleRowIndex > 0) {
+        // Move up by rowsPerPage or to the top
+        targetRow = rows[Math.max(0, visibleRowIndex - rowsPerPage)];
+      } else {
+        // Already at top
+        return;
+      }
       e.preventDefault();
     } else if (e.key === "PageDown") {
-      scrollAmount = container.clientHeight * pageScrollFactor;
+      // Find visible rows
+      const visibleRowIndex = findFirstVisibleRowIndex(container, rows);
+      if (visibleRowIndex < rows.length - 1) {
+        // Move down by rowsPerPage or to the bottom
+        targetRow =
+          rows[Math.min(rows.length - 1, visibleRowIndex + rowsPerPage)];
+      } else {
+        // Already at bottom
+        return;
+      }
       e.preventDefault();
     } else if (e.key === "Home") {
       // Scroll to top
-      container.scrollTop = 0;
-      if (onScroll) onScroll(0);
+      if (rows.length > 0) {
+        targetRow = rows[0];
+      }
       e.preventDefault();
-      return;
     } else if (e.key === "End") {
       // Scroll to bottom
-      container.scrollTop = container.scrollHeight;
-      if (onScroll) onScroll(container.scrollTop);
+      if (rows.length > 0) {
+        targetRow = rows[rows.length - 1];
+      }
       e.preventDefault();
-      return;
     } else if (e.key === "ArrowUp") {
-      scrollAmount = -scrollSpeed;
+      // Move up one row
+      const visibleRowIndex = findFirstVisibleRowIndex(container, rows);
+      if (visibleRowIndex > 0) {
+        targetRow = rows[visibleRowIndex - 1];
+      }
       e.preventDefault();
     } else if (e.key === "ArrowDown") {
-      scrollAmount = scrollSpeed;
+      // Move down one row
+      const visibleRowIndex = findFirstVisibleRowIndex(container, rows);
+      if (visibleRowIndex < rows.length - 1) {
+        targetRow = rows[visibleRowIndex + 1];
+      }
       e.preventDefault();
     } else {
       // Not a scroll key
       return;
     }
 
-    // Apply scroll
-    container.scrollTop += scrollAmount;
+    // Scroll to the target row if we have one
+    if (targetRow) {
+      targetRow.scrollIntoView({
+        behavior: "smooth",
+        block: "start",
+      });
 
-    // Call onScroll callback if provided
-    if (onScroll && typeof onScroll === "function") {
-      onScroll(container.scrollTop);
+      // Call onScroll callback if provided
+      if (onScroll && typeof onScroll === "function") {
+        setTimeout(() => {
+          onScroll(container.scrollTop);
+        }, 100);
+      }
     }
+  };
+
+  // Find the index of the first visible row
+  const findFirstVisibleRowIndex = (container, rows) => {
+    const containerTop = container.scrollTop;
+    const containerBottom = containerTop + container.clientHeight;
+
+    for (let i = 0; i < rows.length; i++) {
+      const rowTop = rows[i].offsetTop;
+      const rowBottom = rowTop + rows[i].offsetHeight;
+
+      // If the row is at least partially visible
+      if (rowBottom > containerTop && rowTop < containerBottom) {
+        // Check if it's more than half visible
+        if (rowTop < containerTop + 20) {
+          return i;
+        }
+        return i;
+      }
+    }
+    return 0; // Default to first row if none found
   };
 
   // Attach event listeners
@@ -108,7 +178,7 @@ export function initScrollHandling(containerId, options = {}) {
  * @param {string} options.block - Vertical alignment: 'start', 'center', 'end', or 'nearest' (default: 'center')
  */
 export function scrollToItem(containerId, itemSelector, options = {}) {
-  const { behavior = "smooth", block = "center" } = options;
+  const { behavior = "smooth", block = "start" } = options;
 
   const container = document.getElementById(containerId);
   if (!container) return;
@@ -150,82 +220,34 @@ export function ensureScrollToTop(container, options = {}) {
       return;
     }
 
-    // Immediate force scroll to top (no animation) - most reliable method
-    containerElement.scrollTop = 0;
+    // Get all rows to find the first one
+    const rows = containerElement.querySelectorAll(".result-row");
+    if (rows && rows.length > 0) {
+      // Scroll to the first row
+      rows[0].scrollIntoView({
+        behavior: smooth ? "smooth" : "auto",
+        block: "start",
+      });
 
-    // Check if we're already at the top
-    if (containerElement.scrollTop === 0) {
-      resolve(true);
-      return;
-    }
-
-    // If not at top, try additional methods
-    const attemptScroll = () => {
-      attempts++;
-
-      // Method 1: Use scrollTop for container-only scrolling instead of scrollTo
-      // or scrollIntoView which can affect page position
-      if (onlyContainer) {
-        containerElement.scrollTop = 0;
-
-        // If we're already at the top, resolve and exit
-        if (containerElement.scrollTop === 0) {
-          resolve(true);
-          return;
-        }
-      } else {
-        // Method 1 (legacy): Use scrollTo with smooth behavior
-        containerElement.scrollTo({
-          top: 0,
-          behavior: smooth ? "smooth" : "auto",
-        });
-      }
-
-      // Method 2: After a short delay, force scrollTop = 0
+      // Check if scroll worked
       setTimeout(
         () => {
-          if (containerElement.scrollTop > 0) {
+          if (containerElement.scrollTop <= 10) {
+            resolve(true);
+            return;
+          } else {
+            // Fallback to direct method
             containerElement.scrollTop = 0;
+            resolve(containerElement.scrollTop === 0);
           }
-
-          // Method 3: If still not at top, try scrollIntoView on the first child
-          // Only if we're allowed to affect the whole page
-          setTimeout(() => {
-            if (containerElement.scrollTop > 0) {
-              if (!onlyContainer && containerElement.firstElementChild) {
-                containerElement.firstElementChild.scrollIntoView({
-                  behavior: "auto",
-                  block: "start",
-                });
-              } else {
-                // For container-only scrolling, use scrollTop again
-                containerElement.scrollTop = 0;
-              }
-            }
-
-            // Final check and force
-            setTimeout(() => {
-              if (containerElement.scrollTop > 0) {
-                containerElement.scrollTop = 0;
-              }
-
-              // If we're still not at the top and haven't exceeded max attempts, try again
-              if (containerElement.scrollTop > 0 && attempts < maxAttempts) {
-                attemptScroll();
-              } else {
-                // If we're at the top or out of attempts, resolve
-                const success = containerElement.scrollTop === 0;
-                resolve(success);
-              }
-            }, 100);
-          }, 100);
         },
         smooth ? 500 : 50
       );
-    };
-
-    // Start the first attempt
-    attemptScroll();
+    } else {
+      // No rows, use direct method
+      containerElement.scrollTop = 0;
+      resolve(containerElement.scrollTop === 0);
+    }
   });
 }
 
@@ -253,17 +275,16 @@ export function isAtBottom(container, threshold = 20) {
 }
 
 /**
- * Scrolls a container one page down
+ * Scrolls a container one page down, aligned to rows
  *
  * @param {string|HTMLElement} container - Container ID or element
  * @param {Object} options - Scroll options
  * @param {number} options.pageFactor - Percentage of page to scroll (default: 0.9)
  * @param {boolean} options.smooth - Whether to use smooth scrolling (default: true)
- * @param {boolean} options.onlyContainer - Only scroll the container, not the whole page (default: true)
  * @returns {boolean} True if scrolled, false if already at bottom
  */
 export function scrollPageDown(container, options = {}) {
-  const { pageFactor = 0.9, smooth = true, onlyContainer = true } = options;
+  const { pageFactor = 0.9, smooth = true } = options;
 
   const containerElement =
     typeof container === "string"
@@ -272,49 +293,57 @@ export function scrollPageDown(container, options = {}) {
 
   if (!containerElement) return false;
 
-  const pageHeight = containerElement.clientHeight * pageFactor;
-  const currentScroll = containerElement.scrollTop;
-  const maxScroll =
-    containerElement.scrollHeight - containerElement.clientHeight;
-
   // Check if already at bottom
   if (isAtBottom(containerElement)) {
     return false;
   }
 
-  // Scroll down one page
-  if (onlyContainer) {
-    // Set scrollTop directly to ensure we only scroll within the container
-    containerElement.scrollTop = Math.min(
-      currentScroll + pageHeight,
-      maxScroll
-    );
+  // Get all result rows
+  const rows = containerElement.querySelectorAll(".result-row");
+  if (!rows || rows.length === 0) return false;
 
-    // If smooth scrolling is requested, apply it after the direct scroll
-    // This is a compromise - we ensure container-only scrolling but still get smoothness
-    if (smooth) {
-      const targetPosition = containerElement.scrollTop;
-      containerElement.scrollTop = currentScroll;
+  // Calculate how many rows fit in a page
+  const rowHeight = rows[0].offsetHeight;
+  const containerHeight = containerElement.clientHeight;
+  const rowsPerPage = Math.floor((containerHeight * pageFactor) / rowHeight);
 
-      // Now smoothly scroll to the target
-      containerElement.scrollTo({
-        top: targetPosition,
-        behavior: "smooth",
-      });
-    }
-  } else {
-    // Legacy method - may affect page position
-    containerElement.scrollTo({
-      top: Math.min(currentScroll + pageHeight, maxScroll),
+  // Find the first visible row
+  const firstVisibleRowIndex = findFirstVisibleRowIndex(containerElement, rows);
+
+  // Calculate target row
+  const targetIndex = Math.min(
+    firstVisibleRowIndex + rowsPerPage,
+    rows.length - 1
+  );
+
+  // Scroll to the target row
+  if (rows[targetIndex]) {
+    rows[targetIndex].scrollIntoView({
       behavior: smooth ? "smooth" : "auto",
+      block: "start",
     });
+    return true;
   }
 
-  return true;
+  return false;
+}
+
+// Helper function to find the first visible row
+function findFirstVisibleRowIndex(container, rows) {
+  const containerTop = container.scrollTop;
+
+  for (let i = 0; i < rows.length; i++) {
+    const rowTop = rows[i].offsetTop;
+    // If this row starts at or below the current scroll position and is the first such row
+    if (rowTop >= containerTop - 10) {
+      return i;
+    }
+  }
+  return 0; // Default to first row
 }
 
 /**
- * Creates a page-by-page auto-scroll effect for results
+ * Creates a page-by-page auto-scroll effect for results with row alignment
  * @param {string} containerId - The ID of the scrollable container
  * @param {object} options - Auto-scroll options
  * @param {number} options.initialDelay - Delay before starting in ms (default: 5000)
@@ -338,30 +367,72 @@ export function createPageScroller(containerId, options = {}) {
   let isActive = false;
   let isPaused = false;
   let isUserActive = false;
+  let currentRowIndex = 0;
 
   // Get the container element
   const getContainer = () => document.getElementById(containerId);
 
-  // Scroll one page down
-  const performPageScroll = () => {
+  // Get all rows in the container
+  const getRows = () => {
+    const container = getContainer();
+    if (!container) return [];
+    return container.querySelectorAll(".result-row");
+  };
+
+  // Scroll to the next row or set of rows
+  const scrollToNextSet = () => {
     if (isPaused || isUserActive) return;
 
     const container = getContainer();
-    if (!container) return;
+    const rows = getRows();
 
-    // Check if we're near the bottom
-    if (isAtBottom(container)) {
-      // Pause at the bottom before returning to top
-      clearTimeout(bottomTimeoutId);
-      bottomTimeoutId = setTimeout(() => {
-        // Scroll back to top
-        ensureScrollToTop(container, { smooth: true });
-      }, bottomDelay);
+    if (!container || rows.length === 0) return;
+
+    // Calculate how many rows fit in the viewport
+    const rowHeight = rows[0].offsetHeight;
+    const containerHeight = container.clientHeight;
+    const rowsPerPage = Math.max(1, Math.floor(containerHeight / rowHeight));
+
+    // Calculate the next row to scroll to
+    const nextRowIndex = currentRowIndex + rowsPerPage;
+
+    // Check if we're at the bottom
+    if (nextRowIndex >= rows.length) {
+      // Reached the end of the list
+      setAtBottom(true);
       return;
     }
 
-    // Scroll down one page
-    scrollPageDown(container, { pageFactor: 0.9, smooth: true });
+    // Scroll to the next row
+    currentRowIndex = nextRowIndex;
+
+    if (rows[currentRowIndex]) {
+      rows[currentRowIndex].scrollIntoView({
+        behavior: "smooth",
+        block: "start",
+      });
+    }
+  };
+
+  // Set at bottom state and handle return to top
+  const setAtBottom = (atBottom) => {
+    if (!atBottom) return;
+
+    // Pause at the bottom before returning to top
+    clearTimeout(bottomTimeoutId);
+    bottomTimeoutId = setTimeout(() => {
+      // Reset row index and scroll back to top
+      currentRowIndex = 0;
+
+      // Get the first row and scroll to it
+      const rows = getRows();
+      if (rows.length > 0) {
+        rows[0].scrollIntoView({
+          behavior: "smooth",
+          block: "start",
+        });
+      }
+    }, bottomDelay);
   };
 
   // Start the auto-scroller
@@ -375,6 +446,7 @@ export function createPageScroller(containerId, options = {}) {
     // Mark as active and reset state
     isActive = true;
     isPaused = false;
+    currentRowIndex = 0;
 
     // Clear any existing timers
     clearAllTimers();
@@ -382,7 +454,7 @@ export function createPageScroller(containerId, options = {}) {
     // Start with a delay
     initialTimeoutId = setTimeout(() => {
       // Begin the page-by-page scrolling interval
-      scrollIntervalId = setInterval(performPageScroll, pageInterval);
+      scrollIntervalId = setInterval(scrollToNextSet, pageInterval);
     }, initialDelay);
   };
 
@@ -422,6 +494,18 @@ export function createPageScroller(containerId, options = {}) {
     clearTimeout(inactivityTimeoutId);
   };
 
+  // Scroll back to the top
+  const scrollToTop = () => {
+    currentRowIndex = 0;
+    const rows = getRows();
+    if (rows.length > 0) {
+      rows[0].scrollIntoView({
+        behavior: "smooth",
+        block: "start",
+      });
+    }
+  };
+
   // Clean up all timers and event listeners
   const destroy = () => {
     stop();
@@ -434,7 +518,7 @@ export function createPageScroller(containerId, options = {}) {
     pause,
     resume,
     userActive,
-    scrollToTop: () => ensureScrollToTop(getContainer(), { smooth: true }),
+    scrollToTop,
     destroy,
     isActive: () => isActive,
     isPaused: () => isPaused,
@@ -443,6 +527,7 @@ export function createPageScroller(containerId, options = {}) {
 
 /**
  * Legacy auto-scroll function (maintained for backward compatibility)
+ * Updated to work with row-based snap scrolling
  * @param {string} containerId - The ID of the scrollable container
  * @param {object} options - Auto-scroll options
  * @returns {object} Control object with start, stop, pause, and resume methods
@@ -461,6 +546,7 @@ export function createAutoScroll(containerId, options = {}) {
   let pauseTimeout = null;
   let startTimeout = null;
   let resetTimeout = null;
+  let currentRowIndex = 0;
 
   const startAutoScroll = () => {
     const container = document.getElementById(containerId);
@@ -471,13 +557,16 @@ export function createAutoScroll(containerId, options = {}) {
     clearTimeout(startTimeout);
     clearTimeout(resetTimeout);
 
+    // Get all rows
+    const rows = container.querySelectorAll(".result-row");
+    if (!rows || rows.length === 0) return;
+
     // Delay before starting
     startTimeout = setTimeout(() => {
       isScrolling = true;
+      currentRowIndex = 0;
 
-      // Convert speed from pixels per second to pixels per interval (16ms ~= 60fps)
-      const pixelsPerInterval = speed / 60;
-
+      // Instead of scrolling by pixels, we'll scroll row by row
       scrollInterval = setInterval(() => {
         if (isPaused) return;
 
@@ -487,35 +576,52 @@ export function createAutoScroll(containerId, options = {}) {
           return;
         }
 
+        const rows = container.querySelectorAll(".result-row");
+        if (!rows || rows.length === 0) return;
+
+        // Advance to next row
+        currentRowIndex++;
+
         // Check if we've reached the bottom
-        if (isAtBottom(container)) {
+        if (currentRowIndex >= rows.length) {
           // Pause at the bottom before scrolling back to top
           isPaused = true;
           pauseTimeout = setTimeout(() => {
-            ensureScrollToTop(container, { smooth: false });
+            currentRowIndex = 0;
+            if (rows[0]) {
+              rows[0].scrollIntoView({
+                behavior: "smooth",
+                block: "start",
+              });
+            }
             isPaused = false;
           }, pauseDelay);
           return;
         }
 
-        // Scroll down
-        container.scrollTop += pixelsPerInterval;
-      }, 16);
+        // Scroll to the current row
+        if (rows[currentRowIndex]) {
+          rows[currentRowIndex].scrollIntoView({
+            behavior: "smooth",
+            block: "start",
+          });
+        }
+      }, 1000); // Scroll every second instead of continuous pixels
 
       // Set timeout to reset to top after resetDelay
       resetTimeout = setTimeout(() => {
-        const container = document.getElementById(containerId);
-        if (!container) return;
-
         isPaused = true;
-
-        // Scroll back to top
-        ensureScrollToTop(container, { smooth: true }).then(() => {
-          // Resume after scroll completes
-          setTimeout(() => {
-            isPaused = false;
-          }, 100);
-        });
+        currentRowIndex = 0;
+        const rows = container.querySelectorAll(".result-row");
+        if (rows && rows.length > 0) {
+          rows[0].scrollIntoView({
+            behavior: "smooth",
+            block: "start",
+          });
+        }
+        setTimeout(() => {
+          isPaused = false;
+        }, 100);
       }, resetDelay);
     }, delay);
   };
@@ -544,7 +650,13 @@ export function createAutoScroll(containerId, options = {}) {
   const resetScrollPosition = () => {
     const container = document.getElementById(containerId);
     if (container) {
-      ensureScrollToTop(container, { smooth: true });
+      const rows = container.querySelectorAll(".result-row");
+      if (rows && rows.length > 0) {
+        rows[0].scrollIntoView({
+          behavior: "smooth",
+          block: "start",
+        });
+      }
     }
   };
 
