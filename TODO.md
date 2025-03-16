@@ -1,12 +1,7 @@
 # TODO
 
-- scrollování výsledků
+- optimalizovat logování scrollování?
 
-  - oddělit chování LEDWALL
-    - scrolluje jen když není nikdo na trati
-  - optimalizovat logování
-
-- vyčistit TABs z komponent
 - TOP10
 
 - ?OnStart
@@ -28,6 +23,7 @@
 - OK: vyhodit hover animace
 - OK: klik na status do konfigurace
 - OK: tvrdý refresh v konfig panelu
+- OK: scrollování výsledků a najíždění na dojetého závodníka
 
 # WON'T DO
 

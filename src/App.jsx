@@ -1,6 +1,6 @@
 // App.jsx
 // Refactored with new layout structure: fixed header, scrollable results, fixed footer
-// Suppresses highlighting in results if the athlete is shown in OnCourse display
+// Enhanced to pass information about current/on-course competitors to results for better scrolling logic
 
 import React, { useState, useEffect, useMemo, useRef } from "react";
 import {
@@ -116,7 +116,7 @@ function App() {
 
 // This component contains all the display elements of the scoreboard
 function ScoreboardContent() {
-  const { isVisible } = useLayout();
+  const { isVisible, displayType } = useLayout();
   const {
     competitorData,
     topResults,
@@ -228,6 +228,32 @@ function ScoreboardContent() {
     }
   }, [scrollPosition]);
 
+  // Check if we have athletes in current or on-course
+  const hasCurrentCompetitor = competitorData && competitorData.Bib;
+  const hasOnCourseCompetitors =
+    onCourseData &&
+    Array.isArray(onCourseData) &&
+    onCourseData.length > 0 &&
+    onCourseData.some(
+      (athlete) =>
+        athlete.Total &&
+        athlete.Total !== "0:00.00" &&
+        athlete.Total !== "0.00" &&
+        athlete.Total !== "0"
+    );
+
+  // Prepare data for ResultsList including current/on-course status
+  const resultsData = useMemo(() => {
+    if (!topResults) return null;
+
+    // Add information about current competitor status
+    return {
+      ...topResults,
+      CurrentCompetitorActive: hasCurrentCompetitor ? "1" : "0",
+      OnCourseActive: hasOnCourseCompetitors ? "1" : "0",
+    };
+  }, [topResults, hasCurrentCompetitor, hasOnCourseCompetitors]);
+
   // Modified function to get highlight bib with suppression for duplicates
   // Suppresses highlighting if the athlete is already shown in OnCourse display
   const getHighlightBib = () => {
@@ -300,7 +326,7 @@ function ScoreboardContent() {
       <div id="results-scroll-container" className="scoreboard-results">
         {isVisible("top") && (
           <ResultsList
-            data={topResults}
+            data={resultsData}
             visible={true}
             highlightBib={getHighlightBib()}
             isAutoScrolling={isAutoScrolling}

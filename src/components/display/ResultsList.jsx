@@ -1,12 +1,17 @@
 // ResultsList.jsx
-// Modified to prevent whole page scrolling when scrolling results
+// Modified to include a time limit for highlighting rows ONLY on LED Wall
 
 import React, { useMemo, useEffect, useRef, useState } from "react";
 import { useLayout } from "../core/LayoutManager";
 import { isAtBottom } from "../../utils/scrollUtils";
 import "../../styles/components/ResultsList.css";
 
-function ResultsList({ data, visible, highlightBib }) {
+function ResultsList({
+  data,
+  visible,
+  highlightBib,
+  isAutoScrolling: parentAutoScrolling,
+}) {
   const { displayType } = useLayout();
   const resultRef = useRef(null);
   const highlightRef = useRef(null);
@@ -14,11 +19,20 @@ function ResultsList({ data, visible, highlightBib }) {
   const autoScrollTimeoutRef = useRef(null);
   const autoScrollIntervalRef = useRef(null);
   const pageScrollTimeoutRef = useRef(null);
+  const highlightScrollTimerRef = useRef(null);
+
+  // Only used for LED wall
+  const highlightStartTimeRef = useRef(null);
+  const lastHighlightBibRef = useRef(null);
 
   // State to track scrolling
   const [isAutoScrolling, setIsAutoScrolling] = useState(false);
   const [isUserScrolling, setIsUserScrolling] = useState(false);
   const [atBottom, setAtBottom] = useState(false);
+  const [scrollEnabled, setScrollEnabled] = useState(true);
+
+  // Local state to track the effective highlight bib (with time limiting) - only for LED wall
+  const [effectiveHighlightBib, setEffectiveHighlightBib] = useState(null);
 
   // Track previous rank data for animations - only keep position changes
   const [prevRanks, setPrevRanks] = useState({});
@@ -29,11 +43,82 @@ function ResultsList({ data, visible, highlightBib }) {
   // Configure auto-scroll settings
   const AUTO_SCROLL_SETTINGS = {
     initialDelay: 1000, // Wait 1 second before starting auto-scroll
-    pageInterval: 4000, // Scroll one page every 4 seconds
-    bottomPauseTime: 2000, // Pause at the bottom for 2 seconds
-    userInactivityTimeout: 5000, // Resume auto-scroll after 5 seconds of inactivity
+    pageInterval: "vertical" ? 9000 : 4000, // Scroll one page every 4 seconds
+    bottomPauseTime: "vertical" ? 5000 : 3000, // Pause at the bottom for 2 seconds
+    userInactivityTimeout: 4000, // Resume auto-scroll after 5 seconds of inactivity
     maxScrollAttempts: 3, // Maximum number of attempts to scroll to top
+    highlightViewTime: 5000, // Time to view highlighted item before returning to top (LED Wall)
+    maxHighlightDuration: 5000, // Maximum time to keep a highlight active on LED wall
   };
+
+  // Check if someone is in current/on-course - assuming these properties exist in the data
+  const isAthleteCurrent = useMemo(() => {
+    return (
+      data?.CurrentCompetitorActive === "1" || data?.OnCourseActive === "1"
+    );
+  }, [data]);
+
+  // Handle highlightBib changes with time limiting - ONLY FOR LED WALL
+  useEffect(() => {
+    // Only apply the time limiting logic for LED wall
+    if (displayType === "ledwall") {
+      // Handle new highlight bib coming in
+      if (highlightBib) {
+        const now = Date.now();
+
+        // Check if this is a new highlight or continuing one
+        if (highlightBib !== lastHighlightBibRef.current) {
+          // New highlight, reset the timer
+          console.log(`LED Wall: New highlight bib: ${highlightBib}`);
+          highlightStartTimeRef.current = now;
+          lastHighlightBibRef.current = highlightBib;
+          setEffectiveHighlightBib(highlightBib);
+          setHasScrolledToHighlight(false);
+        } else {
+          // Continuing highlight, check duration
+          const elapsedTime = now - (highlightStartTimeRef.current || 0);
+
+          if (elapsedTime < AUTO_SCROLL_SETTINGS.maxHighlightDuration) {
+            // Still within time limit, keep highlight
+            if (!effectiveHighlightBib) {
+              setEffectiveHighlightBib(highlightBib);
+            }
+          } else {
+            // Exceeded time limit, clear highlight
+            if (effectiveHighlightBib) {
+              console.log(
+                `LED Wall: Highlight time exceeded for bib: ${highlightBib}, clearing after ${elapsedTime}ms`
+              );
+              setEffectiveHighlightBib(null);
+
+              // After clearing the highlight, scroll back to top
+              scrollToTop();
+
+              // Reset highlight state
+              setHasScrolledToHighlight(false);
+
+              // Check if we should restart auto-scrolling
+              if (!isAthleteCurrent) {
+                startPageAutoScroll();
+              }
+            }
+          }
+        }
+      } else {
+        // No highlight bib from server, clear our state
+        lastHighlightBibRef.current = null;
+        highlightStartTimeRef.current = null;
+        setEffectiveHighlightBib(null);
+      }
+    } else {
+      // For non-LED wall layouts, just use the highlightBib directly
+      // Reset highlight scrolling flag when highlightBib changes
+      if (highlightBib !== effectiveHighlightBib) {
+        setHasScrolledToHighlight(false);
+      }
+      setEffectiveHighlightBib(highlightBib);
+    }
+  }, [highlightBib, displayType, isAthleteCurrent]);
 
   // Safe scroll function that only affects the results container
   const safeScrollToItem = (itemElement) => {
@@ -70,7 +155,7 @@ function ResultsList({ data, visible, highlightBib }) {
 
   // Handle page scroll
   const handlePageScroll = () => {
-    if (!containerRef.current || isUserScrolling) return;
+    if (!containerRef.current || isUserScrolling || !scrollEnabled) return;
 
     // Use the utility function to check if we're at the bottom
     if (isAtBottom(containerRef.current, 20)) {
@@ -146,6 +231,16 @@ function ResultsList({ data, visible, highlightBib }) {
   const startPageAutoScroll = () => {
     if (isAutoScrolling || isUserScrolling) return;
 
+    // For LED Wall, check if we should disable auto-scrolling
+    if (displayType === "ledwall" && isAthleteCurrent) {
+      console.log(
+        "LED Wall: Athlete in current/on-course, disabling auto-scroll"
+      );
+      stopAutoScroll();
+      scrollToTop();
+      return;
+    }
+
     setIsAutoScrolling(true);
     console.log("Starting auto-scroll");
 
@@ -169,13 +264,13 @@ function ResultsList({ data, visible, highlightBib }) {
       console.log("Beginning auto-scroll cycle");
 
       // Immediately do a scroll to see movement
-      if (containerRef.current && !isUserScrolling) {
+      if (containerRef.current && !isUserScrolling && scrollEnabled) {
         handlePageScroll();
       }
 
       // Set up interval for page-by-page scrolling
       autoScrollIntervalRef.current = setInterval(() => {
-        if (!isUserScrolling && containerRef.current) {
+        if (!isUserScrolling && containerRef.current && scrollEnabled) {
           // Do actual scrolling work here
           handlePageScroll();
         }
@@ -216,10 +311,41 @@ function ResultsList({ data, visible, highlightBib }) {
     }, AUTO_SCROLL_SETTINGS.userInactivityTimeout);
   };
 
+  // Handle layout-specific scrolling when highlight changes
+  const handleHighlightScroll = () => {
+    if (!effectiveHighlightBib || !highlightRef.current) return;
+
+    clearTimeout(highlightScrollTimerRef.current);
+
+    // Different behavior based on layout type
+    if (displayType === "ledwall") {
+      console.log("LED Wall: Scrolling to highlighted athlete");
+
+      // Scroll to the highlighted row
+      safeScrollToItem(highlightRef.current);
+      setHasScrolledToHighlight(true);
+
+      // After viewing period, scroll back to top and resume normal behavior
+      highlightScrollTimerRef.current = setTimeout(() => {
+        console.log("LED Wall: Returning to top after highlight view");
+        scrollToTop();
+
+        // Check if we should restart auto-scrolling
+        if (!isAthleteCurrent) {
+          startPageAutoScroll();
+        }
+      }, AUTO_SCROLL_SETTINGS.highlightViewTime);
+    } else {
+      // For horizontal and vertical layouts, just mark as scrolled without actually scrolling
+      setHasScrolledToHighlight(true);
+    }
+  };
+
   // Clean up timeouts and intervals on unmount
   useEffect(() => {
     return () => {
       stopAutoScroll();
+      clearTimeout(highlightScrollTimerRef.current);
     };
   }, []);
 
@@ -235,9 +361,6 @@ function ResultsList({ data, visible, highlightBib }) {
 
     // Update for position changes
     setPrevRanks(newRanks);
-
-    // Reset highlight scrolling flag when data changes
-    setHasScrolledToHighlight(false);
 
     // Restart auto-scrolling when data changes
     resetAutoScrollTimer();
@@ -276,19 +399,37 @@ function ResultsList({ data, visible, highlightBib }) {
     return "";
   }, [data]);
 
-  // Scroll to highlighted row when it changes
+  // Handle highlight changes with layout-specific behavior
   useEffect(() => {
-    if (highlightBib && highlightRef.current && !hasScrolledToHighlight) {
-      // Use a small delay to ensure the component has fully updated
-      const scrollTimer = setTimeout(() => {
-        // Use our safe scroll function instead of scrollIntoView
-        safeScrollToItem(highlightRef.current);
-        setHasScrolledToHighlight(true);
-      }, 300); // 300ms delay allows for state updates to complete
-
-      return () => clearTimeout(scrollTimer);
+    if (effectiveHighlightBib && !hasScrolledToHighlight) {
+      // Small delay to ensure component has rendered
+      setTimeout(() => {
+        handleHighlightScroll();
+      }, 300);
     }
-  }, [highlightBib, data?.list, hasScrolledToHighlight]);
+  }, [effectiveHighlightBib, displayType, hasScrolledToHighlight]);
+
+  // Update scrollEnabled state when athlete current status changes
+  useEffect(() => {
+    if (displayType === "ledwall") {
+      // For LED Wall, disable scrolling when someone is in current/on-course
+      setScrollEnabled(!isAthleteCurrent);
+
+      if (isAthleteCurrent) {
+        console.log("LED Wall: Athlete in current/on-course, disabling scroll");
+        stopAutoScroll();
+        scrollToTop();
+      } else if (visible && !hasScrolledToHighlight && !effectiveHighlightBib) {
+        console.log(
+          "LED Wall: No athlete in current/on-course, enabling scroll"
+        );
+        resetAutoScrollTimer();
+      }
+    } else {
+      // For horizontal and vertical, always allow scrolling
+      setScrollEnabled(true);
+    }
+  }, [isAthleteCurrent, displayType, visible, effectiveHighlightBib]);
 
   // Handle scroll events
   const handleScroll = () => {
@@ -322,26 +463,38 @@ function ResultsList({ data, visible, highlightBib }) {
       container.addEventListener("scroll", handleScroll);
 
       // Start auto-scrolling if visible and has data
-      if (visible && data?.list?.length > 0) {
-        console.log("Starting page auto-scroll");
-        startPageAutoScroll();
+      if (visible && data?.list?.length > 0 && scrollEnabled) {
+        // For LED wall, don't start auto-scroll if there's an effective highlight
+        if (displayType === "ledwall" && effectiveHighlightBib) {
+          // Don't start auto-scroll
+        } else {
+          console.log("Starting page auto-scroll");
+          startPageAutoScroll();
+        }
       }
 
       return () => {
         container.removeEventListener("scroll", handleScroll);
       };
     }
-  }, [visible, data?.list]);
+  }, [visible, data?.list, scrollEnabled, effectiveHighlightBib, displayType]);
 
   // Add a listener for the custom startAutoScroll event
   useEffect(() => {
     const handleStartAutoScroll = () => {
       console.log("Received startAutoScroll event");
+
+      // For LED wall, don't start auto-scroll if there's an effective highlight
+      if (displayType === "ledwall" && effectiveHighlightBib) {
+        return;
+      }
+
       if (
         visible &&
         data?.list?.length > 0 &&
         !isAutoScrolling &&
-        !isUserScrolling
+        !isUserScrolling &&
+        scrollEnabled
       ) {
         console.log("Starting auto-scroll from event");
         startPageAutoScroll();
@@ -354,16 +507,29 @@ function ResultsList({ data, visible, highlightBib }) {
     return () => {
       window.removeEventListener("startAutoScroll", handleStartAutoScroll);
     };
-  }, [visible, data, isAutoScrolling, isUserScrolling]);
+  }, [
+    visible,
+    data,
+    isAutoScrolling,
+    isUserScrolling,
+    scrollEnabled,
+    effectiveHighlightBib,
+    displayType,
+  ]);
 
   // Handle visibility changes
   useEffect(() => {
-    if (visible && data?.list?.length > 0) {
-      resetAutoScrollTimer();
+    if (visible && data?.list?.length > 0 && scrollEnabled) {
+      // For LED wall, don't reset auto-scroll timer if there's an effective highlight
+      if (displayType === "ledwall" && effectiveHighlightBib) {
+        // Don't reset auto-scroll timer
+      } else {
+        resetAutoScrollTimer();
+      }
     } else {
       stopAutoScroll();
     }
-  }, [visible]);
+  }, [visible, scrollEnabled, effectiveHighlightBib, displayType]);
 
   // Handle data updates without restarting auto-scroll completely
   useEffect(() => {
@@ -495,7 +661,12 @@ function ResultsList({ data, visible, highlightBib }) {
   };
 
   return (
-    <div className={`results-list ${displayType}`} ref={resultRef}>
+    <div
+      className={`results-list ${displayType} ${
+        isAutoScrolling ? "auto-scrolling" : ""
+      }`}
+      ref={resultRef}
+    >
       <div className="results-body">
         {data.list.map((competitor, index) => {
           // Check if there are penalties
@@ -503,7 +674,9 @@ function ResultsList({ data, visible, highlightBib }) {
           const penaltyValue = hasPenalties ? competitor.Pen : "0";
 
           // Is this the highlighted row?
-          const isHighlighted = parseInt(competitor.Bib) === highlightBib;
+          const isHighlighted =
+            effectiveHighlightBib &&
+            parseInt(competitor.Bib) === effectiveHighlightBib;
 
           // Get position change class - no longer includes new-entry class
           const positionClass = getPositionChangeClass(competitor.Bib);

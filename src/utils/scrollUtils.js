@@ -1,6 +1,6 @@
 // scrollUtils.js
 // Utilities for handling scrolling in the results container
-// Updated to support snap scrolling
+// Updated to support snap scrolling and layout-specific behaviors
 
 /**
  * Initializes keyboard and mouse wheel scroll handling for the results container
@@ -9,12 +9,20 @@
  * @param {number} options.scrollSpeed - Base scroll speed for wheel (default: 40)
  * @param {number} options.pageScrollFactor - How much of the container height to scroll for Page Up/Down (default: 0.9)
  * @param {function} options.onScroll - Callback for scroll events
+ * @param {boolean} options.enabled - Whether scrolling is enabled (default: true)
  * @returns {function} Cleanup function to remove event listeners
  */
 export function initScrollHandling(containerId, options = {}) {
-  const { scrollSpeed = 40, pageScrollFactor = 0.9, onScroll = null } = options;
+  const {
+    scrollSpeed = 40,
+    pageScrollFactor = 0.9,
+    onScroll = null,
+    enabled = true,
+  } = options;
 
   const handleWheel = (e) => {
+    if (!enabled) return;
+
     const container = document.getElementById(containerId);
     if (!container) return;
 
@@ -52,6 +60,8 @@ export function initScrollHandling(containerId, options = {}) {
   };
 
   const handleKeyDown = (e) => {
+    if (!enabled) return;
+
     const container = document.getElementById(containerId);
     if (!container) return;
 
@@ -158,15 +168,20 @@ export function initScrollHandling(containerId, options = {}) {
     return 0; // Default to first row if none found
   };
 
-  // Attach event listeners
-  window.addEventListener("wheel", handleWheel, { passive: false });
-  window.addEventListener("keydown", handleKeyDown);
+  // Only attach event listeners if enabled
+  if (enabled) {
+    window.addEventListener("wheel", handleWheel, { passive: false });
+    window.addEventListener("keydown", handleKeyDown);
 
-  // Return cleanup function
-  return () => {
-    window.removeEventListener("wheel", handleWheel);
-    window.removeEventListener("keydown", handleKeyDown);
-  };
+    // Return cleanup function
+    return () => {
+      window.removeEventListener("wheel", handleWheel);
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }
+
+  // Return empty cleanup function if not enabled
+  return () => {};
 }
 
 /**
@@ -176,9 +191,10 @@ export function initScrollHandling(containerId, options = {}) {
  * @param {object} options - Scroll options
  * @param {string} options.behavior - Scroll behavior: 'smooth' or 'auto' (default: 'smooth')
  * @param {string} options.block - Vertical alignment: 'start', 'center', 'end', or 'nearest' (default: 'center')
+ * @param {function} options.afterScroll - Callback to execute after scrolling
  */
 export function scrollToItem(containerId, itemSelector, options = {}) {
-  const { behavior = "smooth", block = "start" } = options;
+  const { behavior = "smooth", block = "start", afterScroll = null } = options;
 
   const container = document.getElementById(containerId);
   if (!container) return;
@@ -190,6 +206,17 @@ export function scrollToItem(containerId, itemSelector, options = {}) {
     behavior,
     block,
   });
+
+  // Execute callback after scrolling if provided
+  if (afterScroll && typeof afterScroll === "function") {
+    // Wait for scroll to complete
+    setTimeout(
+      () => {
+        afterScroll();
+      },
+      behavior === "smooth" ? 300 : 0
+    );
+  }
 }
 
 /**
@@ -202,10 +229,17 @@ export function scrollToItem(containerId, itemSelector, options = {}) {
  * @param {boolean} options.smooth - Whether to use smooth scrolling (default: true)
  * @param {number} options.maxAttempts - Maximum number of attempts to scroll to top (default: 3)
  * @param {boolean} options.onlyContainer - Only scroll the container, not the whole page (default: true)
+ * @param {function} options.afterScroll - Callback to execute after scrolling
  * @returns {Promise} Resolves when scrolling is complete
  */
 export function ensureScrollToTop(container, options = {}) {
-  const { smooth = true, maxAttempts = 3, onlyContainer = true } = options;
+  const {
+    smooth = true,
+    maxAttempts = 3,
+    onlyContainer = true,
+    afterScroll = null,
+  } = options;
+
   let attempts = 0;
 
   return new Promise((resolve) => {
@@ -233,11 +267,18 @@ export function ensureScrollToTop(container, options = {}) {
       setTimeout(
         () => {
           if (containerElement.scrollTop <= 10) {
+            if (afterScroll && typeof afterScroll === "function") {
+              afterScroll();
+            }
             resolve(true);
             return;
           } else {
             // Fallback to direct method
             containerElement.scrollTop = 0;
+
+            if (afterScroll && typeof afterScroll === "function") {
+              afterScroll();
+            }
             resolve(containerElement.scrollTop === 0);
           }
         },
@@ -246,6 +287,10 @@ export function ensureScrollToTop(container, options = {}) {
     } else {
       // No rows, use direct method
       containerElement.scrollTop = 0;
+
+      if (afterScroll && typeof afterScroll === "function") {
+        afterScroll();
+      }
       resolve(containerElement.scrollTop === 0);
     }
   });
@@ -281,10 +326,13 @@ export function isAtBottom(container, threshold = 20) {
  * @param {Object} options - Scroll options
  * @param {number} options.pageFactor - Percentage of page to scroll (default: 0.9)
  * @param {boolean} options.smooth - Whether to use smooth scrolling (default: true)
- * @returns {boolean} True if scrolled, false if already at bottom
+ * @param {boolean} options.enabled - Whether scrolling is enabled (default: true)
+ * @returns {boolean} True if scrolled, false if already at bottom or scrolling disabled
  */
 export function scrollPageDown(container, options = {}) {
-  const { pageFactor = 0.9, smooth = true } = options;
+  const { pageFactor = 0.9, smooth = true, enabled = true } = options;
+
+  if (!enabled) return false;
 
   const containerElement =
     typeof container === "string"
@@ -344,20 +392,26 @@ function findFirstVisibleRowIndex(container, rows) {
 
 /**
  * Creates a page-by-page auto-scroll effect for results with row alignment
+ * Enhanced version with layout-specific behaviors
+ *
  * @param {string} containerId - The ID of the scrollable container
  * @param {object} options - Auto-scroll options
  * @param {number} options.initialDelay - Delay before starting in ms (default: 5000)
  * @param {number} options.pageInterval - Time between page scrolls in ms (default: 5000)
  * @param {number} options.bottomDelay - Pause when reaching the bottom in ms (default: 3000)
  * @param {number} options.inactivityTimeout - Time before restarting after user interaction in ms (default: 8000)
+ * @param {string} options.layoutType - Layout type ('horizontal', 'vertical', 'ledwall')
+ * @param {boolean} options.isAthleteCurrent - Whether an athlete is current or on course
  * @returns {object} Control object with start, stop, pause, resume, and isActive methods
  */
 export function createPageScroller(containerId, options = {}) {
   const {
-    initialDelay = 5000,
-    pageInterval = 5000,
+    initialDelay = 8000,
+    pageInterval = 8000,
     bottomDelay = 3000,
-    inactivityTimeout = 8000,
+    inactivityTimeout = 3000,
+    layoutType = "horizontal",
+    isAthleteCurrent = false,
   } = options;
 
   let scrollIntervalId = null;
@@ -368,6 +422,14 @@ export function createPageScroller(containerId, options = {}) {
   let isPaused = false;
   let isUserActive = false;
   let currentRowIndex = 0;
+
+  // Check if scrolling should be enabled based on layout and athlete status
+  const shouldEnableScrolling = () => {
+    if (layoutType === "ledwall") {
+      return !isAthleteCurrent;
+    }
+    return true; // Always enabled for horizontal and vertical
+  };
 
   // Get the container element
   const getContainer = () => document.getElementById(containerId);
@@ -381,7 +443,7 @@ export function createPageScroller(containerId, options = {}) {
 
   // Scroll to the next row or set of rows
   const scrollToNextSet = () => {
-    if (isPaused || isUserActive) return;
+    if (isPaused || isUserActive || !shouldEnableScrolling()) return;
 
     const container = getContainer();
     const rows = getRows();
@@ -437,6 +499,15 @@ export function createPageScroller(containerId, options = {}) {
 
   // Start the auto-scroller
   const start = () => {
+    // Check if we should enable scrolling
+    if (!shouldEnableScrolling()) {
+      console.log(
+        `Auto-scroll disabled: ${layoutType} layout with athlete is current = ${isAthleteCurrent}`
+      );
+      scrollToTop();
+      return;
+    }
+
     // Don't start if already active
     if (isActive) return;
 
@@ -472,6 +543,9 @@ export function createPageScroller(containerId, options = {}) {
 
   // Resume scrolling
   const resume = () => {
+    if (!shouldEnableScrolling()) {
+      return;
+    }
     isPaused = false;
   };
 
@@ -483,6 +557,11 @@ export function createPageScroller(containerId, options = {}) {
     clearTimeout(inactivityTimeoutId);
     inactivityTimeoutId = setTimeout(() => {
       isUserActive = false;
+
+      // Check if we should restart scrolling
+      if (shouldEnableScrolling()) {
+        resume();
+      }
     }, inactivityTimeout);
   };
 
@@ -506,6 +585,24 @@ export function createPageScroller(containerId, options = {}) {
     }
   };
 
+  // Update athlete status
+  const updateAthleteStatus = (isCurrentNow) => {
+    if (isAthleteCurrent !== isCurrentNow) {
+      // Status changed, update and handle accordingly
+
+      if (layoutType === "ledwall") {
+        if (isCurrentNow) {
+          // Athlete is now current, stop scrolling and go to top
+          stop();
+          scrollToTop();
+        } else if (!isCurrentNow && !isActive) {
+          // Athlete is no longer current, can restart scrolling
+          start();
+        }
+      }
+    }
+  };
+
   // Clean up all timers and event listeners
   const destroy = () => {
     stop();
@@ -520,24 +617,29 @@ export function createPageScroller(containerId, options = {}) {
     userActive,
     scrollToTop,
     destroy,
+    updateAthleteStatus,
     isActive: () => isActive,
     isPaused: () => isPaused,
+    shouldEnableScrolling: shouldEnableScrolling,
   };
 }
 
 /**
  * Legacy auto-scroll function (maintained for backward compatibility)
- * Updated to work with row-based snap scrolling
+ * Updated to work with row-based snap scrolling and layout-specific behaviors
+ *
  * @param {string} containerId - The ID of the scrollable container
  * @param {object} options - Auto-scroll options
  * @returns {object} Control object with start, stop, pause, and resume methods
  */
 export function createAutoScroll(containerId, options = {}) {
   const {
-    speed = 30,
+    speed = 100,
     delay = 5000,
     pauseDelay = 2000,
     resetDelay = 8000,
+    layoutType = "horizontal",
+    isAthleteCurrent = false,
   } = options;
 
   let scrollInterval = null;
@@ -548,7 +650,27 @@ export function createAutoScroll(containerId, options = {}) {
   let resetTimeout = null;
   let currentRowIndex = 0;
 
+  // Check if scrolling should be enabled based on layout and athlete status
+  const shouldEnableScrolling = () => {
+    if (layoutType === "ledwall") {
+      return !isAthleteCurrent;
+    }
+    return true; // Always enabled for horizontal and vertical
+  };
+
   const startAutoScroll = () => {
+    // Check if we should enable scrolling
+    if (!shouldEnableScrolling()) {
+      console.log(
+        `Auto-scroll disabled: ${layoutType} layout with athlete is current = ${isAthleteCurrent}`
+      );
+      // Scroll to top for LED Wall when athlete is current
+      if (layoutType === "ledwall") {
+        resetScrollPosition();
+      }
+      return;
+    }
+
     const container = document.getElementById(containerId);
     if (!container) return;
 
@@ -568,7 +690,7 @@ export function createAutoScroll(containerId, options = {}) {
 
       // Instead of scrolling by pixels, we'll scroll row by row
       scrollInterval = setInterval(() => {
-        if (isPaused) return;
+        if (isPaused || !shouldEnableScrolling()) return;
 
         const container = document.getElementById(containerId);
         if (!container) {
@@ -642,7 +764,7 @@ export function createAutoScroll(containerId, options = {}) {
   };
 
   const resumeAutoScroll = () => {
-    if (isScrolling) {
+    if (isScrolling && shouldEnableScrolling()) {
       isPaused = false;
     }
   };
@@ -656,6 +778,24 @@ export function createAutoScroll(containerId, options = {}) {
           behavior: "smooth",
           block: "start",
         });
+      }
+    }
+  };
+
+  // Update athlete status
+  const updateAthleteStatus = (isCurrentNow) => {
+    if (isAthleteCurrent !== isCurrentNow) {
+      // Status changed, update and handle accordingly
+
+      if (layoutType === "ledwall") {
+        if (isCurrentNow) {
+          // Athlete is now current, stop scrolling and go to top
+          stopAutoScroll();
+          resetScrollPosition();
+        } else if (!isCurrentNow && !isScrolling) {
+          // Athlete is no longer current, can restart scrolling
+          startAutoScroll();
+        }
       }
     }
   };
@@ -675,7 +815,9 @@ export function createAutoScroll(containerId, options = {}) {
     pause: pauseAutoScroll,
     resume: resumeAutoScroll,
     reset: resetScrollPosition,
+    updateAthleteStatus,
     isScrolling: () => isScrolling,
     isPaused: () => isPaused,
+    shouldEnableScrolling: shouldEnableScrolling,
   };
 }
