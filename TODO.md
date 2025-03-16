@@ -1,6 +1,5 @@
 # TODO
 
-- tvrdý refresh v konfig panelu
 - zobrazení umístění po dojetí v aktivní řádce
 - TOP10 / rolování komplet výsledků
 - true responsivita
@@ -17,6 +16,7 @@
 - OK: update recommended resolution of images in README
 - OK: vyhodit hover animace
 - OK: klik na status do konfigurace
+- OK: tvrdý refresh v konfig panelu
 
 # WON'T DO
 
