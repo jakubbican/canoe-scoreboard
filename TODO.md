@@ -1,6 +1,7 @@
 # TODO
 
 - klik na status do konfigurace, tvrdý refresh v konfig panelu
+- vyhodit hover animace
 - zobrazení umístění po dojetí v aktivní řádce
 - TOP10 / rolování komplet výsledků
 - true responsivita
