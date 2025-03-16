@@ -54,12 +54,7 @@ function ResultsList({ data, visible, highlightBib }) {
     return categoryInfo ? `${categoryInfo} - Výsledky` : "Výsledky";
   };
 
-  // Limit number of results for LED wall
   let resultsToShow = data.list;
-  if (displayType === "ledwall") {
-    // Limit to 5 results for LED wall to prevent overflow
-    resultsToShow = data.list.slice(0, 10);
-  }
 
   return (
     <div className={`results-list ${displayType}`}>
