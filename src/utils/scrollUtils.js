@@ -407,7 +407,7 @@ function findFirstVisibleRowIndex(container, rows) {
 export function createPageScroller(containerId, options = {}) {
   const {
     initialDelay = 8000,
-    pageInterval = 8000,
+    pageInterval = 15000,
     bottomDelay = 3000,
     inactivityTimeout = 3000,
     layoutType = "horizontal",
@@ -635,7 +635,7 @@ export function createPageScroller(containerId, options = {}) {
 export function createAutoScroll(containerId, options = {}) {
   const {
     speed = 100,
-    delay = 5000,
+    delay = 15000,
     pauseDelay = 2000,
     resetDelay = 8000,
     layoutType = "horizontal",

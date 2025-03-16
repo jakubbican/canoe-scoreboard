@@ -1,5 +1,5 @@
 // ResultsList.jsx
-// Modified to include a time limit for highlighting rows ONLY on LED Wall
+// Modified with layout-specific scroll timing and LED wall highlight time limit
 
 import React, { useMemo, useEffect, useRef, useState } from "react";
 import { useLayout } from "../core/LayoutManager";
@@ -40,16 +40,42 @@ function ResultsList({
   // Track if we've scrolled to highlighted item
   const [hasScrolledToHighlight, setHasScrolledToHighlight] = useState(false);
 
-  // Configure auto-scroll settings
-  const AUTO_SCROLL_SETTINGS = {
-    initialDelay: 1000, // Wait 1 second before starting auto-scroll
-    pageInterval: "vertical" ? 9000 : 4000, // Scroll one page every 4 seconds
-    bottomPauseTime: "vertical" ? 5000 : 3000, // Pause at the bottom for 2 seconds
-    userInactivityTimeout: 4000, // Resume auto-scroll after 5 seconds of inactivity
-    maxScrollAttempts: 3, // Maximum number of attempts to scroll to top
-    highlightViewTime: 5000, // Time to view highlighted item before returning to top (LED Wall)
-    maxHighlightDuration: 5000, // Maximum time to keep a highlight active on LED wall
+  // Configure layout-specific auto-scroll settings
+  const getAutoScrollSettings = () => {
+    // Base settings
+    const settings = {
+      initialDelay: 3000, // Wait 1 second before starting auto-scroll
+      pageInterval: 4000, // Default: Scroll one page every 4 seconds
+      bottomPauseTime: 2000, // Pause at the bottom for 2 seconds
+      userInactivityTimeout: 5000, // Resume auto-scroll after 5 seconds of inactivity
+      maxScrollAttempts: 3, // Maximum number of attempts to scroll to top
+      highlightViewTime: 5000, // Time to view highlighted item before returning to top (LED Wall)
+      maxHighlightDuration: 5000, // Maximum time to keep a highlight active on LED wall
+    };
+
+    // Layout-specific overrides
+    if (displayType === "vertical") {
+      // Vertical layout: stay longer on each page, more time at bottom
+      settings.pageInterval = 12000; // 8 seconds per page
+      settings.bottomPauseTime = 8000; // 4 seconds at bottom
+    } else if (displayType === "ledwall") {
+      // LED Wall: quicker scrolling
+      settings.pageInterval = 3000; // 3 seconds per page
+      settings.bottomPauseTime = 1500; // 1.5 seconds at bottom
+    } else if (displayType === "horizontal") {
+      // Horizontal: default settings
+      settings.pageInterval = 8000; // 4 seconds per page
+      settings.bottomPauseTime = 2000; // 2 seconds at bottom
+    }
+
+    return settings;
   };
+
+  // Get settings based on current layout
+  const AUTO_SCROLL_SETTINGS = useMemo(
+    () => getAutoScrollSettings(),
+    [displayType]
+  );
 
   // Check if someone is in current/on-course - assuming these properties exist in the data
   const isAthleteCurrent = useMemo(() => {
@@ -118,7 +144,12 @@ function ResultsList({
       }
       setEffectiveHighlightBib(highlightBib);
     }
-  }, [highlightBib, displayType, isAthleteCurrent]);
+  }, [
+    highlightBib,
+    displayType,
+    isAthleteCurrent,
+    AUTO_SCROLL_SETTINGS.maxHighlightDuration,
+  ]);
 
   // Safe scroll function that only affects the results container
   const safeScrollToItem = (itemElement) => {
@@ -161,7 +192,8 @@ function ResultsList({
     if (isAtBottom(containerRef.current, 20)) {
       setAtBottom(true);
 
-      // Wait at the bottom for a moment
+      // Wait at the bottom for a moment before scrolling back to top
+      // Use the layout-specific bottom pause time
       clearTimeout(pageScrollTimeoutRef.current);
       pageScrollTimeoutRef.current = setTimeout(() => {
         scrollToTop();
@@ -242,7 +274,9 @@ function ResultsList({
     }
 
     setIsAutoScrolling(true);
-    console.log("Starting auto-scroll");
+    console.log(
+      `Starting auto-scroll for ${displayType} layout with interval ${AUTO_SCROLL_SETTINGS.pageInterval}ms`
+    );
 
     // First, handle any existing state - if at bottom, go to top
     if (containerRef.current && isAtBottom(containerRef.current)) {
@@ -261,14 +295,16 @@ function ResultsList({
 
     // Initial delay before starting to scroll
     autoScrollTimeoutRef.current = setTimeout(() => {
-      console.log("Beginning auto-scroll cycle");
+      console.log(
+        `Beginning auto-scroll cycle for ${displayType} with interval ${AUTO_SCROLL_SETTINGS.pageInterval}ms`
+      );
 
       // Immediately do a scroll to see movement
       if (containerRef.current && !isUserScrolling && scrollEnabled) {
         handlePageScroll();
       }
 
-      // Set up interval for page-by-page scrolling
+      // Set up interval for page-by-page scrolling using layout-specific interval
       autoScrollIntervalRef.current = setInterval(() => {
         if (!isUserScrolling && containerRef.current && scrollEnabled) {
           // Do actual scrolling work here
@@ -468,7 +504,7 @@ function ResultsList({
         if (displayType === "ledwall" && effectiveHighlightBib) {
           // Don't start auto-scroll
         } else {
-          console.log("Starting page auto-scroll");
+          console.log(`Starting page auto-scroll for ${displayType}`);
           startPageAutoScroll();
         }
       }
@@ -496,7 +532,7 @@ function ResultsList({
         !isUserScrolling &&
         scrollEnabled
       ) {
-        console.log("Starting auto-scroll from event");
+        console.log(`Starting auto-scroll from event for ${displayType}`);
         startPageAutoScroll();
       }
     };
