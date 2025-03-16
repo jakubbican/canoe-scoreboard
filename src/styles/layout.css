@@ -1,5 +1,6 @@
 /* layout.css */
 /* Modified to ensure tabs are completely removed and add scroll snap support */
+/* Removed initial yellow effect animation */
 
 /* Main container structure */
 .scoreboard-layout {
@@ -240,19 +241,8 @@
   min-height: 40px;
 }
 
-/* Animation for new results */
-@keyframes newRowHighlight {
-  0% {
-    background-color: rgba(204, 153, 51, 0.5);
-  }
-  100% {
-    background-color: inherit;
-  }
-}
-
-.result-row.new-entry {
-  animation: newRowHighlight 3s ease-out forwards;
-}
+/* REMOVED INITIAL YELLOW EFFECT ANIMATION */
+/* Removed newRowHighlight animation and the .result-row.new-entry class */
 
 /* Animation for position changes */
 @keyframes positionUp {

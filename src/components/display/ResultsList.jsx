@@ -1,6 +1,5 @@
 // ResultsList.jsx
-// Refactored for the scrollable container with fixed scrolling
-// Removed tab implementation and transition markup
+// Modified to prevent whole page scrolling when scrolling results
 
 import React, { useMemo, useEffect, useRef, useState } from "react";
 import { useLayout } from "../core/LayoutManager";
@@ -21,16 +20,15 @@ function ResultsList({ data, visible, highlightBib }) {
   const [isUserScrolling, setIsUserScrolling] = useState(false);
   const [atBottom, setAtBottom] = useState(false);
 
-  // Track previous rank data for animations
+  // Track previous rank data for animations - only keep position changes
   const [prevRanks, setPrevRanks] = useState({});
-  const [newEntries, setNewEntries] = useState(new Set());
 
   // Track if we've scrolled to highlighted item
   const [hasScrolledToHighlight, setHasScrolledToHighlight] = useState(false);
 
   // Configure auto-scroll settings
   const AUTO_SCROLL_SETTINGS = {
-    initialDelay: 1000, // Wait 1 second before starting auto-scroll (reduced for testing)
+    initialDelay: 1000, // Wait 1 second before starting auto-scroll
     pageInterval: 4000, // Scroll one page every 4 seconds
     bottomPauseTime: 2000, // Pause at the bottom for 2 seconds
     userInactivityTimeout: 5000, // Resume auto-scroll after 5 seconds of inactivity
@@ -41,9 +39,8 @@ function ResultsList({ data, visible, highlightBib }) {
   const safeScrollToItem = (itemElement) => {
     if (!itemElement || !containerRef.current) return;
 
+    // Stop propagation to the window
     const container = containerRef.current;
-    const containerRect = container.getBoundingClientRect();
-    const itemRect = itemElement.getBoundingClientRect();
 
     // Calculate center position
     const targetScrollTop =
@@ -55,7 +52,7 @@ function ResultsList({ data, visible, highlightBib }) {
     const maxScroll = container.scrollHeight - container.clientHeight;
     const safeScrollTop = Math.max(0, Math.min(targetScrollTop, maxScroll));
 
-    // Perform the scroll
+    // Perform the scroll only on the container, not the window
     container.scrollTo({
       top: safeScrollTop,
       behavior: "smooth",
@@ -88,40 +85,60 @@ function ResultsList({ data, visible, highlightBib }) {
       return;
     }
 
-    // Manual scrolling approach - more reliable than utility functions
-    const container = containerRef.current;
-    const pageHeight = container.clientHeight * 0.9;
-    const currentScroll = container.scrollTop;
-    const maxScroll = container.scrollHeight - container.clientHeight;
+    // Get all rows
+    const rows = containerRef.current.querySelectorAll(".result-row");
+    if (!rows || rows.length === 0) return;
 
-    // Simple but direct approach to scroll down by a page
-    container.scrollTop = Math.min(currentScroll + pageHeight, maxScroll);
+    // Find the first visible row
+    const visibleRowIndex = findFirstVisibleRowIndex(
+      containerRef.current,
+      rows
+    );
 
-    // For visual smoothness after the fact
-    setTimeout(() => {
-      if (container && document.contains(container)) {
-        container.style.scrollBehavior = "smooth";
-        setTimeout(() => {
-          if (container && document.contains(container)) {
-            container.style.scrollBehavior = "auto";
-          }
-        }, 500);
+    // Calculate how many rows fit in the viewport
+    const rowHeight = rows[0].offsetHeight;
+    const containerHeight = containerRef.current.clientHeight;
+    const rowsPerPage = Math.floor((containerHeight * 0.9) / rowHeight);
+
+    // Calculate the next row to scroll to
+    const nextRowIndex = Math.min(
+      visibleRowIndex + rowsPerPage,
+      rows.length - 1
+    );
+
+    // Scroll only the container, not the window
+    if (rows[nextRowIndex]) {
+      // Use scrollTop instead of scrollIntoView to prevent window scrolling
+      const targetTop = rows[nextRowIndex].offsetTop;
+      containerRef.current.scrollTo({
+        top: targetTop,
+        behavior: "smooth",
+      });
+    }
+  };
+
+  // Find the index of the first visible row
+  const findFirstVisibleRowIndex = (container, rows) => {
+    const containerTop = container.scrollTop;
+
+    for (let i = 0; i < rows.length; i++) {
+      const rowTop = rows[i].offsetTop;
+      // If this row starts at or below the current scroll position and is the first such row
+      if (rowTop >= containerTop - 10) {
+        return i;
       }
-    }, 50);
+    }
+    return 0; // Default to first row
   };
 
   // Function to scroll back to top
   const scrollToTop = () => {
     if (containerRef.current) {
-      // Direct and simple approach - more reliable
-      containerRef.current.scrollTop = 0;
-
-      // Double-check after a short delay to ensure it worked
-      setTimeout(() => {
-        if (containerRef.current) {
-          containerRef.current.scrollTop = 0;
-        }
-      }, 50);
+      // Use scrollTo instead of scrollIntoView to prevent window scrolling
+      containerRef.current.scrollTo({
+        top: 0,
+        behavior: "smooth",
+      });
     }
   };
 
@@ -206,45 +223,24 @@ function ResultsList({ data, visible, highlightBib }) {
     };
   }, []);
 
-  // Update position tracking when results change
+  // Update position tracking when results change - simplified to remove new entry animations
   useEffect(() => {
     if (!data || !data.list) return;
 
-    // Identify new entries
-    const currentBibs = new Set(data.list.map((c) => c.Bib));
-    const previousBibs = new Set(
-      Object.keys(prevRanks).map((bib) => bib.toString())
-    );
-
-    const newBibs = new Set();
-    currentBibs.forEach((bib) => {
-      if (!previousBibs.has(bib.toString())) {
-        newBibs.add(bib);
-      }
-    });
-
-    setNewEntries(newBibs);
-
-    // Update rank tracking for position change animations
+    // Update rank tracking for position change animations only
     const newRanks = {};
     data.list.forEach((competitor) => {
       newRanks[competitor.Bib] = parseInt(competitor.Rank, 10) || 999;
     });
 
+    // Update for position changes
     setPrevRanks(newRanks);
-
-    // Clear new entries flag after animation time
-    const clearNewEntriesTimer = setTimeout(() => {
-      setNewEntries(new Set());
-    }, 3000); // Match animation duration
 
     // Reset highlight scrolling flag when data changes
     setHasScrolledToHighlight(false);
 
     // Restart auto-scrolling when data changes
     resetAutoScrollTimer();
-
-    return () => clearTimeout(clearNewEntriesTimer);
   }, [data?.list, visible]);
 
   // Get position change status for animation
@@ -258,9 +254,7 @@ function ResultsList({ data, visible, highlightBib }) {
     const currentRank = parseInt(competitor.Rank, 10) || 999;
     const prevRank = prevRanks[bib];
 
-    if (newEntries.has(bib)) {
-      return "new-entry";
-    } else if (currentRank < prevRank) {
+    if (currentRank < prevRank) {
       return "position-up"; // Improved position
     } else if (currentRank > prevRank) {
       return "position-down"; // Lost position
@@ -386,45 +380,99 @@ function ResultsList({ data, visible, highlightBib }) {
     }
   }, [data?.list]);
 
-  // Keyboard events to control scrolling
+  // Keyboard events to control scrolling - Fixed to prevent window scrolling
   useEffect(() => {
     const handleKeyDown = (e) => {
       // Only process if container is available and visible
       if (!containerRef.current || !visible) return;
 
+      // For key events we want to stop the default scrolling behavior
+      let shouldPreventDefault = false;
+      let targetPosition = null;
+
+      // Get all rows
+      const rows = containerRef.current.querySelectorAll(".result-row");
+      if (!rows || rows.length === 0) return;
+
       // Handle manual navigation
       if (e.key === "Home") {
-        scrollToTop();
-        e.preventDefault();
-        setIsUserScrolling(true);
-        resetAutoScrollTimer();
+        targetPosition = 0;
+        shouldPreventDefault = true;
       } else if (e.key === "End") {
-        if (containerRef.current) {
-          containerRef.current.scrollTop = containerRef.current.scrollHeight;
-          e.preventDefault();
-          setIsUserScrolling(true);
-          resetAutoScrollTimer();
-        }
+        targetPosition = containerRef.current.scrollHeight;
+        shouldPreventDefault = true;
       } else if (e.key === "PageDown") {
-        if (containerRef.current) {
-          const pageHeight = containerRef.current.clientHeight * 0.9;
-          containerRef.current.scrollTop += pageHeight;
-          e.preventDefault();
-          setIsUserScrolling(true);
-          resetAutoScrollTimer();
+        // Find the first visible row
+        const visibleRowIndex = findFirstVisibleRowIndex(
+          containerRef.current,
+          rows
+        );
+
+        // Calculate how many rows fit in the viewport
+        const rowHeight = rows[0].offsetHeight;
+        const containerHeight = containerRef.current.clientHeight;
+        const rowsPerPage = Math.floor((containerHeight * 0.9) / rowHeight);
+
+        // Calculate the next row to scroll to
+        const nextRowIndex = Math.min(
+          visibleRowIndex + rowsPerPage,
+          rows.length - 1
+        );
+
+        // Get the position to scroll to
+        if (rows[nextRowIndex]) {
+          targetPosition = rows[nextRowIndex].offsetTop;
+          shouldPreventDefault = true;
         }
       } else if (e.key === "PageUp") {
-        if (containerRef.current) {
-          const pageHeight = containerRef.current.clientHeight * 0.9;
-          containerRef.current.scrollTop -= pageHeight;
+        // Find the first visible row
+        const visibleRowIndex = findFirstVisibleRowIndex(
+          containerRef.current,
+          rows
+        );
+
+        // Calculate how many rows fit in the viewport
+        const rowHeight = rows[0].offsetHeight;
+        const containerHeight = containerRef.current.clientHeight;
+        const rowsPerPage = Math.floor((containerHeight * 0.9) / rowHeight);
+
+        // Calculate the previous row to scroll to
+        const prevRowIndex = Math.max(0, visibleRowIndex - rowsPerPage);
+
+        // Get the position to scroll to
+        if (rows[prevRowIndex]) {
+          targetPosition = rows[prevRowIndex].offsetTop;
+          shouldPreventDefault = true;
+        }
+      }
+
+      // If we found a target position, scroll to it and prevent default
+      if (targetPosition !== null) {
+        // Scroll only the container, not the window
+        containerRef.current.scrollTo({
+          top: targetPosition,
+          behavior: "smooth",
+        });
+
+        setIsUserScrolling(true);
+        resetAutoScrollTimer();
+
+        // Reset the user scrolling state after a while
+        setTimeout(() => {
+          setIsUserScrolling(false);
+        }, 1000);
+
+        // Prevent the default scrolling behavior of the window
+        if (shouldPreventDefault) {
           e.preventDefault();
-          setIsUserScrolling(true);
-          resetAutoScrollTimer();
         }
       }
     };
 
-    window.addEventListener("keydown", handleKeyDown);
+    // Add event listener
+    window.addEventListener("keydown", handleKeyDown, { passive: false });
+
+    // Cleanup
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [visible, isUserScrolling]);
 
@@ -457,7 +505,7 @@ function ResultsList({ data, visible, highlightBib }) {
           // Is this the highlighted row?
           const isHighlighted = parseInt(competitor.Bib) === highlightBib;
 
-          // Get position change class
+          // Get position change class - no longer includes new-entry class
           const positionClass = getPositionChangeClass(competitor.Bib);
 
           return (
