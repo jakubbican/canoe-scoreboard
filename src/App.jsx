@@ -1,14 +1,13 @@
 // App.jsx
 // Refactored with new layout structure: fixed header, scrollable results, fixed footer
 
-import React, { useState, useEffect, useMemo } from "react";
+import React, { useState, useEffect, useMemo, useRef } from "react";
 import {
   WebSocketProvider,
   useWebSocket,
 } from "./components/core/WebSocketClient";
 import { LayoutProvider, useLayout } from "./components/core/LayoutManager";
 import { preloadConfiguredAssets } from "./utils/assetUtils";
-import { initScrollHandling, createAutoScroll } from "./utils/scrollUtils";
 import CurrentCompetitor from "./components/display/CurrentCompetitor";
 import ResultsList from "./components/display/ResultsList";
 import Top10Display from "./components/display/Top10Display";
@@ -132,47 +131,127 @@ function ScoreboardContent() {
   // State for scroll position in results area
   const [scrollPosition, setScrollPosition] = useState(0);
 
-  // Initialize scroll handling
+  // State to track current competitor for highlighting in results
+  const [currentCompetitorBib, setCurrentCompetitorBib] = useState(null);
+  const [transitioningFromCourse, setTransitioningFromCourse] = useState(false);
+
+  // Refs for tracking user interaction
+  const userActivityTimeoutRef = useRef(null);
+  const resultsContainerRef = useRef(null);
+
+  // Track whether we're in auto-scroll mode
+  const [isAutoScrolling, setIsAutoScrolling] = useState(false);
+
+  // Track previous onCourse athletes to detect transitions
+  const prevOnCourseRef = useRef([]);
+
+  // Update the highlight bib when a competitor finishes
   useEffect(() => {
-    // Initialize scroll handling
-    const cleanup = initScrollHandling("results-scroll-container", {
-      scrollSpeed: 60,
-      pageScrollFactor: 0.9,
-      onScroll: (position) => {
-        setScrollPosition(position);
-      },
-    });
+    // When competitorData changes, check if it's different from the current highlight
+    if (competitorData && competitorData.Bib) {
+      const competitorBib = parseInt(competitorData.Bib);
 
-    // Setup auto-scroll that activates when no interaction for a while
-    const autoScroller = createAutoScroll("results-scroll-container", {
-      speed: 20, // Pixels per second
-      delay: 10000, // Start after 10 seconds of inactivity
-      pauseDelay: 2000, // Pause for 2 seconds at the bottom
-      resetDelay: 8000, // Scroll back to top after 8 seconds
-    });
+      // Check if this competitor just moved from onCourse to current
+      const wasOnCourse = prevOnCourseRef.current.some(
+        (athlete) => athlete.Bib === competitorData.Bib
+      );
 
-    // Start auto-scroll
-    autoScroller.start();
-
-    // User interaction resets auto-scroll
-    const resetAutoScroll = () => {
-      if (autoScroller.isScrolling()) {
-        autoScroller.stop();
-        autoScroller.start();
+      if (wasOnCourse) {
+        setTransitioningFromCourse(true);
+        // Reset after a short delay to allow animations to complete
+        setTimeout(() => {
+          setTransitioningFromCourse(false);
+        }, 1000);
       }
+
+      // Update the current competitor bib
+      setCurrentCompetitorBib(competitorBib);
+    }
+  }, [competitorData]);
+
+  // Update the previous onCourse list for reference
+  useEffect(() => {
+    if (onCourseData && Array.isArray(onCourseData)) {
+      prevOnCourseRef.current = [...onCourseData];
+    }
+  }, [onCourseData]);
+
+  // Handle scroll events to update header shadow effect
+  const handleScroll = (e) => {
+    if (!resultsContainerRef.current) return;
+
+    const scrollTop = resultsContainerRef.current.scrollTop;
+    setScrollPosition(scrollTop);
+
+    // Reset auto-scroll timer on user scroll
+    resetUserActivityTimer();
+  };
+
+  // Reset user activity timer
+  const resetUserActivityTimer = () => {
+    if (userActivityTimeoutRef.current) {
+      clearTimeout(userActivityTimeoutRef.current);
+    }
+
+    // Restart the auto-scroll timer after inactivity period
+    userActivityTimeoutRef.current = setTimeout(() => {
+      // Don't auto-scroll if config panel is open
+      if (!document.querySelector(".config-panel")) {
+        console.log("Triggering auto-scroll start");
+        setIsAutoScrolling(true);
+
+        // Dispatch a custom event to notify the ResultsList that it should start scrolling
+        const autoScrollEvent = new CustomEvent("startAutoScroll");
+        window.dispatchEvent(autoScrollEvent);
+      }
+    }, 5000); // 5 seconds inactivity period
+  };
+
+  // Setup event listeners for user activity
+  useEffect(() => {
+    // Track user activity to pause auto-scrolling
+    const handleUserActivity = () => {
+      setIsAutoScrolling(false);
+      resetUserActivityTimer();
     };
 
-    // Add user interaction listeners
-    window.addEventListener("click", resetAutoScroll);
-    window.addEventListener("keydown", resetAutoScroll);
-    window.addEventListener("mousemove", resetAutoScroll);
+    // Add event listeners for common user interactions
+    window.addEventListener("click", handleUserActivity);
+    window.addEventListener("keydown", handleUserActivity);
+    window.addEventListener("mousemove", handleUserActivity);
+    window.addEventListener("wheel", handleUserActivity);
+    window.addEventListener("touchstart", handleUserActivity);
 
+    // Initialize the results container ref
+    resultsContainerRef.current = document.getElementById(
+      "results-scroll-container"
+    );
+
+    // Add scroll event listener to the results container
+    if (resultsContainerRef.current) {
+      resultsContainerRef.current.addEventListener("scroll", handleScroll);
+    }
+
+    // Start the initial auto-scroll timer after 3 seconds delay
+    setTimeout(() => {
+      resetUserActivityTimer();
+    }, 3000);
+
+    // Cleanup function
     return () => {
-      cleanup();
-      autoScroller.stop();
-      window.removeEventListener("click", resetAutoScroll);
-      window.removeEventListener("keydown", resetAutoScroll);
-      window.removeEventListener("mousemove", resetAutoScroll);
+      window.removeEventListener("click", handleUserActivity);
+      window.removeEventListener("keydown", handleUserActivity);
+      window.removeEventListener("mousemove", handleUserActivity);
+      window.removeEventListener("wheel", handleUserActivity);
+      window.removeEventListener("touchstart", handleUserActivity);
+
+      if (resultsContainerRef.current) {
+        resultsContainerRef.current.removeEventListener("scroll", handleScroll);
+      }
+
+      if (userActivityTimeoutRef.current) {
+        clearTimeout(userActivityTimeoutRef.current);
+      }
     };
   }, []);
 
@@ -185,6 +264,23 @@ function ScoreboardContent() {
       header.classList.remove("shadowed");
     }
   }, [scrollPosition]);
+
+  // Determine which bib to highlight in results
+  // This should prioritize:
+  // 1. The currently displayed competitor that just transitioned from on-course
+  // 2. The topResults.HighlightBib if available
+  // 3. The currently displayed competitor
+  const getHighlightBib = () => {
+    if (transitioningFromCourse && currentCompetitorBib) {
+      return currentCompetitorBib;
+    }
+
+    if (topResults && topResults.HighlightBib) {
+      return parseInt(topResults.HighlightBib);
+    }
+
+    return currentCompetitorBib;
+  };
 
   return (
     <div className="scoreboard-container">
@@ -225,7 +321,8 @@ function ScoreboardContent() {
           <ResultsList
             data={topResults}
             visible={true}
-            highlightBib={parseInt(topResults.HighlightBib) || 0}
+            highlightBib={getHighlightBib()}
+            isAutoScrolling={isAutoScrolling}
           />
         )}
       </div>

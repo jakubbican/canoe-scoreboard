@@ -1,6 +1,7 @@
 # TODO
 
 - scrollování výsledků
+
 - vyčistit TABs z komponent
 - TOP10
 -
@@ -10,6 +11,7 @@
 
 - korektní výsledky 2 jízd na better score
 - zobrazení umístění po dojetí v aktivní řádce - možná bude muset počkat na zvládnuté závody na 2 jízdy
+- update images for SKVSCB standard (footer)
 
 # DONE
 

@@ -73,6 +73,7 @@
   background-color: rgba(30, 30, 30, 0.7);
   padding: 0;
   margin: 2px 0;
+  transition: background-color 0.3s ease;
 }
 
 /* Alternating row colors with green left borders to differentiate from on-course */
@@ -256,4 +257,93 @@
   /* Removed text shadow for gen-x style */
 }
 
-/* Using the same subtlePulse animation for consistency across display types */
+/* Animation for new results */
+@keyframes newRowHighlight {
+  0% {
+    background-color: rgba(204, 153, 51, 0.5);
+  }
+  100% {
+    background-color: inherit;
+  }
+}
+
+.result-row.new-entry {
+  animation: newRowHighlight 3s ease-out forwards;
+}
+
+/* Animation for position changes */
+@keyframes positionUp {
+  0%,
+  20% {
+    background-color: rgba(51, 153, 102, 0.3);
+  }
+  100% {
+    background-color: inherit;
+  }
+}
+
+@keyframes positionDown {
+  0%,
+  20% {
+    background-color: rgba(204, 51, 51, 0.3);
+  }
+  100% {
+    background-color: inherit;
+  }
+}
+
+.result-row.position-up {
+  animation: positionUp 3s ease-out forwards;
+}
+
+.result-row.position-down {
+  animation: positionDown 3s ease-out forwards;
+}
+
+/* Special highlight for competitor that just moved from on-course to results */
+.result-row.transition-highlight {
+  animation: transitionPulse 5s ease-out forwards;
+  border-left: 4px solid var(--accent-yellow) !important;
+  border-right: 2px solid var(--accent-yellow) !important;
+  box-shadow: 0 0 15px rgba(204, 153, 51, 0.4);
+}
+
+@keyframes transitionPulse {
+  0%,
+  10% {
+    background-color: rgba(204, 153, 51, 0.4);
+  }
+  50% {
+    background-color: rgba(51, 102, 153, 0.5);
+  }
+  100% {
+    background-color: rgba(51, 102, 153, 0.4);
+  }
+}
+
+/* Adding a scroll hint indicator at the bottom of the results area */
+.scoreboard-results::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 20px;
+  background: linear-gradient(to top, var(--primary-color), transparent);
+  pointer-events: none;
+  z-index: 50;
+  opacity: 0.7;
+}
+
+/* Improved alignment for penalty cell */
+.result-row .result-pen {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+/* Style for auto-scrolling mode - potentially add a visual indicator */
+.results-list.auto-scrolling .results-body {
+  /* Optional: Add subtle visual cue that auto-scrolling is active */
+  border-right: 2px solid rgba(204, 153, 51, 0.3);
+}

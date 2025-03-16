@@ -261,3 +261,66 @@
 .stacked-components > div:not(:last-child) {
   margin-bottom: 10px !important;
 }
+
+/* NEW ADDITIONS: Animations for transitions */
+
+/* Animation for new competitor */
+@keyframes newCompetitorHighlight {
+  0%,
+  15% {
+    background-color: rgba(204, 153, 51, 0.4);
+    box-shadow: 0 0 15px rgba(204, 153, 51, 0.4);
+  }
+  100% {
+    background-color: rgba(51, 102, 153, 0.2);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+  }
+}
+
+/* Animation for competitor moving from on-course to current */
+@keyframes fromOnCourseHighlight {
+  0%,
+  20% {
+    background-color: rgba(51, 153, 102, 0.4);
+    box-shadow: 0 0 15px rgba(51, 153, 102, 0.4);
+  }
+  50% {
+    background-color: rgba(204, 153, 51, 0.4);
+    box-shadow: 0 0 15px rgba(204, 153, 51, 0.4);
+  }
+  100% {
+    background-color: rgba(51, 102, 153, 0.2);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+  }
+}
+
+/* Apply animations based on state */
+.current-competitor.new-competitor .competitor-row {
+  animation: newCompetitorHighlight 3s ease-out forwards;
+}
+
+.current-competitor.from-on-course .competitor-row {
+  animation: fromOnCourseHighlight 5s ease-out forwards;
+}
+
+/* Enhanced arrow indicator for transitions */
+.current-competitor.from-on-course .competitor-row::before {
+  animation: emphasizedPulseGlyph 2s infinite;
+  font-size: 16px;
+  content: "►►";
+}
+
+@keyframes emphasizedPulseGlyph {
+  0% {
+    opacity: 0.7;
+    text-shadow: 0 0 5px rgba(255, 196, 0, 0.5);
+  }
+  50% {
+    opacity: 1;
+    text-shadow: 0 0 15px rgba(255, 196, 0, 1), 0 0 20px rgba(255, 196, 0, 0.5);
+  }
+  100% {
+    opacity: 0.7;
+    text-shadow: 0 0 5px rgba(255, 196, 0, 0.5);
+  }
+}

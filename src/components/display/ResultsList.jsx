@@ -3,6 +3,7 @@
 
 import React, { useMemo, useEffect, useRef, useState } from "react";
 import { useLayout } from "../core/LayoutManager";
+import { isAtBottom } from "../../utils/scrollUtils";
 import "../../styles/components/ResultsList.css";
 
 function ResultsList({ data, visible, highlightBib }) {
@@ -11,6 +12,13 @@ function ResultsList({ data, visible, highlightBib }) {
   const highlightRef = useRef(null);
   const containerRef = useRef(null);
   const autoScrollTimeoutRef = useRef(null);
+  const autoScrollIntervalRef = useRef(null);
+  const pageScrollTimeoutRef = useRef(null);
+
+  // State to track scrolling
+  const [isAutoScrolling, setIsAutoScrolling] = useState(false);
+  const [isUserScrolling, setIsUserScrolling] = useState(false);
+  const [atBottom, setAtBottom] = useState(false);
 
   // Track previous rank data for animations
   const [prevRanks, setPrevRanks] = useState({});
@@ -18,6 +26,15 @@ function ResultsList({ data, visible, highlightBib }) {
 
   // Track if we've scrolled to highlighted item
   const [hasScrolledToHighlight, setHasScrolledToHighlight] = useState(false);
+
+  // Configure auto-scroll settings
+  const AUTO_SCROLL_SETTINGS = {
+    initialDelay: 1000, // Wait 1 second before starting auto-scroll (reduced for testing)
+    pageInterval: 4000, // Scroll one page every 4 seconds
+    bottomPauseTime: 2000, // Pause at the bottom for 2 seconds
+    userInactivityTimeout: 5000, // Resume auto-scroll after 5 seconds of inactivity
+    maxScrollAttempts: 3, // Maximum number of attempts to scroll to top
+  };
 
   // Safe scroll function that only affects the results container
   const safeScrollToItem = (itemElement) => {
@@ -45,43 +62,146 @@ function ResultsList({ data, visible, highlightBib }) {
 
     // Reset the auto-scroll timer whenever we manually scroll
     resetAutoScrollTimer();
+    setIsUserScrolling(true);
+
+    // Reset user scrolling flag after a while
+    setTimeout(() => {
+      setIsUserScrolling(false);
+    }, 1000);
+  };
+
+  // Handle page scroll
+  const handlePageScroll = () => {
+    if (!containerRef.current || isUserScrolling) return;
+
+    // Use the utility function to check if we're at the bottom
+    if (isAtBottom(containerRef.current, 20)) {
+      setAtBottom(true);
+
+      // Wait at the bottom for a moment
+      clearTimeout(pageScrollTimeoutRef.current);
+      pageScrollTimeoutRef.current = setTimeout(() => {
+        scrollToTop();
+        setAtBottom(false);
+      }, AUTO_SCROLL_SETTINGS.bottomPauseTime);
+      return;
+    }
+
+    // Manual scrolling approach - more reliable than utility functions
+    const container = containerRef.current;
+    const pageHeight = container.clientHeight * 0.9;
+    const currentScroll = container.scrollTop;
+    const maxScroll = container.scrollHeight - container.clientHeight;
+
+    // Simple but direct approach to scroll down by a page
+    container.scrollTop = Math.min(currentScroll + pageHeight, maxScroll);
+
+    // For visual smoothness after the fact
+    setTimeout(() => {
+      if (container && document.contains(container)) {
+        container.style.scrollBehavior = "smooth";
+        setTimeout(() => {
+          if (container && document.contains(container)) {
+            container.style.scrollBehavior = "auto";
+          }
+        }, 500);
+      }
+    }, 50);
   };
 
   // Function to scroll back to top
   const scrollToTop = () => {
     if (containerRef.current) {
-      // First use smooth scrolling for visual effect
-      containerRef.current.scrollTo({
-        top: 0,
-        behavior: "smooth",
-      });
+      // Direct and simple approach - more reliable
+      containerRef.current.scrollTop = 0;
 
-      // Then ensure we reach absolute top with an immediate scroll after animation
+      // Double-check after a short delay to ensure it worked
       setTimeout(() => {
         if (containerRef.current) {
           containerRef.current.scrollTop = 0;
         }
-      }, 500); // Wait for smooth scroll to complete
+      }, 50);
     }
+  };
+
+  // Start page-by-page auto-scrolling
+  const startPageAutoScroll = () => {
+    if (isAutoScrolling || isUserScrolling) return;
+
+    setIsAutoScrolling(true);
+    console.log("Starting auto-scroll");
+
+    // First, handle any existing state - if at bottom, go to top
+    if (containerRef.current && isAtBottom(containerRef.current)) {
+      scrollToTop();
+      setTimeout(startAutoScrollCycle, 500);
+    } else {
+      startAutoScrollCycle();
+    }
+  };
+
+  // Start the actual auto-scroll cycle (extracted to separate function)
+  const startAutoScrollCycle = () => {
+    // Clear any existing timers
+    clearTimeout(autoScrollTimeoutRef.current);
+    clearInterval(autoScrollIntervalRef.current);
+
+    // Initial delay before starting to scroll
+    autoScrollTimeoutRef.current = setTimeout(() => {
+      console.log("Beginning auto-scroll cycle");
+
+      // Immediately do a scroll to see movement
+      if (containerRef.current && !isUserScrolling) {
+        handlePageScroll();
+      }
+
+      // Set up interval for page-by-page scrolling
+      autoScrollIntervalRef.current = setInterval(() => {
+        if (!isUserScrolling && containerRef.current) {
+          // Do actual scrolling work here
+          handlePageScroll();
+        }
+      }, AUTO_SCROLL_SETTINGS.pageInterval);
+    }, AUTO_SCROLL_SETTINGS.initialDelay);
+  };
+
+  // Stop auto-scrolling
+  const stopAutoScroll = () => {
+    if (!isAutoScrolling) return;
+
+    setIsAutoScrolling(false);
+    clearTimeout(autoScrollTimeoutRef.current);
+    clearInterval(autoScrollIntervalRef.current);
+    clearTimeout(pageScrollTimeoutRef.current);
   };
 
   // Reset auto-scroll timer
   const resetAutoScrollTimer = () => {
-    if (autoScrollTimeoutRef.current) {
-      clearTimeout(autoScrollTimeoutRef.current);
-    }
+    // First stop the current auto-scroll cycle
+    stopAutoScroll();
 
+    // After user inactivity, restart auto-scrolling
+    clearTimeout(autoScrollTimeoutRef.current);
     autoScrollTimeoutRef.current = setTimeout(() => {
-      scrollToTop();
-    }, 8000); // 8 seconds
+      if (visible && data?.list?.length > 0) {
+        // If already at bottom, scroll to top first
+        if (containerRef.current && isAtBottom(containerRef.current)) {
+          scrollToTop();
+          // Wait for scroll to complete before starting the auto-scroll cycle
+          setTimeout(() => {
+            startPageAutoScroll();
+          }, 1000);
+        } else {
+          startPageAutoScroll();
+        }
+      }
+    }, AUTO_SCROLL_SETTINGS.userInactivityTimeout);
   };
 
-  // Clean up timeout on unmount
+  // Clean up timeouts and intervals on unmount
   useEffect(() => {
     return () => {
-      if (autoScrollTimeoutRef.current) {
-        clearTimeout(autoScrollTimeoutRef.current);
-      }
+      stopAutoScroll();
     };
   }, []);
 
@@ -120,8 +240,11 @@ function ResultsList({ data, visible, highlightBib }) {
     // Reset highlight scrolling flag when data changes
     setHasScrolledToHighlight(false);
 
+    // Restart auto-scrolling when data changes
+    resetAutoScrollTimer();
+
     return () => clearTimeout(clearNewEntriesTimer);
-  }, [data?.list]);
+  }, [data?.list, visible]);
 
   // Get position change status for animation
   const getPositionChangeClass = (bib) => {
@@ -173,29 +296,134 @@ function ResultsList({ data, visible, highlightBib }) {
     }
   }, [highlightBib, data?.list, hasScrolledToHighlight]);
 
+  // Handle scroll events
+  const handleScroll = () => {
+    if (!containerRef.current) return;
+
+    const container = containerRef.current;
+    const isAtBottom =
+      container.scrollHeight - container.scrollTop <=
+      container.clientHeight + 10;
+
+    setAtBottom(isAtBottom);
+
+    // If user is scrolling, pause auto-scroll
+    setIsUserScrolling(true);
+    resetAutoScrollTimer();
+
+    // Reset user scrolling after a short delay
+    setTimeout(() => {
+      setIsUserScrolling(false);
+    }, 1000);
+  };
+
   // Access container element and store reference
   useEffect(() => {
     // Get the parent scrollable container
     const container = document.getElementById("results-scroll-container");
     if (container) {
       containerRef.current = container;
-      // Initialize auto-scroll timer
-      resetAutoScrollTimer();
-    }
-  }, []);
 
-  // Reset timer when user manually scrolls
+      // Add scroll event listener
+      container.addEventListener("scroll", handleScroll);
+
+      // Start auto-scrolling if visible and has data
+      if (visible && data?.list?.length > 0) {
+        console.log("Starting page auto-scroll");
+        startPageAutoScroll();
+      }
+
+      return () => {
+        container.removeEventListener("scroll", handleScroll);
+      };
+    }
+  }, [visible, data?.list]);
+
+  // Add a listener for the custom startAutoScroll event
   useEffect(() => {
-    const handleScroll = () => {
-      resetAutoScrollTimer();
+    const handleStartAutoScroll = () => {
+      console.log("Received startAutoScroll event");
+      if (
+        visible &&
+        data?.list?.length > 0 &&
+        !isAutoScrolling &&
+        !isUserScrolling
+      ) {
+        console.log("Starting auto-scroll from event");
+        startPageAutoScroll();
+      }
     };
 
-    const container = containerRef.current;
-    if (container) {
-      container.addEventListener("scroll", handleScroll);
-      return () => container.removeEventListener("scroll", handleScroll);
+    // Listen for the startAutoScroll event from App.jsx
+    window.addEventListener("startAutoScroll", handleStartAutoScroll);
+
+    return () => {
+      window.removeEventListener("startAutoScroll", handleStartAutoScroll);
+    };
+  }, [visible, data, isAutoScrolling, isUserScrolling]);
+
+  // Handle visibility changes
+  useEffect(() => {
+    if (visible && data?.list?.length > 0) {
+      resetAutoScrollTimer();
+    } else {
+      stopAutoScroll();
     }
-  }, []);
+  }, [visible]);
+
+  // Handle data updates without restarting auto-scroll completely
+  useEffect(() => {
+    // If data changes, don't restart the auto-scroll cycle completely
+    // Just make sure scroll-to-top happens if we were at the bottom
+    if (data?.list?.length > 0 && isAutoScrolling && atBottom) {
+      console.log("Data updated while at bottom, scrolling back to top");
+      // Scroll to top but preserve the auto-scrolling state
+      clearTimeout(pageScrollTimeoutRef.current);
+      pageScrollTimeoutRef.current = setTimeout(() => {
+        scrollToTop();
+        setAtBottom(false);
+      }, 500); // Short delay before scrolling back to top
+    }
+  }, [data?.list]);
+
+  // Keyboard events to control scrolling
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      // Only process if container is available and visible
+      if (!containerRef.current || !visible) return;
+
+      // Handle manual navigation
+      if (e.key === "Home") {
+        scrollToTop();
+        e.preventDefault();
+        setIsUserScrolling(true);
+        resetAutoScrollTimer();
+      } else if (e.key === "End") {
+        if (containerRef.current) {
+          containerRef.current.scrollTop = containerRef.current.scrollHeight;
+          e.preventDefault();
+          setIsUserScrolling(true);
+          resetAutoScrollTimer();
+        }
+      } else if (e.key === "PageDown") {
+        scrollPageDown();
+        e.preventDefault();
+        setIsUserScrolling(true);
+        resetAutoScrollTimer();
+      } else if (e.key === "PageUp") {
+        if (containerRef.current) {
+          const pageHeight = containerRef.current.clientHeight * 0.9;
+          containerRef.current.scrollTop -= pageHeight;
+          e.preventDefault();
+          setIsUserScrolling(true);
+          resetAutoScrollTimer();
+        }
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [visible, isUserScrolling]);
 
   if (!visible || !data || !data.list || data.list.length === 0) {
     return null;
@@ -230,15 +458,13 @@ function ResultsList({ data, visible, highlightBib }) {
     return categoryInfo ? `${categoryInfo} - Výsledky` : "Výsledky";
   };
 
-  let resultsToShow = data.list;
-
   return (
     <div className={`results-list ${displayType}`} ref={resultRef}>
       {/* Tab for Results with category title */}
       <div className="results-tab">{getCategoryTitle()}</div>
 
       <div className="results-body">
-        {resultsToShow.map((competitor, index) => {
+        {data.list.map((competitor, index) => {
           // Check if there are penalties
           const hasPenalties = competitor.Pen && competitor.Pen !== "0";
           const penaltyValue = hasPenalties ? competitor.Pen : "0";

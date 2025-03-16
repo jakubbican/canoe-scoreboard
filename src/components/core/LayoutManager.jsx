@@ -1,5 +1,5 @@
 // LayoutManager.jsx
-// Updated to handle the new layout structure
+// Updated to handle the new layout structure with reduced logging
 
 import React, { createContext, useContext, useState, useEffect } from "react";
 import { useWebSocket } from "./WebSocketClient";
@@ -140,13 +140,11 @@ export function LayoutProvider({
 }) {
   // Get parameters directly from URL
   const urlParams = getUrlParams();
-  console.log("URL params detected:", urlParams);
 
   // Set initial display type from URL parameter or default
   const [displayType, setDisplayType] = useState(
     urlParams.type || initialDisplayType
   );
-  console.log("Using display type:", displayType);
 
   // Set custom config if width and height are provided in URL
   const initialCustomConfig =
@@ -246,15 +244,6 @@ export function LayoutProvider({
     isVisible,
     scale,
   };
-
-  // For debugging purposes
-  console.log("Active layout config:", {
-    type: displayType,
-    width: config.width,
-    height: config.height,
-    className: config.className,
-    scale: scale,
-  });
 
   return (
     <LayoutContext.Provider value={contextValue}>
