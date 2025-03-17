@@ -6,13 +6,21 @@ import { useLayout } from "../core/LayoutManager";
 import "../../styles/components/ConfigPanel.css";
 
 function ConfigPanel({ onClose, onServerChange, currentServer }) {
-  const { displayType, setDisplayType, config, setCustomConfig } = useLayout();
+  const {
+    displayType,
+    setDisplayType,
+    config,
+    setCustomConfig,
+    disableScrolling,
+    setDisableScrolling,
+  } = useLayout();
 
   const [serverUrl, setServerUrl] = useState(currentServer);
   const [customWidth, setCustomWidth] = useState(config.width);
   const [customHeight, setCustomHeight] = useState(config.height);
   const [selectedDisplayType, setSelectedDisplayType] = useState(displayType);
   const [showTypeOptions, setShowTypeOptions] = useState(false);
+  const [scrollingDisabled, setScrollingDisabled] = useState(disableScrolling);
 
   // Handle form submission
   const handleSubmit = (e) => {
@@ -20,6 +28,9 @@ function ConfigPanel({ onClose, onServerChange, currentServer }) {
 
     // Update display type
     setDisplayType(selectedDisplayType);
+
+    // Update scrolling setting
+    setDisableScrolling(scrollingDisabled);
 
     // Update server URL if changed
     if (serverUrl !== currentServer) {
@@ -38,6 +49,7 @@ function ConfigPanel({ onClose, onServerChange, currentServer }) {
     const url = new URL(window.location.href);
     url.searchParams.set("type", selectedDisplayType);
     url.searchParams.set("server", serverUrl);
+    url.searchParams.set("disableScroll", scrollingDisabled.toString());
 
     if (selectedDisplayType === "custom") {
       url.searchParams.set("width", customWidth);
@@ -171,6 +183,20 @@ function ConfigPanel({ onClose, onServerChange, currentServer }) {
             </div>
           </>
         )}
+
+        <div className="form-group">
+          <label className="checkbox-label">
+            <input
+              type="checkbox"
+              checked={scrollingDisabled}
+              onChange={(e) => setScrollingDisabled(e.target.checked)}
+            />
+            Disable Auto-Scrolling
+          </label>
+          <div className="option-description">
+            Prevents results from automatically scrolling
+          </div>
+        </div>
 
         <div className="form-group buttons">
           <button type="submit">Apply</button>

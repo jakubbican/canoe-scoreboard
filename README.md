@@ -115,11 +115,12 @@ You can configure the scoreboard through URL parameters:
 - `?server=ws://192.168.1.100:8081/` - Set WebSocket server address
 - `?width=1280&height=720` - Set custom dimensions when type is `custom`
 - `?config=true` - Show configuration panel on load
+- `?autoScroll=false` - Disable auto-scrolling of results (default is enabled)
 
 Example:
 
 ```
-http://localhost:3000/?type=vertical&server=ws://192.168.1.100:8081/
+http://localhost:3000/?type=vertical&server=ws://192.168.1.100:8081/&autoScroll=false
 ```
 
 ### Configuration Panel

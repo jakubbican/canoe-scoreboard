@@ -114,6 +114,8 @@ const LayoutContext = createContext({
   setCustomConfig: () => {},
   isVisible: () => false,
   scale: 1,
+  disableScrolling: false,
+  setDisableScrolling: () => {},
 });
 
 /**
@@ -127,6 +129,7 @@ function getUrlParams() {
     width: parseInt(params.get("width"), 10) || null,
     height: parseInt(params.get("height"), 10) || null,
     server: params.get("server") || null,
+    disableScroll: params.get("disableScroll") === "true",
   };
 }
 
@@ -158,6 +161,9 @@ export function LayoutProvider({
 
   const [customConfig, setCustomConfig] = useState(initialCustomConfig);
   const [scale, setScale] = useState(1);
+  const [disableScrolling, setDisableScrolling] = useState(
+    urlParams.disableScroll || false
+  );
   const { controlState } = useWebSocket();
 
   // Validate display type
@@ -243,6 +249,8 @@ export function LayoutProvider({
     setCustomConfig: updateCustomConfig,
     isVisible,
     scale,
+    disableScrolling,
+    setDisableScrolling,
   };
 
   return (

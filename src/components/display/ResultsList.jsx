@@ -12,7 +12,7 @@ function ResultsList({
   highlightBib,
   isAutoScrolling: parentAutoScrolling,
 }) {
-  const { displayType } = useLayout();
+  const { displayType, disableScrolling } = useLayout();
   const resultRef = useRef(null);
   const highlightRef = useRef(null);
   const containerRef = useRef(null);
@@ -29,7 +29,7 @@ function ResultsList({
   const [isAutoScrolling, setIsAutoScrolling] = useState(false);
   const [isUserScrolling, setIsUserScrolling] = useState(false);
   const [atBottom, setAtBottom] = useState(false);
-  const [scrollEnabled, setScrollEnabled] = useState(true);
+  const [scrollEnabled, setScrollEnabled] = useState(!disableScrolling);
 
   // Local state to track the effective highlight bib (with time limiting) - only for LED wall
   const [effectiveHighlightBib, setEffectiveHighlightBib] = useState(null);
@@ -118,6 +118,7 @@ function ResultsList({
               setEffectiveHighlightBib(null);
 
               // After clearing the highlight, scroll back to top
+
               scrollToTop();
 
               // Reset highlight state
@@ -153,7 +154,7 @@ function ResultsList({
 
   // Safe scroll function that only affects the results container
   const safeScrollToItem = (itemElement) => {
-    if (!itemElement || !containerRef.current) return;
+    if (!itemElement || !containerRef.current || disableScrolling) return;
 
     // Stop propagation to the window
     const container = containerRef.current;
@@ -186,7 +187,13 @@ function ResultsList({
 
   // Handle page scroll
   const handlePageScroll = () => {
-    if (!containerRef.current || isUserScrolling || !scrollEnabled) return;
+    if (
+      !containerRef.current ||
+      isUserScrolling ||
+      !scrollEnabled ||
+      disableScrolling
+    )
+      return;
 
     // Use the utility function to check if we're at the bottom
     if (isAtBottom(containerRef.current, 20)) {
@@ -250,7 +257,7 @@ function ResultsList({
 
   // Function to scroll back to top
   const scrollToTop = () => {
-    if (containerRef.current) {
+    if (containerRef.current && !disableScrolling) {
       // Use scrollTo instead of scrollIntoView to prevent window scrolling
       containerRef.current.scrollTo({
         top: 0,
@@ -261,7 +268,7 @@ function ResultsList({
 
   // Start page-by-page auto-scrolling
   const startPageAutoScroll = () => {
-    if (isAutoScrolling || isUserScrolling) return;
+    if (isAutoScrolling || isUserScrolling || disableScrolling) return;
 
     // For LED Wall, check if we should disable auto-scrolling
     if (displayType === "ledwall" && isAthleteCurrent) {
@@ -444,6 +451,22 @@ function ResultsList({
       }, 300);
     }
   }, [effectiveHighlightBib, displayType, hasScrolledToHighlight]);
+
+  // Update scrollEnabled state when disableScrolling changes
+  useEffect(() => {
+    setScrollEnabled(!disableScrolling && !isAthleteCurrent);
+
+    if (disableScrolling) {
+      stopAutoScroll();
+    } else if (
+      visible &&
+      !isAthleteCurrent &&
+      !hasScrolledToHighlight &&
+      !effectiveHighlightBib
+    ) {
+      resetAutoScrollTimer();
+    }
+  }, [disableScrolling, isAthleteCurrent, visible, effectiveHighlightBib]);
 
   // Update scrollEnabled state when athlete current status changes
   useEffect(() => {
@@ -699,7 +722,7 @@ function ResultsList({
   return (
     <div
       className={`results-list ${displayType} ${
-        isAutoScrolling ? "auto-scrolling" : ""
+        isAutoScrolling && !disableScrolling ? "auto-scrolling" : ""
       }`}
       ref={resultRef}
     >

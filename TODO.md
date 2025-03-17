@@ -8,6 +8,8 @@
 - Schedule
 - true responsivita
 
+- cleanup komentářů a všech souborů
+
 - korektní výsledky 2 jízd na better score
 - zobrazení umístění po dojetí v aktivní řádce - možná bude muset počkat na zvládnuté závody na 2 jízdy
 
@@ -24,6 +26,7 @@
 - OK: tvrdý refresh v konfig panelu
 - OK: scrollování výsledků a najíždění na dojetého závodníka
 - OK: update images for SKVSCB standard (footer)
+- OK: disable scrolling option
 
 # WON'T DO
 

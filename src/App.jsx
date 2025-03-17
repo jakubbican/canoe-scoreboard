@@ -116,7 +116,7 @@ function App() {
 
 // This component contains all the display elements of the scoreboard
 function ScoreboardContent() {
-  const { isVisible, displayType } = useLayout();
+  const { isVisible, displayType, disableScrolling } = useLayout();
   const {
     competitorData,
     topResults,
@@ -157,17 +157,20 @@ function ScoreboardContent() {
     }
 
     // Restart the auto-scroll timer after inactivity period
-    userActivityTimeoutRef.current = setTimeout(() => {
-      // Don't auto-scroll if config panel is open
-      if (!document.querySelector(".config-panel")) {
-        console.log("Triggering auto-scroll start");
-        setIsAutoScrolling(true);
+    // Skip if scrolling is disabled
+    if (!disableScrolling) {
+      userActivityTimeoutRef.current = setTimeout(() => {
+        // Don't auto-scroll if config panel is open
+        if (!document.querySelector(".config-panel")) {
+          console.log("Triggering auto-scroll start");
+          setIsAutoScrolling(true);
 
-        // Dispatch a custom event to notify the ResultsList that it should start scrolling
-        const autoScrollEvent = new CustomEvent("startAutoScroll");
-        window.dispatchEvent(autoScrollEvent);
-      }
-    }, 5000); // 5 seconds inactivity period
+          // Dispatch a custom event to notify the ResultsList that it should start scrolling
+          const autoScrollEvent = new CustomEvent("startAutoScroll");
+          window.dispatchEvent(autoScrollEvent);
+        }
+      }, 5000); // 5 seconds inactivity period
+    }
   };
 
   // Setup event listeners for user activity
