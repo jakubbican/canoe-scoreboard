@@ -239,13 +239,12 @@ The application automatically adapts asset display based on the selected layout.
 
 ##### Footer and UI Elements
 
-| Asset          | File Location               | Layout Type         | Recommended Size | Format | Notes                                             |
-| -------------- | --------------------------- | ------------------- | ---------------- | ------ | ------------------------------------------------- |
-| Footer Banner  | `public/assets/footer.png`  | Horizontal/Vertical | 1920px × 120px   | PNG    | Fixed height of 120px across layouts              |
-|                |                             | LED Wall            | Not displayed    | N/A    | Footer is hidden in LED wall layout               |
-| Bib Background | `public/assets/bib.png`     | Horizontal          | 100px × 100px    | PNG    | Matches 100px bib column in horizontal mode       |
-|                |                             | Vertical/LED Wall   | 80px × 80px      | PNG    | Matches 80px bib column in these layouts          |
-| Country Flags  | `public/assets/flags/*.bmp` | All layouts         | 60px × 40px      | BMP    | Named using 3-letter country code (e.g., CZE.bmp) |
+| Asset          | File Location              | Layout Type         | Recommended Size | Format | Notes                                       |
+| -------------- | -------------------------- | ------------------- | ---------------- | ------ | ------------------------------------------- |
+| Footer Banner  | `public/assets/footer.png` | Horizontal/Vertical | 1920px × 120px   | PNG    | Fixed height of 120px across layouts        |
+|                |                            | LED Wall            | Not displayed    | N/A    | Footer is hidden in LED wall layout         |
+| Bib Background | `public/assets/bib.png`    | Horizontal          | 100px × 100px    | PNG    | Matches 100px bib column in horizontal mode |
+|                |                            | Vertical/LED Wall   | 80px × 80px      | PNG    | Matches 80px bib column in these layouts    |
 
 **Format and Design Recommendations:**
 
