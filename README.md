@@ -33,7 +33,7 @@ This app has been developed in a unique way - I started without any knowledge of
 - [Customization and Asset Management](#customization-and-asset-management)
   - [Visual Assets Overview](#visual-assets-overview)
   - [How to Customize Visual Assets](#how-to-customize-visual-assets)
-  - [Country Flag Optimization (Optional)](#country-flag-optimization-optional)
+  - [Country Flag Optimization](#country-flag-optimization)
   - [Advanced: Configuration File Customization](#advanced-configuration-file-customization)
   - [Customizing Colors, Fonts and Styling](#customizing-colors-fonts-and-styling)
   - [Image Optimization Tools](#image-optimization-tools)
@@ -287,20 +287,34 @@ You have three methods to install your custom assets:
 2. Edit the `assets/config.json` file to specify new file paths if filenames differ from defaults
 3. Increment the `cacheVersion` value in the config file to force browsers to reload cached assets
 
-#### 3. Country Flag Optimization (Optional)
+### Country Flag Optimization
 
-For production deployments, you can optimize flag loading performance:
+The application uses base64-encoded flag images embedded directly in the JavaScript code for optimal performance, rather than loading individual image files:
 
-1. Ensure all flag images are in the `public/assets/flags/` directory
-2. Run the flag optimization script:
+1. **Adding New Flags**: Place BMP flag files in the `assets-source/flags/` directory using 3-letter country codes (e.g., `CZE.bmp`)
+
+2. **Converting to Base64**: Run the flag conversion script:
+
    ```bash
+   # Convert flags to base64 encoding
    node scripts/flags-to-base64.cjs
-   ```
-3. This embeds flags directly into the application as base64 strings, eliminating HTTP requests
-4. Rebuild the application after running this script:
-   ```bash
+
+   # Rebuild the application
    npm run build
    ```
+
+**Important Notes:**
+
+- Base64 encoding eliminates HTTP requests for flags and improves loading performance
+- For deployments where flags are not needed, the default empty `flagsBase64.js` file keeps bundle size small
+- A backup of previously encoded flags is maintained in `flags-base64-backup.js`
+- To restore flags from backup, copy the content from `flags-base64-backup.js` to `src/utils/flagsBase64.js`
+
+**Flag Image Requirements:**
+
+- Format: BMP (preferred for compatibility with the control system)
+- Filename: Three-letter country code (ISO 3166-1 alpha-3), e.g., `CZE.bmp`
+- Recommended size: 60px × 40px
 
 #### 4. Advanced: Configuration File Customization
 
