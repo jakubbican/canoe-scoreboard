@@ -279,9 +279,3 @@
   align-items: center;
   justify-content: flex-end;
 }
-
-/* Style for auto-scrolling mode - potentially add a visual indicator */
-.results-list.auto-scrolling .results-body {
-  /* Optional: Add subtle visual cue that auto-scrolling is active */
-  border-right: 2px solid rgba(204, 153, 51, 0.3);
-}
