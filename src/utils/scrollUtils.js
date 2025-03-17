@@ -502,7 +502,7 @@ export function createPageScroller(containerId, options = {}) {
     // Check if we should enable scrolling
     if (!shouldEnableScrolling()) {
       console.log(
-        `Auto-scroll disabled: ${layoutType} layout with athlete is current = ${isAthleteCurrent}`
+        `[Scroll] Auto-scroll disabled for ${layoutType}: athlete status=${isAthleteCurrent}`
       );
       scrollToTop();
       return;
@@ -593,10 +593,16 @@ export function createPageScroller(containerId, options = {}) {
       if (layoutType === "ledwall") {
         if (isCurrentNow) {
           // Athlete is now current, stop scrolling and go to top
+          console.log(
+            `[Scroll] Athlete now current: stopping scroll for ${layoutType}`
+          );
           stop();
           scrollToTop();
         } else if (!isCurrentNow && !isActive) {
           // Athlete is no longer current, can restart scrolling
+          console.log(
+            `[Scroll] Athlete no longer current: restarting scroll for ${layoutType}`
+          );
           start();
         }
       }
@@ -662,7 +668,7 @@ export function createAutoScroll(containerId, options = {}) {
     // Check if we should enable scrolling
     if (!shouldEnableScrolling()) {
       console.log(
-        `Auto-scroll disabled: ${layoutType} layout with athlete is current = ${isAthleteCurrent}`
+        `[Scroll] Legacy auto-scroll disabled: ${layoutType}, athlete status=${isAthleteCurrent}`
       );
       // Scroll to top for LED Wall when athlete is current
       if (layoutType === "ledwall") {
@@ -790,10 +796,16 @@ export function createAutoScroll(containerId, options = {}) {
       if (layoutType === "ledwall") {
         if (isCurrentNow) {
           // Athlete is now current, stop scrolling and go to top
+          console.log(
+            `[Scroll] Legacy: Athlete now current, stopping scroll for ${layoutType}`
+          );
           stopAutoScroll();
           resetScrollPosition();
         } else if (!isCurrentNow && !isScrolling) {
           // Athlete is no longer current, can restart scrolling
+          console.log(
+            `[Scroll] Legacy: Athlete no longer current, restarting scroll for ${layoutType}`
+          );
           startAutoScroll();
         }
       }

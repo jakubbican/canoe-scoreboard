@@ -162,7 +162,7 @@ function ScoreboardContent() {
       userActivityTimeoutRef.current = setTimeout(() => {
         // Don't auto-scroll if config panel is open
         if (!document.querySelector(".config-panel")) {
-          console.log("Triggering auto-scroll start");
+          console.log("[Scroll] User inactive, triggering auto-scroll");
           setIsAutoScrolling(true);
 
           // Dispatch a custom event to notify the ResultsList that it should start scrolling
