@@ -10,7 +10,6 @@
 
 - korektní výsledky 2 jízd na better score
 - zobrazení umístění po dojetí v aktivní řádce - možná bude muset počkat na zvládnuté závody na 2 jízdy
-- update images for SKVSCB standard (footer)
 
 # DONE
 
@@ -24,6 +23,7 @@
 - OK: klik na status do konfigurace
 - OK: tvrdý refresh v konfig panelu
 - OK: scrollování výsledků a najíždění na dojetého závodníka
+- OK: update images for SKVSCB standard (footer)
 
 # WON'T DO
 
