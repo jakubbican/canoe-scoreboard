@@ -1,9 +1,8 @@
 # TODO
 
 - optimalizovat logování scrollování?
-- scrolling timing (vertical+after return to top)
-- hide incomplete rows from the results scrolling viewport
 - disrupted scrolling after data arrives
+- hide incomplete rows from the results scrolling viewport
 
 - TOP10
 
@@ -30,6 +29,7 @@
 - OK: scrollování výsledků a najíždění na dojetého závodníka
 - OK: update images for SKVSCB standard (footer)
 - OK: disable scrolling option
+- OK: disrupted scrolling after data arrives
 
 # WON'T DO
 
