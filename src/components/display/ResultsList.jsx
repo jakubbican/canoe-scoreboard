@@ -265,6 +265,9 @@ function ResultsList({
         top: 0,
         behavior: "smooth",
       });
+
+      // Reset auto-scroll timers when returning to top
+      resetAutoScrollTimer();
     }
   };
 

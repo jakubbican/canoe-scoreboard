@@ -1,6 +1,9 @@
 # TODO
 
 - optimalizovat logování scrollování?
+- scrolling timing (vertical+after return to top)
+- hide incomplete rows from the results scrolling viewport
+- disrupted scrolling after data arrives
 
 - TOP10
 
