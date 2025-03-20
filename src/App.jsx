@@ -1,6 +1,5 @@
 // App.jsx
-// Refactored with new layout structure: fixed header, scrollable results, fixed footer
-// Enhanced to pass information about current/on-course competitors to results for better scrolling logic
+// Optimized with simplified scrolling interaction logic
 
 import React, { useState, useEffect, useMemo, useRef } from "react";
 import {
@@ -131,94 +130,46 @@ function ScoreboardContent() {
 
   // State for scroll position in results area
   const [scrollPosition, setScrollPosition] = useState(0);
-
-  // Refs for tracking user interaction
-  const userActivityTimeoutRef = useRef(null);
-  const resultsContainerRef = useRef(null);
-
-  // Track whether we're in auto-scroll mode
   const [isAutoScrolling, setIsAutoScrolling] = useState(false);
+  const autoScrollTimerRef = useRef(null);
 
-  // Handle scroll events to update header shadow effect
-  const handleScroll = (e) => {
-    if (!resultsContainerRef.current) return;
-
-    const scrollTop = resultsContainerRef.current.scrollTop;
-    setScrollPosition(scrollTop);
-
-    // Reset auto-scroll timer on user scroll
-    resetUserActivityTimer();
-  };
-
-  // Reset user activity timer
-  const resetUserActivityTimer = () => {
-    if (userActivityTimeoutRef.current) {
-      clearTimeout(userActivityTimeoutRef.current);
-    }
-
-    // Restart the auto-scroll timer after inactivity period
-    // Skip if scrolling is disabled
-    if (!disableScrolling) {
-      userActivityTimeoutRef.current = setTimeout(() => {
-        // Don't auto-scroll if config panel is open
-        if (!document.querySelector(".config-panel")) {
-          console.log("[Scroll] User inactive, triggering auto-scroll");
-          setIsAutoScrolling(true);
-
-          // Dispatch a custom event to notify the ResultsList that it should start scrolling
-          const autoScrollEvent = new CustomEvent("startAutoScroll");
-          window.dispatchEvent(autoScrollEvent);
-        }
-      }, 5000); // 5 seconds inactivity period
-    }
-  };
-
-  // Setup event listeners for user activity
+  // Setup auto-scrolling timer
   useEffect(() => {
-    // Track user activity to pause auto-scrolling
-    const handleUserActivity = () => {
-      setIsAutoScrolling(false);
-      resetUserActivityTimer();
-    };
+    // Only start auto-scrolling if config panel is not open
+    if (!document.querySelector(".config-panel") && !disableScrolling) {
+      // Start the auto-scroll timer after delay
+      autoScrollTimerRef.current = setTimeout(() => {
+        console.log("[Scroll] Initiating auto-scroll");
+        setIsAutoScrolling(true);
 
-    // Add event listeners for common user interactions
-    window.addEventListener("click", handleUserActivity);
-    window.addEventListener("keydown", handleUserActivity);
-    window.addEventListener("mousemove", handleUserActivity);
-    window.addEventListener("wheel", handleUserActivity);
-    window.addEventListener("touchstart", handleUserActivity);
-
-    // Initialize the results container ref
-    resultsContainerRef.current = document.getElementById(
-      "results-scroll-container"
-    );
-
-    // Add scroll event listener to the results container
-    if (resultsContainerRef.current) {
-      resultsContainerRef.current.addEventListener("scroll", handleScroll);
+        // Dispatch a custom event to notify the ResultsList that it should start scrolling
+        const autoScrollEvent = new CustomEvent("startAutoScroll");
+        window.dispatchEvent(autoScrollEvent);
+      }, 3000); // 3 seconds initial delay
     }
 
-    // Start the initial auto-scroll timer after 3 seconds delay
-    setTimeout(() => {
-      resetUserActivityTimer();
-    }, 3000);
-
-    // Cleanup function
     return () => {
-      window.removeEventListener("click", handleUserActivity);
-      window.removeEventListener("keydown", handleUserActivity);
-      window.removeEventListener("mousemove", handleUserActivity);
-      window.removeEventListener("wheel", handleUserActivity);
-      window.removeEventListener("touchstart", handleUserActivity);
-
-      if (resultsContainerRef.current) {
-        resultsContainerRef.current.removeEventListener("scroll", handleScroll);
-      }
-
-      if (userActivityTimeoutRef.current) {
-        clearTimeout(userActivityTimeoutRef.current);
+      if (autoScrollTimerRef.current) {
+        clearTimeout(autoScrollTimerRef.current);
       }
     };
+  }, [disableScrolling]);
+
+  // Handle simple scroll position updates for header shadow
+  const handleScroll = () => {
+    const container = document.getElementById("results-scroll-container");
+    if (container) {
+      setScrollPosition(container.scrollTop);
+    }
+  };
+
+  // Add scroll listener
+  useEffect(() => {
+    const container = document.getElementById("results-scroll-container");
+    if (container) {
+      container.addEventListener("scroll", handleScroll);
+      return () => container.removeEventListener("scroll", handleScroll);
+    }
   }, []);
 
   // Add header shadow when scrolled

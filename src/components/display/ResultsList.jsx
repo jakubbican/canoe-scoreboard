@@ -1,5 +1,5 @@
 // ResultsList.jsx
-// Modified with layout-specific scroll timing and LED wall highlight time limit
+// Optimized for smoother autoscrolling with minimal user interaction handling
 
 import React, { useMemo, useEffect, useRef, useState } from "react";
 import { useLayout } from "../core/LayoutManager";
@@ -27,7 +27,6 @@ function ResultsList({
 
   // State to track scrolling
   const [isAutoScrolling, setIsAutoScrolling] = useState(false);
-  const [isUserScrolling, setIsUserScrolling] = useState(false);
   const [atBottom, setAtBottom] = useState(false);
   const [scrollEnabled, setScrollEnabled] = useState(!disableScrolling);
 
@@ -44,11 +43,9 @@ function ResultsList({
   const getAutoScrollSettings = () => {
     // Base settings
     const settings = {
-      initialDelay: 3000, // Wait 1 second before starting auto-scroll
+      initialDelay: 3000, // Wait 3 seconds before starting auto-scroll
       pageInterval: 4000, // Default: Scroll one page every 4 seconds
       bottomPauseTime: 2000, // Pause at the bottom for 2 seconds
-      userInactivityTimeout: 5000, // Resume auto-scroll after 5 seconds of inactivity
-      maxScrollAttempts: 3, // Maximum number of attempts to scroll to top
       highlightViewTime: 5000, // Time to view highlighted item before returning to top (LED Wall)
       maxHighlightDuration: 5000, // Maximum time to keep a highlight active on LED wall
     };
@@ -56,15 +53,15 @@ function ResultsList({
     // Layout-specific overrides
     if (displayType === "vertical") {
       // Vertical layout: stay longer on each page, more time at bottom
-      settings.pageInterval = 12000; // 8 seconds per page
-      settings.bottomPauseTime = 8000; // 4 seconds at bottom
+      settings.pageInterval = 12000; // 12 seconds per page
+      settings.bottomPauseTime = 8000; // 8 seconds at bottom
     } else if (displayType === "ledwall") {
       // LED Wall: quicker scrolling
       settings.pageInterval = 3000; // 3 seconds per page
       settings.bottomPauseTime = 1500; // 1.5 seconds at bottom
     } else if (displayType === "horizontal") {
       // Horizontal: default settings
-      settings.pageInterval = 8000; // 4 seconds per page
+      settings.pageInterval = 8000; // 8 seconds per page
       settings.bottomPauseTime = 2000; // 2 seconds at bottom
     }
 
@@ -120,7 +117,6 @@ function ResultsList({
               setEffectiveHighlightBib(null);
 
               // After clearing the highlight, scroll back to top
-
               scrollToTop();
 
               // Reset highlight state
@@ -154,48 +150,31 @@ function ResultsList({
     AUTO_SCROLL_SETTINGS.maxHighlightDuration,
   ]);
 
-  // Safe scroll function that only affects the results container
+  // Scroll function that only affects the results container
   const safeScrollToItem = (itemElement) => {
     if (!itemElement || !containerRef.current || disableScrolling) return;
-
-    // Stop propagation to the window
-    const container = containerRef.current;
 
     // Calculate center position
     const targetScrollTop =
       itemElement.offsetTop -
-      container.clientHeight / 2 +
+      containerRef.current.clientHeight / 2 +
       itemElement.offsetHeight / 2;
 
     // Ensure we stay within bounds
-    const maxScroll = container.scrollHeight - container.clientHeight;
+    const maxScroll =
+      containerRef.current.scrollHeight - containerRef.current.clientHeight;
     const safeScrollTop = Math.max(0, Math.min(targetScrollTop, maxScroll));
 
     // Perform the scroll only on the container, not the window
-    container.scrollTo({
+    containerRef.current.scrollTo({
       top: safeScrollTop,
       behavior: "smooth",
     });
-
-    // Reset the auto-scroll timer whenever we manually scroll
-    resetAutoScrollTimer();
-    setIsUserScrolling(true);
-
-    // Reset user scrolling flag after a while
-    setTimeout(() => {
-      setIsUserScrolling(false);
-    }, 1000);
   };
 
   // Handle page scroll
   const handlePageScroll = () => {
-    if (
-      !containerRef.current ||
-      isUserScrolling ||
-      !scrollEnabled ||
-      disableScrolling
-    )
-      return;
+    if (!containerRef.current || !scrollEnabled || disableScrolling) return;
 
     // Use the utility function to check if we're at the bottom
     if (isAtBottom(containerRef.current, 20)) {
@@ -265,15 +244,12 @@ function ResultsList({
         top: 0,
         behavior: "smooth",
       });
-
-      // Reset auto-scroll timers when returning to top
-      resetAutoScrollTimer();
     }
   };
 
   // Start page-by-page auto-scrolling
   const startPageAutoScroll = () => {
-    if (isAutoScrolling || isUserScrolling || disableScrolling) return;
+    if (isAutoScrolling || disableScrolling) return;
 
     // For LED Wall, check if we should disable auto-scrolling
     if (displayType === "ledwall" && isAthleteCurrent) {
@@ -299,7 +275,7 @@ function ResultsList({
     }
   };
 
-  // Start the actual auto-scroll cycle (extracted to separate function)
+  // Start the actual auto-scroll cycle
   const startAutoScrollCycle = () => {
     // Clear any existing timers
     clearTimeout(autoScrollTimeoutRef.current);
@@ -308,13 +284,13 @@ function ResultsList({
     // Initial delay before starting to scroll
     autoScrollTimeoutRef.current = setTimeout(() => {
       // Immediately do a scroll to see movement
-      if (containerRef.current && !isUserScrolling && scrollEnabled) {
+      if (containerRef.current && scrollEnabled) {
         handlePageScroll();
       }
 
       // Set up interval for page-by-page scrolling using layout-specific interval
       autoScrollIntervalRef.current = setInterval(() => {
-        if (!isUserScrolling && containerRef.current && scrollEnabled) {
+        if (containerRef.current && scrollEnabled) {
           // Do actual scrolling work here
           handlePageScroll();
         }
@@ -337,22 +313,19 @@ function ResultsList({
     // First stop the current auto-scroll cycle
     stopAutoScroll();
 
-    // After user inactivity, restart auto-scrolling
-    clearTimeout(autoScrollTimeoutRef.current);
-    autoScrollTimeoutRef.current = setTimeout(() => {
-      if (visible && data?.list?.length > 0) {
-        // If already at bottom, scroll to top first
-        if (containerRef.current && isAtBottom(containerRef.current)) {
-          scrollToTop();
-          // Wait for scroll to complete before starting the auto-scroll cycle
-          setTimeout(() => {
-            startPageAutoScroll();
-          }, 1000);
-        } else {
+    // Start auto-scrolling immediately if conditions are right
+    if (visible && data?.list?.length > 0 && scrollEnabled) {
+      // If already at bottom, scroll to top first
+      if (containerRef.current && isAtBottom(containerRef.current)) {
+        scrollToTop();
+        // Wait for scroll to complete before starting the auto-scroll cycle
+        setTimeout(() => {
           startPageAutoScroll();
-        }
+        }, 1000);
+      } else {
+        startPageAutoScroll();
       }
-    }, AUTO_SCROLL_SETTINGS.userInactivityTimeout);
+    }
   };
 
   // Handle layout-specific scrolling when highlight changes
@@ -495,36 +468,12 @@ function ResultsList({
     }
   }, [isAthleteCurrent, displayType, visible, effectiveHighlightBib]);
 
-  // Handle scroll events
-  const handleScroll = () => {
-    if (!containerRef.current) return;
-
-    const container = containerRef.current;
-    const isAtBottomValue =
-      container.scrollHeight - container.scrollTop <=
-      container.clientHeight + 10;
-
-    setAtBottom(isAtBottomValue);
-
-    // If user is scrolling, pause auto-scroll
-    setIsUserScrolling(true);
-    resetAutoScrollTimer();
-
-    // Reset user scrolling after a short delay
-    setTimeout(() => {
-      setIsUserScrolling(false);
-    }, 1000);
-  };
-
   // Access container element and store reference
   useEffect(() => {
     // Get the parent scrollable container
     const container = document.getElementById("results-scroll-container");
     if (container) {
       containerRef.current = container;
-
-      // Add scroll event listener
-      container.addEventListener("scroll", handleScroll);
 
       // Start auto-scrolling if visible and has data
       if (visible && data?.list?.length > 0 && scrollEnabled) {
@@ -536,10 +485,6 @@ function ResultsList({
           startPageAutoScroll();
         }
       }
-
-      return () => {
-        container.removeEventListener("scroll", handleScroll);
-      };
     }
   }, [visible, data?.list, scrollEnabled, effectiveHighlightBib, displayType]);
 
@@ -555,7 +500,6 @@ function ResultsList({
         visible &&
         data?.list?.length > 0 &&
         !isAutoScrolling &&
-        !isUserScrolling &&
         scrollEnabled
       ) {
         console.log(`[Scroll] Event triggered auto-scroll: ${displayType}`);
@@ -573,7 +517,6 @@ function ResultsList({
     visible,
     data,
     isAutoScrolling,
-    isUserScrolling,
     scrollEnabled,
     effectiveHighlightBib,
     displayType,
@@ -607,102 +550,6 @@ function ResultsList({
       }, 500); // Short delay before scrolling back to top
     }
   }, [data?.list]);
-
-  // Keyboard events to control scrolling - Fixed to prevent window scrolling
-  useEffect(() => {
-    const handleKeyDown = (e) => {
-      // Only process if container is available and visible
-      if (!containerRef.current || !visible) return;
-
-      // For key events we want to stop the default scrolling behavior
-      let shouldPreventDefault = false;
-      let targetPosition = null;
-
-      // Get all rows
-      const rows = containerRef.current.querySelectorAll(".result-row");
-      if (!rows || rows.length === 0) return;
-
-      // Handle manual navigation
-      if (e.key === "Home") {
-        targetPosition = 0;
-        shouldPreventDefault = true;
-      } else if (e.key === "End") {
-        targetPosition = containerRef.current.scrollHeight;
-        shouldPreventDefault = true;
-      } else if (e.key === "PageDown") {
-        // Find the first visible row
-        const visibleRowIndex = findFirstVisibleRowIndex(
-          containerRef.current,
-          rows
-        );
-
-        // Calculate how many rows fit in the viewport
-        const rowHeight = rows[0].offsetHeight;
-        const containerHeight = containerRef.current.clientHeight;
-        const rowsPerPage = Math.floor((containerHeight * 0.9) / rowHeight);
-
-        // Calculate the next row to scroll to
-        const nextRowIndex = Math.min(
-          visibleRowIndex + rowsPerPage,
-          rows.length - 1
-        );
-
-        // Get the position to scroll to
-        if (rows[nextRowIndex]) {
-          targetPosition = rows[nextRowIndex].offsetTop;
-          shouldPreventDefault = true;
-        }
-      } else if (e.key === "PageUp") {
-        // Find the first visible row
-        const visibleRowIndex = findFirstVisibleRowIndex(
-          containerRef.current,
-          rows
-        );
-
-        // Calculate how many rows fit in the viewport
-        const rowHeight = rows[0].offsetHeight;
-        const containerHeight = containerRef.current.clientHeight;
-        const rowsPerPage = Math.floor((containerHeight * 0.9) / rowHeight);
-
-        // Calculate the previous row to scroll to
-        const prevRowIndex = Math.max(0, visibleRowIndex - rowsPerPage);
-
-        // Get the position to scroll to
-        if (rows[prevRowIndex]) {
-          targetPosition = rows[prevRowIndex].offsetTop;
-          shouldPreventDefault = true;
-        }
-      }
-
-      // If we found a target position, scroll to it and prevent default
-      if (targetPosition !== null) {
-        // Scroll only the container, not the window
-        containerRef.current.scrollTo({
-          top: targetPosition,
-          behavior: "smooth",
-        });
-
-        setIsUserScrolling(true);
-        resetAutoScrollTimer();
-
-        // Reset the user scrolling state after a while
-        setTimeout(() => {
-          setIsUserScrolling(false);
-        }, 1000);
-
-        // Prevent the default scrolling behavior of the window
-        if (shouldPreventDefault) {
-          e.preventDefault();
-        }
-      }
-    };
-
-    // Add event listener
-    window.addEventListener("keydown", handleKeyDown, { passive: false });
-
-    // Cleanup
-    return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [visible, isUserScrolling]);
 
   if (!visible || !data || !data.list || data.list.length === 0) {
     return null;
