@@ -2,7 +2,6 @@
 
 - optimalizovat logování scrollování?
 - disrupted scrolling after data arrives
-- hide incomplete rows from the results scrolling viewport
 
 - TOP10
 
@@ -34,3 +33,4 @@
 # WON'T DO
 
 - ??zobrazit oncourse vedle sebe na ledwall
+- hide incomplete rows from the results scrolling viewport
