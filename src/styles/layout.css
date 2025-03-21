@@ -171,6 +171,29 @@
   margin-top: 5px;
 }
 
+/* Special positioning for Top10Display in LED wall mode */
+.layout-ledwall .top10-display.ledwall {
+  /* Ensure the top10 display stays below the header */
+  top: 52%;
+  transform: translate(-50%, -50%);
+  position: fixed;
+  /* Set a max-height that fits the screen */
+  max-height: 315px;
+  /* Ensure good spacing below top bar */
+  margin-top: 5px;
+}
+
+/* When top bar is visible, adjust position */
+.layout-ledwall .scoreboard-header:not(.hidden) ~ .top10-display.ledwall {
+  top: 56%;
+}
+
+/* When the title is displayed, adjust positioning */
+.layout-ledwall .event-title:not(.hidden) ~ .top10-display.ledwall {
+  top: 58%;
+  max-height: 300px;
+}
+
 /* Ensure footer is fixed at bottom */
 .footer {
   position: sticky;

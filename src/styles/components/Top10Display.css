@@ -6,188 +6,609 @@
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  max-width: 960px;
   display: flex;
   flex-direction: column;
-  font-family: var(--font-display);
+  font-family: var(--font-primary);
   color: var(--text-primary);
-  transition: top 1s, opacity 1s;
-  transition-timing-function: ease-in-out;
-  border-spacing: 0;
-  z-index: 10;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+  z-index: 100;
+  background-color: rgba(
+    10,
+    10,
+    10,
+    0.98
+  ); /* Darker background for better contrast */
+  border-radius: 8px; /* Slightly larger radius */
+  box-shadow: 0 15px 50px rgba(0, 0, 0, 0.8), 0 0 30px rgba(51, 102, 153, 0.6); /* Enhanced shadow with accent glow */
+  overflow: hidden;
+  border: 3px solid var(--accent-blue); /* Thicker border for more prominence */
+  animation: top10Appear 0.5s ease-out forwards,
+    borderGlow 3s infinite ease-in-out;
+  max-height: 90vh;
+}
+
+@keyframes top10Appear {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.9);
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+    box-shadow: 0 15px 50px rgba(0, 0, 0, 0.8), 0 0 30px rgba(51, 102, 153, 0.6);
+  }
+}
+
+@keyframes borderGlow {
+  0% {
+    box-shadow: 0 0 10px rgba(51, 102, 153, 0.4);
+  }
+  50% {
+    box-shadow: 0 0 20px rgba(51, 102, 153, 0.7);
+  }
+  100% {
+    box-shadow: 0 0 10px rgba(51, 102, 153, 0.4);
+  }
 }
 
 /* Header section */
 .top10-header {
-  background-image: var(--accent-gradient);
-  padding: 15px 20px;
-  border-top-left-radius: 10px;
-  border-top-right-radius: 10px;
+  padding: 15px 18px; /* Adjust padding for single-line header */
+  background: linear-gradient(
+    to bottom,
+    var(--accent-blue),
+    var(--primary-color)
+  ); /* Gradient background */
+  color: #ffffff; /* Brighter white text */
   text-align: center;
-  box-shadow: 0 4px 20px rgba(138, 43, 226, 0.3);
+  position: relative;
+  overflow: hidden;
+  border-bottom: 3px solid var(--accent-blue);
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.4); /* Text shadow for better readability */
+  display: flex;
+  align-items: center;
+  justify-content: center; /* Center the race name */
 }
 
 .top10-header h2 {
-  font-size: var(--header-size);
-  margin: 0;
+  font-size: calc(var(--header-size) * 0.8); /* Larger text */
+  font-weight: 700; /* Bolder text */
+  letter-spacing: 0.6px;
   text-transform: uppercase;
+  margin: 0;
 }
 
+/* Remove the paragraph styles since we've removed that element */
 .top10-header p {
-  font-size: calc(var(--body-size) - 4px);
-  margin: 5px 0 0 0;
-  opacity: 0.9;
+  display: none;
 }
 
 /* Body section */
 .top10-body {
   display: flex;
   flex-direction: column;
+  overflow-y: auto;
+  max-height: 70vh;
+  padding-top: 6px; /* Add padding at top since we removed the header */
 }
 
-/* Individual result row */
+/* Row styling */
 .top10-row {
   display: grid;
   grid-template-columns: 60px 2fr 60px 60px 140px 100px;
   align-items: center;
-  height: 50px;
+  background-color: rgba(30, 30, 30, 0.7);
+  transition: background-color 0.2s ease;
+  min-height: 44px; /* Ensure all rows have good height */
+}
+
+/* Remove header-specific styles since we no longer need them */
+.top10-row.header {
+  display: none;
+}
+
+/* Column styling */
+.top10-col {
+  padding: 8px 12px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Alternating row colors with accent borders */
+.top10-row:nth-child(even) {
+  background-color: var(--primary-color);
+  border-left: 2px solid var(--accent-blue);
+  min-height: 44px;
+}
+
+.top10-row:nth-child(odd) {
   background-color: var(--primary-light);
-  border-left: 3px solid var(--accent-teal);
-  transition: all 0.3s ease;
+  border-left: 2px solid var(--accent-blue);
+  min-height: 44px;
 }
 
 .top10-row:hover {
-  transform: translateX(5px);
-  background-color: rgba(0, 206, 209, 0.1);
-  border-left: 3px solid var(--accent-color);
+  background-color: rgba(51, 102, 153, 0.3) !important; /* Highlight on hover */
+  transition: background-color 0.2s ease;
 }
 
-/* Cells styling */
-.top10-row > div {
-  padding: 5px 10px;
-  font-size: calc(var(--body-size) - 2px);
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+/* First row special styling to subtly indicate it's the top position */
+.top10-row:first-child {
+  border-left: 3px solid var(--accent-yellow);
+  background-color: rgba(
+    45,
+    45,
+    45,
+    0.95
+  ); /* Slightly different color for the first place */
+  min-height: 48px; /* Slightly taller for emphasis */
 }
 
-.top10-rank {
+.top10-row:first-child .top10-col.rank,
+.top10-row:first-child .top10-col.total {
+  color: var(--accent-yellow); /* Highlight gold position */
+  font-weight: 700;
+}
+
+/* Individual column specific styling */
+.top10-col.rank {
   text-align: center;
-  border-bottom-left-radius: 10px;
+  font-weight: 600;
 }
 
-.top10-name {
+.top10-col.name {
   text-align: left;
-  border-bottom-right-radius: 10px;
+  padding-left: 15px;
 }
 
-.top10-nat {
+.top10-col.nat {
   text-align: center;
 }
 
-.top10-nat img {
-  height: 35px;
+.top10-col.nat img {
+  height: 30px;
   vertical-align: middle;
 }
 
-.top10-pen {
+/* Improved penalty column styling to match app's color scheme */
+.top10-col.pen {
   text-align: center;
-  background-image: linear-gradient(rgba(255,0,0,1), rgba(255,0,0,0.5));
-  color: var(--text-primary);
-  border-bottom-right-radius: 10px;
-}
-
-.top10-pen:empty {
-  display: block;
   background-image: none;
+  color: var(--text-primary);
+  position: relative;
+  font-weight: normal;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
 }
 
-.top10-total {
-  text-align: right;
-  min-width: 140px; /* Ensure full time is visible */
-  border-bottom-right-radius: 10px;
+/* More subtle penalty styling that doesn't override other elements */
+.top10-col.pen:not(:empty) {
+  background: rgba(204, 51, 51, 0.5); /* More transparent */
+  border-radius: 3px;
+  font-weight: 500; /* Less bold */
+  color: rgba(255, 255, 255, 0.9);
+  min-width: 28px;
+  padding: 1px 4px;
+  margin: 0 auto;
+  font-size: 0.9em; /* Slightly smaller */
 }
 
-.top10-behind {
+/* Enhanced time column styling */
+.top10-col.total {
   text-align: right;
-  min-width: 100px; /* Ensure full time is visible */
-  border-bottom-right-radius: 10px;
+  font-weight: 700; /* Bolder */
+  color: #00ffff; /* Bright cyan for better visibility */
+  padding-right: 10px;
+  position: relative;
+  font-size: 1.05em; /* Slightly larger */
+}
+
+/* Remove the after pseudo-element glow that was too much */
+.top10-col.total::after {
+  display: none;
+}
+
+.top10-col.behind {
+  text-align: right;
+  font-weight: 400; /* Less bold */
+  padding-right: 10px;
+  color: rgba(255, 255, 255, 0.7); /* More transparent */
+  font-style: italic; /* Match ResultsList */
+  font-size: 0.9em; /* Slightly smaller */
+}
+
+/* Special styling for the medalists (first 3 rows) */
+.top10-row:nth-child(1) .top10-col.rank,
+.top10-row:nth-child(1) .top10-col.total {
+  color: var(--accent-yellow);
+  text-shadow: 0 0 5px rgba(255, 215, 0, 0.3);
+  font-weight: 700;
+}
+
+.top10-row:nth-child(2) .top10-col.rank,
+.top10-row:nth-child(2) .top10-col.total {
+  color: #c0c0c0; /* Silver */
+  text-shadow: 0 0 5px rgba(192, 192, 192, 0.3);
+  font-weight: 600;
+}
+
+.top10-row:nth-child(3) .top10-col.rank,
+.top10-row:nth-child(3) .top10-col.total {
+  color: #cd7f32; /* Bronze */
+  text-shadow: 0 0 5px rgba(205, 127, 50, 0.3);
+  font-weight: 600;
+}
+
+/* Use a more subtle medal indicator */
+.top10-row:nth-child(1) .top10-col.rank::before,
+.top10-row:nth-child(2) .top10-col.rank::before,
+.top10-row:nth-child(3) .top10-col.rank::before {
+  content: "•";
+  margin-right: 3px;
+  font-size: 1em;
+  vertical-align: middle;
+  opacity: 0.9;
 }
 
 /* Footer section */
 .top10-footer {
-  padding: 10px;
-  background-color: var(--accent-color);
-  border-bottom-left-radius: 10px;
-  border-bottom-right-radius: 10px;
+  padding: 8px;
+  background-color: var(--primary-color);
+  color: rgba(255, 255, 255, 0.7);
+  font-size: calc(var(--small-size) * 0.7);
   text-align: center;
-  font-size: calc(var(--small-size) - 4px);
-  font-weight: bold;
-  letter-spacing: 1px;
-  text-transform: uppercase;
-  box-shadow: 0 -4px 20px rgba(138, 43, 226, 0.3);
+  font-weight: 500;
+  letter-spacing: 0.5px;
+  border-top: 1px solid rgba(51, 102, 153, 0.3);
 }
 
-/* Display type specific adjustments */
+/* Layout specific adjustments */
+/* Horizontal layout - enhanced styling */
+.top10-display.horizontal {
+  width: 850px; /* Slightly wider */
+}
+
+.top10-display.horizontal .top10-header {
+  border-bottom: 3px solid var(--accent-blue);
+}
+
+.top10-display.horizontal .top10-header h2 {
+  font-size: 26px; /* Increased header font size */
+}
+
+.top10-display.horizontal .top10-body {
+  padding-top: 8px; /* Slightly more padding in horizontal layout */
+}
+
+.top10-display.horizontal .top10-row {
+  min-height: 46px; /* Taller rows for prominence */
+}
+
+.top10-display.horizontal .top10-col {
+  font-size: 24px; /* Larger font size for all columns */
+  padding: 10px 14px; /* More padding */
+  font-weight: 500; /* Slightly bolder text */
+}
+
+.top10-display.horizontal .top10-row:first-child {
+  min-height: 52px; /* Even taller first row */
+}
+
+.top10-display.horizontal .top10-row.header .top10-col {
+  font-size: 24px; /* Larger header font size */
+  font-weight: 700;
+  color: #ffd700; /* Brighter yellow for header text */
+}
+
+.top10-display.horizontal .top10-footer {
+  border-top: 2px solid var(--accent-blue);
+  font-weight: 600;
+  font-size: 18px; /* Larger footer text */
+  padding: 12px;
+  background: linear-gradient(
+    to top,
+    rgba(51, 102, 153, 0.2),
+    var(--primary-color)
+  );
+}
+
+/* Horizontal layout specific time column */
+.top10-display.horizontal .top10-col.total {
+  color: #00ffff;
+  text-shadow: 0 0 6px rgba(0, 255, 255, 0.3);
+  font-size: 26px;
+  font-weight: 700;
+}
+
+.top10-display.horizontal .top10-col.behind {
+  font-size: 21px;
+  font-style: italic;
+  color: rgba(255, 255, 255, 0.7);
+  font-weight: 400;
+}
+
+/* Vertical layout - enhanced styling */
 .top10-display.vertical {
-  max-width: 800px;
+  width: 800px; /* Slightly wider */
+}
+
+.top10-display.vertical .top10-header {
+  border-bottom: 3px solid var(--accent-blue);
+}
+
+.top10-display.vertical .top10-header h2 {
+  font-size: 28px; /* Increased header font size */
+}
+
+.top10-display.vertical .top10-body {
+  padding-top: 10px; /* More padding in vertical layout */
 }
 
 .top10-display.vertical .top10-row {
-  height: 60px;
+  min-height: 46px; /* Taller rows for prominence */
   grid-template-columns: 60px 2fr 60px 60px 160px 110px; /* Wider time columns */
 }
 
-.top10-display.vertical .top10-row > div {
-  font-size: var(--body-size);
+.top10-display.vertical .top10-col {
+  font-size: 26px; /* Larger font size for all columns */
+  padding: 10px 16px; /* More padding */
+  font-weight: 500;
 }
 
-.top10-display.vertical .top10-total {
-  min-width: 160px; /* Ensure full time is visible */
+.top10-display.vertical .top10-row:first-child {
+  min-height: 54px; /* Even taller first row */
 }
 
-.top10-display.vertical .top10-behind {
-  min-width: 110px; /* Ensure full time is visible */
+.top10-display.vertical .top10-row.header .top10-col {
+  font-size: 26px; /* Larger header font size */
+  font-weight: 700;
+  color: #ffd700; /* Brighter yellow for header text */
 }
 
+.top10-display.vertical .top10-footer {
+  border-top: 2px solid var(--accent-blue);
+  font-weight: 600;
+  font-size: 20px; /* Larger footer text */
+  padding: 12px;
+  background: linear-gradient(
+    to top,
+    rgba(51, 102, 153, 0.2),
+    var(--primary-color)
+  );
+}
+
+/* Vertical layout specific time column */
+.top10-display.vertical .top10-col.total {
+  color: #00ffff;
+  text-shadow: 0 0 6px rgba(0, 255, 255, 0.3);
+  font-size: 28px;
+  font-weight: 700;
+}
+
+.top10-display.vertical .top10-col.behind {
+  font-size: 23px;
+  font-style: italic;
+  color: rgba(255, 255, 255, 0.7);
+  font-weight: 400;
+}
+
+/* Horizontal and Vertical layouts - more subtle penalties */
+.top10-display.horizontal .top10-col.pen:not(:empty),
+.top10-display.vertical .top10-col.pen:not(:empty) {
+  background: rgba(204, 51, 51, 0.5);
+  border-radius: 3px;
+  font-weight: 500;
+  box-shadow: none;
+  text-shadow: none;
+  min-width: 35px;
+  padding: 1px 6px;
+  font-size: 0.85em;
+}
+
+/* LED Wall layout - enhanced visibility and larger fonts */
 .top10-display.ledwall {
-  max-width: 700px; /* Larger to be more visible from distance */
+  width: 750px; /* Slightly wider to fit all data */
+  height: 325px; /* Fixed height to ensure it fits within LED screens */
+  transform: translate(-50%, -50%) scale(1); /* Remove scale reduction */
+  max-height: none; /* Let the fixed height control the container */
+  background-color: rgba(0, 0, 0, 0.9); /* Darker, more opaque background */
+  border: 2px solid var(--accent-blue);
+  /* Position adjustments to avoid overlapping with title */
+  top: 53%; /* Move down slightly to avoid top panel */
+  z-index: 1000; /* Ensure it appears above other elements */
+}
+
+.top10-display.ledwall .top10-header {
+  padding: 6px 10px; /* Tighter padding */
+  height: 34px; /* Shorter header to save vertical space */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--primary-color);
+  border-bottom: 2px solid var(--accent-blue);
 }
 
 .top10-display.ledwall .top10-header h2 {
-  font-size: 38px; /* Larger for visibility */
-  font-weight: 700; /* Bolder for visibility */
+  font-size: 20px; /* Smaller font size to ensure title fits */
+  font-weight: 700;
+  text-transform: uppercase;
+  white-space: nowrap; /* Prevent wrapping */
+  overflow: hidden;
+  text-overflow: ellipsis; /* Add ellipsis for long titles */
+  max-width: 720px; /* Ensure text stays within container */
 }
 
-.top10-display.ledwall .top10-header p {
-  font-size: 28px; /* Larger for visibility */
+.top10-display.ledwall .top10-body {
+  padding-top: 2px; /* Minimal top padding */
+  padding-bottom: 2px;
+  max-height: 290px; /* Fixed max height to fit all rows */
+  overflow-y: auto;
 }
 
+/* Improve row height to fit more entries */
 .top10-display.ledwall .top10-row {
-  height: 50px;
-  grid-template-columns: 60px 2fr 60px 60px 140px 100px;
+  height: 28px; /* Shorter rows */
+  min-height: 28px;
+  /* Redistribute column widths for better data visibility */
+  grid-template-columns: 40px minmax(200px, 1.8fr) 45px 45px 95px 70px;
 }
 
-.top10-display.ledwall .top10-row > div {
-  font-size: 28px; /* Larger for visibility from distance */
-  font-weight: 600; /* Bolder for visibility */
-  padding: 5px 10px;
+.top10-display.ledwall .top10-row:first-child {
+  min-height: 30px; /* Slightly taller first row */
+  background-color: rgba(
+    40,
+    40,
+    20,
+    0.95
+  ); /* Subtler gold tint for first place */
 }
 
-.top10-display.ledwall .top10-nat img {
-  height: 30px;
+.top10-display.ledwall .top10-col {
+  padding: 0 4px; /* Tighter padding */
+  font-size: 17px; /* Smaller font size to fit more content */
+  font-weight: 600;
+  height: 100%;
+  display: flex;
+  align-items: center;
 }
 
-.top10-display.ledwall .top10-total {
-  min-width: 140px; /* Ensure full time is visible */
+/* Column-specific settings for LED wall */
+.top10-display.ledwall .top10-col.rank {
+  justify-content: center;
+  padding-left: 2px;
+  font-weight: 700;
 }
 
-.top10-display.ledwall .top10-behind {
-  min-width: 100px; /* Ensure full time is visible */
+.top10-display.ledwall .top10-col.name {
+  padding-left: 8px;
+  text-align: left;
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
 }
 
-/* Hide footer for LED wall as requested */
+.top10-display.ledwall .top10-col.nat {
+  padding: 0;
+  justify-content: center;
+}
+
+.top10-display.ledwall .top10-col.nat img {
+  height: 20px; /* Smaller flag images */
+  width: auto;
+  object-fit: contain;
+}
+
+.top10-display.ledwall .top10-col.pen {
+  justify-content: center;
+  padding: 0;
+}
+
+.top10-display.ledwall .top10-col.pen:not(:empty) {
+  background: rgba(204, 51, 51, 0.5);
+  border-radius: 2px;
+  font-weight: 500;
+  box-shadow: none;
+  text-shadow: none;
+  min-width: 22px;
+  padding: 1px 3px;
+  margin: 0 auto;
+  font-size: 14px;
+}
+
+.top10-display.ledwall .top10-col.total {
+  color: #00ffff;
+  text-shadow: 0 0 4px rgba(0, 255, 255, 0.4);
+  font-size: 18px;
+  font-weight: 700;
+  justify-content: flex-end;
+  padding-right: 6px;
+}
+
+.top10-display.ledwall .top10-col.behind {
+  font-size: 15px;
+  font-style: italic;
+  color: rgba(255, 255, 255, 0.65);
+  font-weight: 400;
+  justify-content: flex-end;
+  padding-right: 6px;
+}
+
+.top10-display.ledwall .top10-col.pen:not(:empty) {
+  background: rgba(204, 51, 51, 0.5);
+  border-radius: 2px;
+  font-weight: 500;
+  box-shadow: none;
+  text-shadow: none;
+  min-width: 22px;
+  padding: 1px 3px;
+  margin: 0 auto;
+  font-size: 14px;
+}
+
+.top10-display.ledwall .top10-col.behind {
+  justify-content: flex-end;
+  padding-right: 6px;
+  font-size: 16px;
+}
+
+/* Tighter alternating rows for LED wall */
+.top10-display.ledwall .top10-row:nth-child(even) {
+  background-color: rgba(22, 22, 22, 0.95);
+  border-left: 2px solid var(--accent-blue);
+}
+
+.top10-display.ledwall .top10-row:nth-child(odd) {
+  background-color: rgba(32, 32, 32, 0.95);
+  border-left: 2px solid var(--accent-blue);
+}
+
+/* Maintain medal highlights for LED wall but more subtle */
+.top10-display.ledwall .top10-row:nth-child(1) .top10-col.total,
+.top10-display.ledwall .top10-row:nth-child(2) .top10-col.total,
+.top10-display.ledwall .top10-row:nth-child(3) .top10-col.total {
+  text-shadow: none;
+}
+
+/* Hide footer for LED wall */
 .top10-display.ledwall .top10-footer {
   display: none;
+}
+
+/* Thinner scrollbar for LED wall */
+.top10-display.ledwall .top10-body::-webkit-scrollbar {
+  width: 3px;
+}
+
+.top10-display.ledwall .top10-body::-webkit-scrollbar-track {
+  background: rgba(30, 30, 30, 0.2);
+}
+
+.top10-display.ledwall .top10-body::-webkit-scrollbar-thumb {
+  background-color: rgba(51, 102, 153, 0.5);
+}
+
+/* Scrollbar styling to match other components */
+.top10-body::-webkit-scrollbar {
+  width: var(--scrollbar-width, 10px);
+}
+
+.top10-body::-webkit-scrollbar-track {
+  background: var(--primary-light);
+  border-radius: 5px;
+}
+
+.top10-body::-webkit-scrollbar-thumb {
+  background-color: var(--accent-blue);
+  border-radius: 5px;
+  border: 2px solid var(--primary-light);
+}
+
+/* Hide scrollbar for LED wall */
+.top10-display.ledwall .top10-body::-webkit-scrollbar {
+  width: 4px;
 }

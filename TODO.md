@@ -1,7 +1,5 @@
 # TODO
 
-- TOP10
-
 - ?OnStart
 
 - true responsivita
@@ -29,6 +27,7 @@
 - OK: screenshots
 - OK: cleanup komentářů a všech souborů
 - OK: Schedule
+- OK: TOP10
 
 # WON'T DO
 
