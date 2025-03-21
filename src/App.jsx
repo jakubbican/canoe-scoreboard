@@ -1,5 +1,5 @@
 // App.jsx
-// Optimized with improved scrolling interaction logic
+// Main application component with layout and data providers
 
 import React, { useState, useEffect, useMemo, useRef } from "react";
 import {
@@ -20,27 +20,26 @@ import Footer from "./components/display/Footer";
 import ConnectionStatus from "./components/ui/ConnectionStatus";
 import ConfigPanel from "./components/config/ConfigPanel";
 
-// Get WebSocket server URL from URL parameter or default
+// Get WebSocket server URL from URL parameter or use default
 const getServerUrl = () => {
   const params = new URLSearchParams(window.location.search);
   return params.get("server") || "ws://localhost:8081/";
 };
 
-// Determine if we should show the config panel
+// Determine if config panel should be shown on startup
 const shouldShowConfig = () => {
   const params = new URLSearchParams(window.location.search);
   return params.get("config") === "true";
 };
 
 function App() {
-  // Use initial state to avoid unnecessary state updates
+  // App state
   const [showConfig, setShowConfig] = useState(shouldShowConfig());
   const [serverUrl, setServerUrl] = useState(getServerUrl());
   const [assetsPreloaded, setAssetsPreloaded] = useState(false);
 
-  // Preload configured assets on component mount
+  // Preload assets on component mount
   useEffect(() => {
-    // Preload assets from configuration
     preloadConfiguredAssets()
       .then(() => {
         console.log("Assets preloaded successfully");
@@ -145,7 +144,7 @@ function ScoreboardContent() {
         athlete.Total !== "0"
     );
 
-  // Handle simple scroll position updates for header shadow
+  // Handle scroll position updates for header shadow
   const handleScroll = () => {
     const container = document.getElementById("results-scroll-container");
     if (container) {
@@ -176,7 +175,6 @@ function ScoreboardContent() {
   const resultsData = useMemo(() => {
     if (!topResults) return null;
 
-    // Add information about current competitor status
     return {
       ...topResults,
       CurrentCompetitorActive: hasCurrentCompetitor ? "1" : "0",
@@ -184,8 +182,7 @@ function ScoreboardContent() {
     };
   }, [topResults, hasCurrentCompetitor, hasOnCourseCompetitors]);
 
-  // Modified function to get highlight bib with suppression for duplicates
-  // Suppresses highlighting if the athlete is already shown in OnCourse display
+  // Get highlight bib with suppression for duplicates
   const getHighlightBib = () => {
     // First check if there's a highlight bib from the server
     if (topResults && topResults.HighlightBib) {

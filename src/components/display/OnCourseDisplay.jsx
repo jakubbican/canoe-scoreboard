@@ -1,6 +1,5 @@
 // OnCourseDisplay.jsx
-// Displays competitors currently on the course - simplified without tabs and transition logic
-// Filters out athletes with zero time
+// Displays competitors currently on the course, filtering out athletes with zero time
 
 import React, { useMemo, useEffect, useRef } from "react";
 import { useLayout } from "../core/LayoutManager";

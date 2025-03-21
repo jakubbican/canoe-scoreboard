@@ -1,5 +1,5 @@
-// src/utils/assetUtils.js
-// Enhanced utility functions for working with assets
+// assetUtils.js
+// Utility functions for asset loading, configuration and fallback management
 
 // Import the base64-encoded flags
 import { getFlagBase64, emptyFlagBase64 } from "./flagsBase64";
@@ -44,7 +44,7 @@ export function loadAssetConfig() {
 }
 
 /**
- * Get flag image path or base64 data with fallback to empty flag
+ * Get flag image path or base64 data with fallback
  * @param {string} countryCode - The country code (e.g., "CZE")
  * @param {boolean} useBase64 - Whether to use base64 encoding (default: true)
  * @returns {string} - Path or base64 data for the flag image
@@ -57,8 +57,6 @@ export function getFlagPath(countryCode, useBase64 = true) {
   if (useBase64) {
     try {
       // Try to use the base64 version if available
-      // This will work after the conversion script has been run
-      // and the getFlagBase64 function is available
       return getFlagBase64(countryCode);
     } catch (e) {
       console.warn("Base64 flags not available, falling back to file paths");
@@ -88,7 +86,7 @@ export function getConfiguredAssetPath(assetKey) {
 }
 
 /**
- * Get asset path with fallback (legacy method)
+ * Get asset path with fallback
  * @param {string} assetName - The asset name (e.g., "logo")
  * @param {string} extension - File extension (e.g., "png")
  * @param {string} fallback - Fallback asset name

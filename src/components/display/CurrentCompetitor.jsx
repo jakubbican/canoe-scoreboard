@@ -1,5 +1,5 @@
 // CurrentCompetitor.jsx
-// Displays the current competitor's data - simplified without tabs and transition logic
+// Displays the current competitor's data with animation on competitor change
 
 import React, { useEffect, useRef, useState } from "react";
 import { useLayout } from "../core/LayoutManager";
@@ -11,7 +11,7 @@ function CurrentCompetitor({ data, visible }) {
   const [isNewCompetitor, setIsNewCompetitor] = useState(false);
   const animationTimerRef = useRef(null);
 
-  // Check if this is a new competitor
+  // Check if this is a new competitor and handle animations
   useEffect(() => {
     // Only run this check when data changes and is valid
     if (!data || !data.Bib) return;

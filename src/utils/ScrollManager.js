@@ -1,12 +1,11 @@
 // ScrollManager.js
-// A centralized manager for handling results scrolling with state machine approach
-// Includes utility functions from scrollUtils.js
+// Centralized manager for handling results scrolling with state machine approach
 
 /**
  * ResultsScrollManager
  *
  * Manages the auto-scrolling behavior of the results list with a state machine approach.
- * Handles various scroll phases, timing, and interruptions like highlights.
+ * Handles scroll phases, timing, and interruptions like highlights.
  */
 export class ResultsScrollManager {
   /**
@@ -31,7 +30,7 @@ export class ResultsScrollManager {
       ...options,
     };
 
-    // State - use explicit phases for better tracking
+    // State - using explicit phases for better tracking
     this.phase = "IDLE"; // IDLE, WAITING, SCROLLING, PAUSED_AT_BOTTOM, RETURNING_TO_TOP, HIGHLIGHT_VIEW
     this.timer = null;
     this.currentRowIndex = 0;
@@ -48,7 +47,7 @@ export class ResultsScrollManager {
   }
 
   /**
-   * Set the container element
+   * Set the container element to scroll
    * @param {HTMLElement} element Container element
    */
   setContainer(element) {
@@ -60,8 +59,6 @@ export class ResultsScrollManager {
    * @returns {boolean} Whether scrolling was started
    */
   start() {
-    // More tolerant check - don't require container immediately
-    // We'll set it later if needed
     if (this.phase !== "IDLE" || this.isDisabled) {
       this.logDebug(
         `Scroll not started: phase=${this.phase}, isDisabled=${this.isDisabled}`
@@ -74,12 +71,11 @@ export class ResultsScrollManager {
     this.currentRowIndex = 0;
     this.isPaused = false;
 
-    // If container not set yet, we'll wait and try to set it before first scroll
+    // Try to find the container if not set yet
     if (!this.container) {
       this.logDebug(
         "Container not set yet - will try to find before scrolling"
       );
-      // Try to find the container
       const container = document.getElementById("results-scroll-container");
       if (container) {
         this.logDebug("Found container during start");
@@ -457,7 +453,7 @@ export class ResultsScrollManager {
   }
 
   /************************************************************
-   * UTILITY FUNCTIONS (from scrollUtils.js)
+   * UTILITY FUNCTIONS
    ************************************************************/
 
   /**
@@ -574,7 +570,12 @@ export function getScrollSettingsForLayout(displayType) {
   return settings;
 }
 
-// Additional export for compatibility with existing code that might use isAtBottom directly
+/**
+ * Check if a container is scrolled to the bottom
+ * @param {string|HTMLElement} container The container to check
+ * @param {number} threshold Pixels threshold to consider as bottom
+ * @returns {boolean} True if at bottom
+ */
 export function isAtBottom(container, threshold = 20) {
   const containerElement =
     typeof container === "string"

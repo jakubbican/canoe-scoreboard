@@ -1,5 +1,5 @@
 // ConfigPanel.jsx
-// Configuration panel with native dropdown for better visibility on LED wall
+// Configuration panel with settings for display type, server connection, and scrolling options
 
 import React, { useState } from "react";
 import { useLayout } from "../core/LayoutManager";
@@ -15,6 +15,7 @@ function ConfigPanel({ onClose, onServerChange, currentServer }) {
     setDisableScrolling,
   } = useLayout();
 
+  // State for form inputs
   const [serverUrl, setServerUrl] = useState(currentServer);
   const [customWidth, setCustomWidth] = useState(config.width);
   const [customHeight, setCustomHeight] = useState(config.height);
@@ -22,7 +23,7 @@ function ConfigPanel({ onClose, onServerChange, currentServer }) {
   const [showTypeOptions, setShowTypeOptions] = useState(false);
   const [scrollingDisabled, setScrollingDisabled] = useState(disableScrolling);
 
-  // Handle form submission
+  // Handle form submission and apply settings
   const handleSubmit = (e) => {
     e.preventDefault();
 
@@ -62,7 +63,7 @@ function ConfigPanel({ onClose, onServerChange, currentServer }) {
     window.history.replaceState({}, "", url.toString());
   };
 
-  // Get display name
+  // Get display type name for the dropdown menu
   const getDisplayTypeName = (type) => {
     switch (type) {
       case "horizontal":
@@ -78,13 +79,13 @@ function ConfigPanel({ onClose, onServerChange, currentServer }) {
     }
   };
 
-  // Handle type selection
+  // Handle display type selection
   const handleSelectType = (type) => {
     setSelectedDisplayType(type);
     setShowTypeOptions(false);
   };
 
-  // Handle hard refresh (like Ctrl+F5)
+  // Perform a hard refresh to clear cache
   const handleHardRefresh = () => {
     window.location.reload(true);
   };
@@ -108,7 +109,7 @@ function ConfigPanel({ onClose, onServerChange, currentServer }) {
         <div className="form-group">
           <label>Display Type:</label>
 
-          {/* Custom dropdown replacement for LED wall */}
+          {/* Custom dropdown for better visibility on LED wall */}
           <div className="custom-select">
             <div
               className="selected-option"

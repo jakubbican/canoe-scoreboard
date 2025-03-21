@@ -1,5 +1,5 @@
 // EventInfo.jsx
-// Updated to use dynamic asset configuration
+// Displays event title, logos, and scrolling information messages
 
 import React, { useState, useEffect } from "react";
 import { useLayout } from "../core/LayoutManager";
@@ -25,7 +25,7 @@ function EventInfo({
   const getCategoryFromResults = () => {
     if (!topResults || !topResults.RaceName) return "";
 
-    // Updated pattern to match "K1m", "C1w", etc. at the beginning
+    // Match "K1m", "C1w", etc. at the beginning
     const categoryMatch = topResults.RaceName.match(/^([KC][12].?)\s/i);
     if (categoryMatch) {
       return categoryMatch[1].toUpperCase();
@@ -63,7 +63,7 @@ function EventInfo({
       .catch(() => setPartnersSrc("/assets/partners.png"));
   }, []);
 
-  // Separate rendering function for the top bar and title
+  // Render the top bar and title
   const renderTopContent = () => {
     if (!visibleTopBar && !visibleTitle) return null;
 
@@ -98,13 +98,15 @@ function EventInfo({
   return (
     <>
       {renderTopContent()}
-      {/* The info text component will be rendered separately in App.jsx */}
+      {/* Info text component will be rendered separately in App.jsx */}
     </>
   );
 }
 
 // Export both the main component and the info text renderer
 export default EventInfo;
+
+// Info text component with marquee animation
 export const InfoText = ({ infoText, visible }) => {
   const { displayType } = useLayout();
 

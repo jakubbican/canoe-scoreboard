@@ -1,5 +1,5 @@
 // ResultsList.jsx
-// Optimized with improved ScrollManager for smoother autoscrolling
+// Displays a scrollable list of competition results with highlighting and auto-scrolling
 
 import React, { useMemo, useEffect, useRef, useState } from "react";
 import { useLayout } from "../core/LayoutManager";
@@ -18,29 +18,15 @@ function ResultsList({ data, visible, highlightBib }) {
   // Scroll manager reference
   const scrollManagerRef = useRef(null);
 
-  // State to track if we've initialized auto-scrolling
+  // State tracking refs and flags
   const hasInitializedRef = useRef(false);
-
-  // State to track the effective highlight bib (with time limiting)
   const [effectiveHighlightBib, setEffectiveHighlightBib] = useState(null);
-
-  // State to track scroll phase for UI feedback
   const [scrollPhase, setScrollPhase] = useState("IDLE");
-
-  // Track previous rank data for animations
   const [prevRanks, setPrevRanks] = useState({});
-
-  // Reference for pending data
   const pendingDataRef = useRef(null);
-
-  // Only used for LED wall
   const highlightStartTimeRef = useRef(null);
   const lastHighlightBibRef = useRef(null);
-
-  // Track when we've received data - this is key for initialization
   const hasDataRef = useRef(false);
-
-  // Track when we've already processed a highlight
   const [hasProcessedHighlight, setHasProcessedHighlight] = useState(false);
 
   // Check if someone is in current/on-course
@@ -85,9 +71,8 @@ function ResultsList({ data, visible, highlightBib }) {
     };
   }, [displayType]);
 
-  // Setup container reference - run immediately
+  // Setup container reference as soon as component mounts
   useEffect(() => {
-    // Get the container reference as soon as possible
     const container = document.getElementById("results-scroll-container");
     if (container && scrollManagerRef.current) {
       containerRef.current = container;
@@ -136,7 +121,7 @@ function ResultsList({ data, visible, highlightBib }) {
       return;
     }
 
-    // Skip if no data yet - this is key!
+    // Skip if no data yet
     if (!hasDataRef.current) {
       console.log("[Scroll] Cannot initialize: no data yet");
       return;
@@ -152,7 +137,7 @@ function ResultsList({ data, visible, highlightBib }) {
       return;
     }
 
-    // Finally, all conditions satisfied - start scrolling with a small delay
+    // All conditions satisfied - start scrolling with a small delay
     setTimeout(() => {
       // One last check before starting
       if (scrollManagerRef.current && scrollPhase === "IDLE") {
@@ -172,7 +157,7 @@ function ResultsList({ data, visible, highlightBib }) {
     }, 1000); // 1 second delay for UI to stabilize
   };
 
-  // Key function to handle data arrival and initialize scrolling
+  // Track data arrival and initialize scrolling when data arrives
   useEffect(() => {
     if (!data || !data.list) return;
 
@@ -189,7 +174,7 @@ function ResultsList({ data, visible, highlightBib }) {
     initializeScrollingIfReady();
   }, [data?.list]);
 
-  // Handle visibility and scrolling state changes - ONLY FOR VERTICAL/HORIZONTAL
+  // Handle visibility and scrolling state changes - for VERTICAL/HORIZONTAL layouts
   useEffect(() => {
     if (!scrollManagerRef.current) return;
 
@@ -222,7 +207,7 @@ function ResultsList({ data, visible, highlightBib }) {
     }
   }, [visible, disableScrolling, displayType, scrollPhase]);
 
-  // Handle highlightBib changes - separate implementations by layout type
+  // Handle highlightBib changes for different layout types
   useEffect(() => {
     // Skip if nothing to do
     if (!scrollManagerRef.current) return;
@@ -318,7 +303,7 @@ function ResultsList({ data, visible, highlightBib }) {
     }
   }, [highlightBib, displayType, disableScrolling]);
 
-  // Use a simpler React state to control LEDWALL scrolling behavior
+  // State for LEDWALL scrolling behavior state machine
   const [ledwallScrollState, setLedwallScrollState] = useState("IDLE"); // IDLE, HIGHLIGHT_ACTIVE, ATHLETE_ACTIVE
 
   // Highlight timeout ref
@@ -482,20 +467,7 @@ function ResultsList({ data, visible, highlightBib }) {
     scrollPhase,
   ]);
 
-  // Handle highlightBib changes for vertical and horizontal layouts
-  // This has been integrated into the main highlight effect above
-
-  // Detect when to clear highlights and return to top in LED wall mode
-  // Not needed anymore - handled by state machine
-
-  // Apply pending data updates when safe - this is now simplified
-  useEffect(() => {
-    // We've simplified position tracking, so we don't need
-    // complex pending data handling anymore
-  }, []);
-
-  // Position change tracking no longer used - animations removed
-  // We still track positions for potential future use
+  // Track position changes for future use
   const trackPositionChanges = (newData) => {
     if (!newData || !newData.list) return;
 
@@ -512,7 +484,7 @@ function ResultsList({ data, visible, highlightBib }) {
   const categoryInfo = useMemo(() => {
     if (!data || !data.RaceName) return "";
 
-    // Updated pattern to match "K1m", "C1w", etc. at the beginning
+    // Match "K1m", "C1w", etc. at the beginning
     const categoryMatch = data.RaceName.match(/^([KC][12].?)\s/i);
     if (categoryMatch) {
       return categoryMatch[1].toUpperCase();
@@ -557,7 +529,7 @@ function ResultsList({ data, visible, highlightBib }) {
             effectiveHighlightBib &&
             parseInt(competitor.Bib) === effectiveHighlightBib;
 
-          // Get position change class - no longer needed but reference is still used in code
+          // Position class placeholder for future use
           const positionClass = "";
 
           return (

@@ -1,5 +1,5 @@
 // LayoutManager.jsx
-// Updated to handle the new layout structure with reduced logging
+// Manages layout configuration, scaling and visibility of UI components
 
 import React, { createContext, useContext, useState, useEffect } from "react";
 import { useWebSocket } from "./WebSocketClient";
@@ -25,8 +25,7 @@ const DISPLAY_CONFIGS = {
       "--results-margin-top": "10px",
       "--scrollbar-width": "8px",
       "--header-shadow-color": "rgba(0, 0, 0, 0.3)",
-      "--header-components-margin-top":
-        "100px" /* Offset for horizontal layout */,
+      "--header-components-margin-top": "100px",
       "--results-top-padding": "15px",
       "--results-top-margin": "15px",
     },
@@ -50,8 +49,7 @@ const DISPLAY_CONFIGS = {
       "--results-margin-top": "10px",
       "--scrollbar-width": "10px",
       "--header-shadow-color": "rgba(0, 0, 0, 0.3)",
-      "--header-components-margin-top":
-        "140px" /* Increased offset for vertical layout */,
+      "--header-components-margin-top": "140px",
       "--results-top-padding": "15px",
       "--results-top-margin": "20px",
     },
@@ -75,7 +73,7 @@ const DISPLAY_CONFIGS = {
       "--results-margin-top": "5px",
       "--scrollbar-width": "6px",
       "--header-shadow-color": "rgba(0, 0, 0, 0.5)", // stronger shadow for LED walls
-      "--header-components-margin-top": "60px" /* Offset for LED wall */,
+      "--header-components-margin-top": "60px",
       "--results-top-padding": "5px",
       "--results-top-margin": "5px",
     },
@@ -99,7 +97,7 @@ const DISPLAY_CONFIGS = {
       "--results-margin-top": "10px",
       "--scrollbar-width": "8px",
       "--header-shadow-color": "rgba(0, 0, 0, 0.3)",
-      "--header-components-margin-top": "90px" /* Offset for custom layout */,
+      "--header-components-margin-top": "90px",
       "--results-top-padding": "10px",
       "--results-top-margin": "10px",
     },
@@ -120,7 +118,7 @@ const LayoutContext = createContext({
 
 /**
  * Get URL parameters synchronously
- * This is a more reliable way to get URL parameters than using useState and useEffect
+ * This is more reliable than using useState and useEffect
  */
 function getUrlParams() {
   const params = new URLSearchParams(window.location.search);
@@ -229,7 +227,7 @@ export function LayoutProvider({
     return () => window.removeEventListener("resize", handleResize);
   }, [config, config.width, config.height]);
 
-  // Allow updating custom configuration
+  // Update custom configuration
   const updateCustomConfig = (newConfig) => {
     setCustomConfig({
       ...DISPLAY_CONFIGS.custom,
