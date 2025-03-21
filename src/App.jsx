@@ -216,6 +216,13 @@ function ScoreboardContent() {
     return null;
   };
 
+  // Add a debug statement once instead of on every render
+  React.useEffect(() => {
+    if (scheduleData && scheduleData.length > 0) {
+      console.log("Schedule data received in App:", scheduleData);
+    }
+  }, [scheduleData]);
+
   return (
     <div className="scoreboard-container">
       {/* HEADER SECTION - Fixed at top */}

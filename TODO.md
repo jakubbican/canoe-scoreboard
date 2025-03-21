@@ -3,7 +3,6 @@
 - TOP10
 
 - ?OnStart
-- Schedule
 
 - true responsivita
 
@@ -29,6 +28,7 @@
 - OK: zrušit divný vizuální efekt na celém seznamu vertical po dojetí jezdce na nějaké nižší obrazovce
 - OK: screenshots
 - OK: cleanup komentářů a všech souborů
+- OK: Schedule
 
 # WON'T DO
 

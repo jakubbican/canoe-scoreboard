@@ -208,6 +208,11 @@ export function WebSocketProvider({
         // Process message based on type
         const { msg, data } = message;
 
+        // Add debug logging - but cleaner without flooding console
+        if (msg === "schedule") {
+          console.log("Received schedule data from server:", data);
+        }
+
         switch (msg) {
           case "comp":
             setCompetitorData(data);
@@ -219,7 +224,16 @@ export function WebSocketProvider({
             setTop10Results(data);
             break;
           case "schedule":
-            setScheduleData(data);
+            // Ensure we're handling the data structure correctly
+            if (Array.isArray(data)) {
+              setScheduleData(data);
+            } else if (data && Array.isArray(data.data)) {
+              // Handle case where data might be nested in a data property
+              setScheduleData(data.data);
+            } else {
+              console.error("Schedule data is not in expected format:", data);
+              setScheduleData([]);
+            }
             break;
           case "oncourse":
             setOnCourseData(data);

@@ -2,202 +2,592 @@
 /* Styling for the schedule display component */
 
 .schedule-display {
-  position: absolute;
+  position: fixed;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
   display: flex;
   flex-direction: column;
-  font-family: var(--font-display);
-  transition: all 0.7s cubic-bezier(0.16, 1, 0.3, 1);
-  z-index: 10;
-  backdrop-filter: blur(15px);
-  border-radius: 10px;
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+  font-family: var(--font-primary);
+  color: var(--text-primary);
+  z-index: 100;
+  background-color: rgba(
+    18,
+    18,
+    18,
+    0.98
+  ); /* Darker, more opaque background for all layouts */
+  border-radius: 6px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.7), 0 0 20px rgba(51, 102, 153, 0.4); /* Enhanced shadow with accent glow */
   overflow: hidden;
-  border: 1px solid rgba(138, 43, 226, 0.3);
-  animation: scheduleAppear 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  border: 2px solid var(--accent-blue); /* More prominent border for all layouts */
+  animation: scheduleAppear 0.4s ease-out forwards;
+  max-height: 90vh;
 }
 
 @keyframes scheduleAppear {
-  from { 
+  from {
     opacity: 0;
     transform: translate(-50%, -50%) scale(0.9);
-    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
   }
-  to { 
+  to {
     opacity: 1;
     transform: translate(-50%, -50%) scale(1);
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.7), 0 0 20px rgba(51, 102, 153, 0.4);
   }
 }
 
 /* Header section */
 .schedule-header {
-  padding: 15px 20px;
-  background: var(--accent-gradient);
+  padding: 12px 15px;
+  background-color: var(--primary-color);
   color: var(--text-primary);
-  font-size: var(--body-size);
+  font-size: calc(var(--header-size) * 0.7);
   text-align: center;
-  border-top-left-radius: 10px;
-  border-top-right-radius: 10px;
-  font-weight: bold;
-  letter-spacing: 1px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
   text-transform: uppercase;
   position: relative;
   overflow: hidden;
-  box-shadow: 0 4px 15px rgba(138, 43, 226, 0.3);
-}
-
-.schedule-header::before {
-  content: '';
-  position: absolute;
-  top: -50%;
-  left: -50%;
-  width: 200%;
-  height: 200%;
-  background: linear-gradient(
-    transparent, 
-    rgba(255, 255, 255, 0.05), 
-    transparent
-  );
-  transform: rotate(45deg);
-  animation: shimmer 3s infinite;
-}
-
-@keyframes shimmer {
-  0% { transform: translateX(-100%) rotate(45deg); }
-  100% { transform: translateX(100%) rotate(45deg); }
+  border-bottom: 2px solid var(--accent-blue);
 }
 
 /* Body section */
 .schedule-body {
   display: flex;
   flex-direction: column;
+  overflow-y: auto;
+  max-height: 70vh;
+}
+
+/* Special styling for LED wall 2-column layout */
+.schedule-body.ledwall-layout {
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.schedule-column {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  border-right: 1px solid rgba(51, 102, 153, 0.2);
+}
+
+.schedule-column:last-child {
+  border-right: none;
 }
 
 /* Row styling */
 .schedule-row {
   display: grid;
-  grid-template-columns: 2fr 1fr 1fr 1fr;
   align-items: center;
+  background-color: rgba(30, 30, 30, 0.7);
+  transition: background-color 0.2s ease;
+}
+
+.schedule-body.standard-layout .schedule-row {
+  grid-template-columns: 2fr 1fr 1fr 1fr;
+}
+
+.schedule-body.ledwall-layout .schedule-row {
+  grid-template-columns: 2fr 0.7fr 1fr;
 }
 
 .schedule-row.header {
-  height: 30px;
+  background-color: var(--primary-light);
+  border-bottom: 1px solid rgba(51, 102, 153, 0.3);
+  position: sticky;
+  top: 0;
+  z-index: 10;
 }
 
-.schedule-row:not(.header) {
-  height: 40px;
+/* Adjustments for standard layouts (horizontal and vertical) */
+.schedule-body.standard-layout .schedule-row.header {
+  background-color: var(--primary-color);
+  height: 32px;
+  min-height: 32px;
+  display: grid;
+  width: 100%;
+  border-bottom: 1px solid rgba(51, 102, 153, 0.4);
 }
 
-/* Alternating row colors */
+/* Header styling for all layouts */
+.schedule-body.standard-layout .schedule-row.header .schedule-col {
+  font-weight: 600;
+  color: var(--accent-yellow);
+  letter-spacing: 0.5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  background-color: var(--primary-color);
+  font-size: 20px;
+}
+
+/* First Start and Last Start column consistency */
+.schedule-body.standard-layout .schedule-row.header .schedule-col.start-time,
+.schedule-body.standard-layout .schedule-row.header .schedule-col.end-time {
+  justify-content: center;
+  text-align: center;
+  padding: 4px 6px;
+}
+
+/* Horizontal layout specific header styling */
+.schedule-display.horizontal
+  .schedule-body.standard-layout
+  .schedule-row.header
+  .schedule-col.start-time,
+.schedule-display.horizontal
+  .schedule-body.standard-layout
+  .schedule-row.header
+  .schedule-col.end-time {
+  font-size: 22px;
+  padding: 4px 10px;
+}
+
+/* Vertical layout specific header styling */
+.schedule-display.vertical
+  .schedule-body.standard-layout
+  .schedule-row.header
+  .schedule-col.start-time,
+.schedule-display.vertical
+  .schedule-body.standard-layout
+  .schedule-row.header
+  .schedule-col.end-time {
+  font-size: 28px;
+  padding: 4px 10px;
+}
+
+/* Make all data cells in standard layout consistent */
+.schedule-body.standard-layout
+  .schedule-row:not(.header)
+  .schedule-col.start-time,
+.schedule-body.standard-layout
+  .schedule-row:not(.header)
+  .schedule-col.end-time {
+  text-align: center;
+  justify-content: center;
+  display: flex;
+  align-items: center;
+}
+
+/* Alternating row colors with accent borders - match results list style */
 .schedule-row:not(.header):nth-child(even) {
-  background-color: rgba(18, 18, 18, 0.7);
-  border-left: 3px solid var(--accent-blue);
+  background-color: var(--primary-color);
+  border-left: 2px solid var(--accent-blue);
 }
 
 .schedule-row:not(.header):nth-child(odd) {
-  background-color: rgba(30, 30, 30, 0.7);
-  border-left: 3px solid var(--accent-teal);
+  background-color: var(--primary-light);
+  border-left: 2px solid var(--accent-blue);
 }
 
-.schedule-row:not(.header) {
-  transition: all 0.3s ease;
-}
-
-.schedule-row:not(.header):hover {
-  background-color: rgba(138, 43, 226, 0.15);
-  transform: translateX(5px);
-}
-
-/* Column styling */
+/* Column styling - fixing alignment and colors */
 .schedule-col {
-  padding: 5px 10px;
+  padding: 8px 12px;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 
 .schedule-row.header .schedule-col {
-  font-size: calc(var(--small-size) - 4px);
-  font-weight: bold;
-  background-color: var(--primary-color);
+  font-weight: 600;
   color: var(--accent-yellow);
-  text-align: center;
-  text-transform: uppercase;
   letter-spacing: 0.5px;
+  text-align: center;
 }
 
-.schedule-row:not(.header) .schedule-col {
-  font-size: calc(var(--body-size) - 4px);
-  color: var(--text-primary);
-}
-
+/* Fixed alignment for each column type */
 .schedule-col.competition {
   text-align: left;
+  padding-left: 15px;
 }
 
 .schedule-col.boats {
   text-align: center;
+  font-weight: 600;
 }
 
 .schedule-col.start-time,
 .schedule-col.end-time {
-  text-align: right;
-  color: var(--accent-teal);
-  font-weight: bold;
+  text-align: center;
+  justify-content: center;
+  font-weight: 600;
+  padding: 4px 6px;
+  color: var(--text-primary); /* Using primary text color instead of teal */
+}
+
+/* Make all time columns match in style */
+.schedule-row:not(.header) .schedule-col.start-time,
+.schedule-row:not(.header) .schedule-col.end-time {
+  color: var(--text-primary); /* Using primary text color instead of teal */
+}
+
+/* Fix for LED wall layout - ensure consistent alignment */
+.schedule-body.ledwall-layout .schedule-col.start-time {
+  text-align: center;
+  justify-content: center;
+  padding: 4px 6px;
+  color: var(--text-primary);
 }
 
 /* Footer section */
 .schedule-footer {
   padding: 8px;
-  background: var(--accent-gradient);
-  color: var(--text-primary);
-  font-size: calc(var(--small-size) - 6px);
+  background-color: var(--primary-color);
+  color: rgba(255, 255, 255, 0.7);
+  font-size: calc(var(--small-size) * 0.7);
   text-align: center;
-  border-bottom-left-radius: 10px;
-  border-bottom-right-radius: 10px;
-  font-weight: bold;
-  letter-spacing: 1px;
-  text-transform: uppercase;
-  box-shadow: 0 -4px 15px rgba(138, 43, 226, 0.3);
+  font-weight: 500;
+  letter-spacing: 0.5px;
+  border-top: 1px solid rgba(51, 102, 153, 0.3);
 }
 
 /* Layout specific adjustments */
+/* Horizontal layout - enhanced styling */
 .schedule-display.horizontal {
   width: 800px;
+  background-color: rgba(18, 18, 18, 0.98);
+  border: 2px solid var(--accent-blue);
 }
 
+.schedule-display.horizontal .schedule-header {
+  border-bottom: 3px solid var(--accent-blue);
+  background-color: var(--primary-color);
+  font-weight: 700;
+  font-size: 24px; /* Increased header font size */
+}
+
+.schedule-display.horizontal .schedule-row:not(.header):nth-child(even) {
+  background-color: rgba(28, 28, 28, 0.95);
+  border-left: 3px solid var(--accent-blue);
+}
+
+.schedule-display.horizontal .schedule-row:not(.header):nth-child(odd) {
+  background-color: rgba(40, 40, 40, 0.95);
+  border-left: 3px solid var(--accent-blue);
+}
+
+.schedule-display.horizontal .schedule-row {
+  min-height: 40px; /* Ensure rows are tall enough for larger text */
+}
+
+.schedule-display.horizontal .schedule-col {
+  font-size: 22px; /* Larger font size for all columns */
+  padding: 8px 12px; /* More padding */
+}
+
+.schedule-display.horizontal .schedule-row.header .schedule-col {
+  font-size: 22px; /* Larger header font size */
+}
+
+.schedule-display.horizontal .schedule-footer {
+  border-top: 2px solid rgba(51, 102, 153, 0.5);
+  font-weight: 600;
+  font-size: 18px; /* Larger footer text */
+  padding: 10px;
+}
+
+/* Vertical layout - enhanced styling */
 .schedule-display.vertical {
-  width: 700px;
+  width: 750px;
+  background-color: rgba(18, 18, 18, 0.98);
+  border: 2px solid var(--accent-blue);
 }
 
-.schedule-display.vertical .schedule-row:not(.header) {
-  height: 50px;
+.schedule-display.vertical .schedule-header {
+  border-bottom: 3px solid var(--accent-blue);
+  background-color: var(--primary-color);
+  font-weight: 700;
+  font-size: 26px; /* Increased header font size */
+  padding: 12px 15px; /* More padding */
 }
 
-.schedule-display.vertical .schedule-row:not(.header) .schedule-col {
-  font-size: var(--body-size);
+.schedule-display.vertical .schedule-row:not(.header):nth-child(even) {
+  background-color: rgba(28, 28, 28, 0.95);
+  border-left: 3px solid var(--accent-blue);
 }
 
+.schedule-display.vertical .schedule-row:not(.header):nth-child(odd) {
+  background-color: rgba(40, 40, 40, 0.95);
+  border-left: 3px solid var(--accent-blue);
+}
+
+.schedule-display.vertical .schedule-row {
+  min-height: 42px; /* Ensure rows are tall enough for larger text */
+}
+
+.schedule-display.vertical .schedule-col {
+  font-size: 24px; /* Larger font size for all columns */
+  padding: 8px 14px; /* More padding */
+}
+
+.schedule-display.vertical .schedule-row.header .schedule-col {
+  font-size: 24px; /* Larger header font size */
+}
+
+.schedule-display.vertical .schedule-footer {
+  border-top: 2px solid rgba(51, 102, 153, 0.5);
+  font-weight: 600;
+  font-size: 18px; /* Larger footer text */
+  padding: 10px;
+}
+
+/* LED Wall layout - enhanced visibility and larger fonts */
 .schedule-display.ledwall {
-  width: 600px;
-  transform: translate(-50%, -50%) scale(0.85);
+  width: 700px;
+  transform: translate(-50%, -50%) scale(0.9);
+  max-height: 320px;
+  background-color: rgba(18, 18, 18, 0.98); /* Darker, more opaque background */
+  border: 2px solid var(--accent-blue); /* More prominent border */
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.7), 0 0 20px rgba(51, 102, 153, 0.4); /* Enhanced shadow with accent color glow */
+}
+
+.schedule-display.ledwall .schedule-header {
+  padding: 10px;
+  font-size: 22px; /* Larger font size */
+  font-weight: 700; /* Bolder text */
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  height: 40px; /* Taller header */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--primary-color);
+  border-bottom: 3px solid var(--accent-blue); /* More prominent separator */
+}
+
+.schedule-display.ledwall .schedule-row {
+  height: 36px; /* Taller rows */
+  min-height: 36px;
 }
 
 .schedule-display.ledwall .schedule-row.header {
-  height: 25px;
-}
-
-.schedule-display.ledwall .schedule-row:not(.header) {
-  height: 35px;
+  height: 32px; /* Taller header row */
+  min-height: 32px;
+  background-color: var(--primary-color);
+  display: grid;
+  width: 100%;
+  border-bottom: 2px solid rgba(51, 102, 153, 0.5); /* More visible separator */
 }
 
 .schedule-display.ledwall .schedule-row.header .schedule-col {
-  font-size: calc(var(--small-size) - 6px);
+  text-align: center;
+  color: var(--accent-yellow);
+  padding: 4px 6px;
+  font-size: 18px; /* Larger header font */
+  font-weight: 700; /* Bolder text */
+  letter-spacing: 0.7px;
+  line-height: 20px;
+  background-color: var(--primary-color);
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
 }
 
 .schedule-display.ledwall .schedule-row:not(.header) .schedule-col {
-  font-size: calc(var(--small-size) - 2px);
+  font-size: 20px; /* Larger data font */
+  padding: 4px 6px;
+  font-weight: 600;
+  height: 100%;
+  display: flex;
+  align-items: center;
+}
+
+/* More distinct alternating rows */
+.schedule-display.ledwall .schedule-row:not(.header):nth-child(even) {
+  background-color: rgba(28, 28, 28, 0.95);
+  border-left: 3px solid var(--accent-blue);
+}
+
+.schedule-display.ledwall .schedule-row:not(.header):nth-child(odd) {
+  background-color: rgba(40, 40, 40, 0.95);
+  border-left: 3px solid var(--accent-blue);
+}
+
+.schedule-display.ledwall .schedule-footer {
+  padding: 6px;
+  font-size: 16px; /* Larger footer font */
+  font-weight: 600;
+  border-top: 2px solid rgba(51, 102, 153, 0.5); /* More visible separator */
+}
+
+/* LED Wall layout - compact 2-column design */
+.schedule-display.ledwall {
+  width: 700px;
+  transform: translate(-50%, -50%) scale(0.9);
+  max-height: 320px;
+}
+
+.schedule-display.ledwall .schedule-header {
+  padding: 8px 10px;
+  font-size: 20px; /* Reduce this to match other headers */
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  height: 36px; /* Set a fixed height to match other components */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.schedule-display.ledwall .schedule-row {
+  height: 32px;
+  min-height: 32px;
+}
+
+.schedule-display.ledwall .schedule-row.header {
+  height: 28px;
+  min-height: 28px;
+  background-color: var(
+    --primary-color
+  ); /* Match header background on LED wall */
+  display: grid; /* Ensure grid layout is correctly applied */
+  width: 100%;
+}
+
+.schedule-display.ledwall .schedule-row.header .schedule-col {
+  text-align: center;
+  color: var(--accent-yellow);
+  padding: 4px 6px;
+  font-size: 16px; /* Consistent font size for all header columns */
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  line-height: 20px; /* Fixed line height to prevent inconsistencies */
+  background-color: var(--primary-color); /* Ensure background is consistent */
+  width: 100%; /* Fill the cell width */
+  height: 100%; /* Fill the cell height */
+  display: flex; /* Use flexbox for content alignment */
+  align-items: center; /* Center vertically */
+  justify-content: center; /* Center horizontally for header */
+  overflow: hidden;
+}
+
+.schedule-display.ledwall .schedule-row.header .schedule-col.competition,
+.schedule-display.ledwall .schedule-row.header .schedule-col.boats,
+.schedule-display.ledwall .schedule-row.header .schedule-col.start-time,
+.schedule-display.ledwall .schedule-row.header .schedule-col.end-time {
+  text-align: center;
+  color: var(--accent-yellow);
+}
+
+.schedule-display.ledwall .schedule-row.header .schedule-col.competition {
+  justify-content: center; /* Center headers */
+}
+
+.schedule-display.ledwall .schedule-row.header .schedule-col.boats {
+  justify-content: center;
+}
+
+.schedule-display.ledwall .schedule-row.header .schedule-col.start-time {
+  justify-content: center;
+}
+
+.schedule-display.ledwall .schedule-row:not(.header) {
+  display: grid;
+  grid-template-columns: 2fr 0.7fr 1fr; /* Match the parent grid */
+  width: 100%;
+}
+
+.schedule-display.ledwall .schedule-row:not(.header) .schedule-col {
+  font-size: 17px;
+  padding: 4px 6px;
+  height: 100%;
+  display: flex;
+  align-items: center;
+}
+
+.schedule-display.ledwall .schedule-col.competition {
+  text-align: left;
+  padding-left: 8px;
+}
+
+.schedule-display.ledwall .schedule-col.boats {
+  text-align: center;
+}
+
+.schedule-display.ledwall .schedule-col.start-time,
+.schedule-display.ledwall .schedule-col.end-time {
+  text-align: right;
+  padding-right: 8px;
+  color: var(--accent-teal);
+}
+
+.schedule-display.ledwall .schedule-footer {
+  padding: 5px;
+  font-size: 14px;
+}
+
+/* LED Wall layout specific column fixes */
+.schedule-display.ledwall .schedule-row.header .schedule-col.start-time {
+  text-align: center;
+  justify-content: center;
+  padding: 4px 6px;
+  color: var(--accent-yellow); /* Keep header color consistent */
+}
+
+/* Fix alignment of data cells to match Boats column */
+.schedule-display.ledwall .schedule-row:not(.header) .schedule-col.start-time {
+  text-align: center;
+  justify-content: center;
+  padding: 4px 6px;
+  color: var(--text-primary); /* Using primary text color instead of teal */
+  font-weight: 600;
+}
+
+/* Ensure consistent styling across all columns in all layouts */
+.schedule-display.ledwall .schedule-column .schedule-col.boats,
+.schedule-display.ledwall .schedule-column .schedule-col.start-time {
+  text-align: center;
+  justify-content: center;
+}
+
+/* Scrollbar styling to match results list */
+.schedule-body::-webkit-scrollbar {
+  width: var(--scrollbar-width, 8px);
+}
+
+.schedule-body::-webkit-scrollbar-track {
+  background: var(--primary-light);
+  border-radius: 4px;
+}
+
+.schedule-body::-webkit-scrollbar-thumb {
+  background-color: var(--accent-color);
+  border-radius: 4px;
+  border: 2px solid var(--primary-light);
+}
+
+/* Hide scrollbar for LED wall */
+.schedule-display.ledwall .schedule-body::-webkit-scrollbar {
+  width: 4px;
+}
+
+/* Prevent too tall schedule tables */
+.schedule-body {
+  max-height: 60vh;
+}
+
+.schedule-display.ledwall .schedule-body {
+  max-height: 250px;
+}
+
+/* Ensure consistent layout for the column containers */
+.schedule-display.ledwall .schedule-body.ledwall-layout .schedule-column {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  border-right: 1px solid rgba(51, 102, 153, 0.2);
+  overflow: hidden;
+}
+
+/* Ensure grid structure of schedule rows is consistently applied */
+.schedule-body.ledwall-layout .schedule-row {
+  display: grid;
+  grid-template-columns: 2fr 0.7fr 1fr;
+  width: 100%;
 }
