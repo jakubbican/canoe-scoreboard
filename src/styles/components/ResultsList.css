@@ -1,6 +1,6 @@
 /* ResultsList.css */
 /* Styling for the results list component - with scroll snap for row alignment */
-/* Removed initial yellow effect animation */
+/* Removed position change animations and unused styles */
 
 .results-list {
   position: relative;
@@ -225,38 +225,6 @@
 .results-list.ledwall .result-row.highlight > div {
   font-weight: 700;
   /* Removed text shadow for gen-x style */
-}
-
-/* REMOVED INITIAL YELLOW EFFECT ANIMATION */
-/* Removed newRowHighlight animation and new-entry class styling */
-
-/* Animation for position changes */
-@keyframes positionUp {
-  0%,
-  20% {
-    background-color: rgba(51, 153, 102, 0.3);
-  }
-  100% {
-    background-color: inherit;
-  }
-}
-
-@keyframes positionDown {
-  0%,
-  20% {
-    background-color: rgba(204, 51, 51, 0.3);
-  }
-  100% {
-    background-color: inherit;
-  }
-}
-
-.result-row.position-up {
-  animation: positionUp 3s ease-out forwards;
-}
-
-.result-row.position-down {
-  animation: positionDown 3s ease-out forwards;
 }
 
 /* Adding a scroll hint indicator at the bottom of the results area */

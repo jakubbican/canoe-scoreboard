@@ -182,24 +182,8 @@ function ResultsList({ data, visible, highlightBib }) {
     // Log when we receive data
     console.log(`[Scroll] Received ${data.list.length} result items`);
 
-    // Get positions for animation tracking
-    const newRanks = {};
-    data.list.forEach((competitor) => {
-      newRanks[competitor.Bib] = parseInt(competitor.Rank, 10) || 999;
-    });
-
-    // Check with scroll manager if it's safe to update now
-    const canUpdateImmediately =
-      !scrollManagerRef.current?.handleDataUpdate ||
-      scrollManagerRef.current.handleDataUpdate();
-
-    if (canUpdateImmediately) {
-      // Update position tracking immediately
-      setPrevRanks(newRanks);
-    } else {
-      // Store for later application
-      pendingDataRef.current = newRanks;
-    }
+    // Track position changes
+    trackPositionChanges(data);
 
     // Try to initialize scrolling now that we have data
     initializeScrollingIfReady();
@@ -504,37 +488,24 @@ function ResultsList({ data, visible, highlightBib }) {
   // Detect when to clear highlights and return to top in LED wall mode
   // Not needed anymore - handled by state machine
 
-  // Apply pending data updates when safe
+  // Apply pending data updates when safe - this is now simplified
   useEffect(() => {
-    // When scrolling is idle or we're at bottom, apply any pending updates
-    if (
-      (scrollPhase === "IDLE" || scrollPhase === "PAUSED_AT_BOTTOM") &&
-      pendingDataRef.current
-    ) {
-      console.log("[Scroll] Applying pending data update");
-      setPrevRanks(pendingDataRef.current);
-      pendingDataRef.current = null;
-    }
-  }, [scrollPhase]);
+    // We've simplified position tracking, so we don't need
+    // complex pending data handling anymore
+  }, []);
 
-  // Get position change status for animation
-  const getPositionChangeClass = (bib) => {
-    if (!bib || !prevRanks[bib]) return "";
+  // Position change tracking no longer used - animations removed
+  // We still track positions for potential future use
+  const trackPositionChanges = (newData) => {
+    if (!newData || !newData.list) return;
 
-    // Find current rank
-    const competitor = data.list.find((c) => c.Bib === bib);
-    if (!competitor) return "";
+    // Store current positions
+    const newRanks = {};
+    newData.list.forEach((competitor) => {
+      newRanks[competitor.Bib] = parseInt(competitor.Rank, 10) || 999;
+    });
 
-    const currentRank = parseInt(competitor.Rank, 10) || 999;
-    const prevRank = prevRanks[bib];
-
-    if (currentRank < prevRank) {
-      return "position-up"; // Improved position
-    } else if (currentRank > prevRank) {
-      return "position-down"; // Lost position
-    }
-
-    return "";
+    setPrevRanks(newRanks);
   };
 
   // Extract category from RaceName if available
@@ -586,15 +557,13 @@ function ResultsList({ data, visible, highlightBib }) {
             effectiveHighlightBib &&
             parseInt(competitor.Bib) === effectiveHighlightBib;
 
-          // Get position change class
-          const positionClass = getPositionChangeClass(competitor.Bib);
+          // Get position change class - no longer needed but reference is still used in code
+          const positionClass = "";
 
           return (
             <div
               key={`${competitor.Bib}-${index}`}
-              className={`result-row
-                ${isHighlighted ? "highlight" : ""}
-                ${positionClass}`}
+              className={`result-row ${isHighlighted ? "highlight" : ""}`}
               ref={isHighlighted ? highlightRef : null}
             >
               <div className="result-rank">
