@@ -12,16 +12,17 @@
   color: var(--text-primary);
   z-index: 100;
   background-color: rgba(
-    18,
-    18,
-    18,
+    10,
+    10,
+    10,
     0.98
-  ); /* Darker, more opaque background for all layouts */
-  border-radius: 6px;
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.7), 0 0 20px rgba(51, 102, 153, 0.4); /* Enhanced shadow with accent glow */
+  ); /* Darker background for better contrast */
+  border-radius: 8px; /* Slightly larger radius */
+  box-shadow: 0 15px 50px rgba(0, 0, 0, 0.8), 0 0 30px rgba(51, 102, 153, 0.6); /* Enhanced shadow with stronger accent glow */
   overflow: hidden;
-  border: 2px solid var(--accent-blue); /* More prominent border for all layouts */
-  animation: scheduleAppear 0.4s ease-out forwards;
+  border: 3px solid var(--accent-blue); /* Thicker border for more prominence */
+  animation: scheduleAppear 0.5s ease-out forwards,
+    borderGlow 3s infinite ease-in-out;
   max-height: 90vh;
 }
 
@@ -34,23 +35,40 @@
   to {
     opacity: 1;
     transform: translate(-50%, -50%) scale(1);
-    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.7), 0 0 20px rgba(51, 102, 153, 0.4);
+    box-shadow: 0 15px 50px rgba(0, 0, 0, 0.8), 0 0 30px rgba(51, 102, 153, 0.6);
+  }
+}
+
+@keyframes borderGlow {
+  0% {
+    box-shadow: 0 0 10px rgba(51, 102, 153, 0.4);
+  }
+  50% {
+    box-shadow: 0 0 20px rgba(51, 102, 153, 0.7);
+  }
+  100% {
+    box-shadow: 0 0 10px rgba(51, 102, 153, 0.4);
   }
 }
 
 /* Header section */
 .schedule-header {
-  padding: 12px 15px;
-  background-color: var(--primary-color);
-  color: var(--text-primary);
-  font-size: calc(var(--header-size) * 0.7);
+  padding: 15px 18px; /* Larger padding */
+  background: linear-gradient(
+    to bottom,
+    var(--accent-blue),
+    var(--primary-color)
+  ); /* Gradient background */
+  color: #ffffff; /* Brighter white text */
+  font-size: calc(var(--header-size) * 0.8); /* Larger text */
   text-align: center;
-  font-weight: 600;
-  letter-spacing: 0.5px;
+  font-weight: 700; /* Bolder text */
+  letter-spacing: 0.6px;
   text-transform: uppercase;
   position: relative;
   overflow: hidden;
-  border-bottom: 2px solid var(--accent-blue);
+  border-bottom: 3px solid var(--accent-blue);
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.4); /* Text shadow for better readability */
 }
 
 /* Body section */
@@ -215,7 +233,8 @@
   justify-content: center;
   font-weight: 600;
   padding: 4px 6px;
-  color: var(--text-primary); /* Using primary text color instead of teal */
+  color: #00ffff !important; /* Brighter cyan color for time values */
+  font-weight: 700;
 }
 
 /* Make all time columns match in style */
@@ -247,91 +266,117 @@
 /* Layout specific adjustments */
 /* Horizontal layout - enhanced styling */
 .schedule-display.horizontal {
-  width: 800px;
-  background-color: rgba(18, 18, 18, 0.98);
-  border: 2px solid var(--accent-blue);
+  width: 850px; /* Slightly wider */
+  background-color: rgba(10, 10, 10, 0.97); /* Darker for contrast */
+  border: 3px solid var(--accent-blue);
 }
 
 .schedule-display.horizontal .schedule-header {
   border-bottom: 3px solid var(--accent-blue);
-  background-color: var(--primary-color);
+  background: linear-gradient(
+    to bottom,
+    var(--accent-blue),
+    var(--primary-color)
+  );
   font-weight: 700;
-  font-size: 24px; /* Increased header font size */
+  font-size: 26px; /* Increased header font size */
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
 }
 
 .schedule-display.horizontal .schedule-row:not(.header):nth-child(even) {
-  background-color: rgba(28, 28, 28, 0.95);
-  border-left: 3px solid var(--accent-blue);
+  background-color: rgba(20, 20, 20, 0.98);
+  border-left: 4px solid var(--accent-blue);
 }
 
 .schedule-display.horizontal .schedule-row:not(.header):nth-child(odd) {
-  background-color: rgba(40, 40, 40, 0.95);
-  border-left: 3px solid var(--accent-blue);
+  background-color: rgba(35, 35, 35, 0.98);
+  border-left: 4px solid var(--accent-blue);
 }
 
 .schedule-display.horizontal .schedule-row {
-  min-height: 40px; /* Ensure rows are tall enough for larger text */
+  min-height: 44px; /* Taller rows for prominence */
 }
 
 .schedule-display.horizontal .schedule-col {
-  font-size: 22px; /* Larger font size for all columns */
-  padding: 8px 12px; /* More padding */
+  font-size: 24px; /* Larger font size for all columns */
+  padding: 10px 14px; /* More padding */
+  font-weight: 500; /* Slightly bolder text */
 }
 
 .schedule-display.horizontal .schedule-row.header .schedule-col {
-  font-size: 22px; /* Larger header font size */
+  font-size: 24px; /* Larger header font size */
+  font-weight: 700;
+  color: #ffd700; /* Brighter yellow for header text */
 }
 
 .schedule-display.horizontal .schedule-footer {
-  border-top: 2px solid rgba(51, 102, 153, 0.5);
+  border-top: 2px solid var(--accent-blue);
   font-weight: 600;
   font-size: 18px; /* Larger footer text */
-  padding: 10px;
+  padding: 12px;
+  background: linear-gradient(
+    to top,
+    rgba(51, 102, 153, 0.2),
+    var(--primary-color)
+  );
 }
 
 /* Vertical layout - enhanced styling */
 .schedule-display.vertical {
-  width: 750px;
-  background-color: rgba(18, 18, 18, 0.98);
-  border: 2px solid var(--accent-blue);
+  width: 800px; /* Slightly wider */
+  background-color: rgba(10, 10, 10, 0.97); /* Darker for contrast */
+  border: 3px solid var(--accent-blue);
 }
 
 .schedule-display.vertical .schedule-header {
   border-bottom: 3px solid var(--accent-blue);
-  background-color: var(--primary-color);
+  background: linear-gradient(
+    to bottom,
+    var(--accent-blue),
+    var(--primary-color)
+  );
   font-weight: 700;
-  font-size: 26px; /* Increased header font size */
-  padding: 12px 15px; /* More padding */
+  font-size: 28px; /* Increased header font size */
+  padding: 15px 18px; /* More padding */
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
 }
 
 .schedule-display.vertical .schedule-row:not(.header):nth-child(even) {
-  background-color: rgba(28, 28, 28, 0.95);
-  border-left: 3px solid var(--accent-blue);
+  background-color: rgba(20, 20, 20, 0.98);
+  border-left: 4px solid var(--accent-blue);
 }
 
 .schedule-display.vertical .schedule-row:not(.header):nth-child(odd) {
-  background-color: rgba(40, 40, 40, 0.95);
-  border-left: 3px solid var(--accent-blue);
+  background-color: rgba(35, 35, 35, 0.98);
+  border-left: 4px solid var(--accent-blue);
 }
 
 .schedule-display.vertical .schedule-row {
-  min-height: 42px; /* Ensure rows are tall enough for larger text */
+  min-height: 46px; /* Taller rows for prominence */
 }
 
 .schedule-display.vertical .schedule-col {
-  font-size: 24px; /* Larger font size for all columns */
-  padding: 8px 14px; /* More padding */
+  font-size: 26px; /* Larger font size for all columns */
+  padding: 10px 16px; /* More padding */
+  font-weight: 500;
 }
 
 .schedule-display.vertical .schedule-row.header .schedule-col {
-  font-size: 24px; /* Larger header font size */
+  font-size: 26px; /* Larger header font size */
+  font-weight: 700;
+  color: #ffd700; /* Brighter yellow for header text */
 }
 
 .schedule-display.vertical .schedule-footer {
-  border-top: 2px solid rgba(51, 102, 153, 0.5);
+  border-top: 2px solid var(--accent-blue);
   font-weight: 600;
-  font-size: 18px; /* Larger footer text */
-  padding: 10px;
+  font-size: 20px; /* Larger footer text */
+  padding: 12px;
+  background: linear-gradient(
+    to top,
+    rgba(51, 102, 153, 0.2),
+    var(--primary-color)
+  );
 }
 
 /* LED Wall layout - enhanced visibility and larger fonts */
@@ -548,17 +593,17 @@
 
 /* Scrollbar styling to match results list */
 .schedule-body::-webkit-scrollbar {
-  width: var(--scrollbar-width, 8px);
+  width: var(--scrollbar-width, 10px); /* Wider scrollbar */
 }
 
 .schedule-body::-webkit-scrollbar-track {
   background: var(--primary-light);
-  border-radius: 4px;
+  border-radius: 5px;
 }
 
 .schedule-body::-webkit-scrollbar-thumb {
-  background-color: var(--accent-color);
-  border-radius: 4px;
+  background-color: var(--accent-blue);
+  border-radius: 5px;
   border: 2px solid var(--primary-light);
 }
 
@@ -590,4 +635,10 @@
   display: grid;
   grid-template-columns: 2fr 0.7fr 1fr;
   width: 100%;
+}
+
+/* Enhance the focus on data with highlighted effects */
+.schedule-row:not(.header):hover {
+  background-color: rgba(51, 102, 153, 0.3) !important; /* Highlight on hover */
+  transition: background-color 0.2s ease;
 }
