@@ -1,8 +1,5 @@
 # TODO
 
-- cleanup komentářů a všech souborů
-- screenshots
-
 - TOP10
 
 - ?OnStart
@@ -30,6 +27,8 @@
 - OK: disrupted scrolling after data arrives
 - OK: disrupted scrolling after data arrives
 - OK: zrušit divný vizuální efekt na celém seznamu vertical po dojetí jezdce na nějaké nižší obrazovce
+- OK: screenshots
+- OK: cleanup komentářů a všech souborů
 
 # WON'T DO
 

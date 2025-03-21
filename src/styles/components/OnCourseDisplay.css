@@ -1,6 +1,3 @@
-/* OnCourseDisplay.css */
-/* Matched to CurrentCompetitor styling - removed tabs */
-
 .on-course-display {
   position: relative;
   width: 100%;
@@ -21,29 +18,22 @@
   padding: 0 !important;
 }
 
-/* Grid layout for the course row - enhanced as active row */
 .course-row {
   display: grid;
   align-items: center;
-  background-color: rgba(
-    51,
-    102,
-    153,
-    0.2
-  ); /* More visible active background */
+  background-color: rgba(51, 102, 153, 0.2);
   border-left: 3px solid var(--accent-yellow);
-  border-right: 1px solid var(--accent-yellow); /* Right border to emphasize active status */
+  border-right: 1px solid var(--accent-yellow);
   padding: 0 !important;
   margin: 0 !important;
   height: 45px !important;
   min-height: 0 !important;
-  position: relative; /* For active indicator */
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3); /* Slightly stronger shadow */
+  position: relative;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
 }
 
-/* Active indicator - double arrow glyph */
 .course-row::before {
-  content: "►"; /* Double arrow without button background */
+  content: "►";
   position: absolute;
   left: 5px;
   color: var(--accent-yellow);
@@ -67,7 +57,6 @@
   }
 }
 
-/* Cell styling */
 .course-bib {
   text-align: center;
   white-space: nowrap;
@@ -91,7 +80,6 @@
   gap: 3px;
 }
 
-/* Gate penalties */
 .course-gate-penalty {
   display: inline-flex;
   align-items: center;
@@ -126,29 +114,23 @@
   color: var(--text-primary);
 }
 
-/* Penalty exists */
 .course-pen.has-penalty {
   background-color: var(--error-color);
-  /* Removed animation for gen-x style */
 }
 
-/* No penalty */
 .course-pen.no-penalty {
   background-color: rgba(51, 153, 102, 0.8);
   color: var(--text-secondary);
 }
 
-/* Removed penaltyPulse animation for gen-x style */
-
 .course-total {
   text-align: right;
   white-space: nowrap;
   font-weight: bold;
-  color: var(--accent-yellow); /* Consistent color across all layouts */
+  color: var(--accent-yellow);
   padding: 0 15px;
 }
 
-/* Layout specific adjustments - grid columns and sizes */
 .on-course-display.horizontal .course-row {
   grid-template-columns: 100px minmax(200px, 1fr) minmax(100px, auto) 150px;
   height: 45px !important;
@@ -159,7 +141,6 @@
   padding: 0 10px;
 }
 
-/* Vertical layout adjustments */
 .on-course-display.vertical .course-row {
   grid-template-columns: 80px minmax(200px, 1fr) minmax(100px, auto) 160px;
   height: 40px !important;
@@ -176,7 +157,6 @@
   font-size: calc(var(--small-size) - 8px);
 }
 
-/* LED Wall layout adjustments - matched to VERTICAL mode with adjusted time column */
 .on-course-display.ledwall .course-row {
   grid-template-columns: 80px minmax(200px, 1fr) minmax(100px, auto) 80px;
   height: 40px !important;
@@ -187,7 +167,6 @@
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
 }
 
-/* Adjust indicator for ledwall to match vertical */
 .on-course-display.ledwall .course-row::before {
   font-size: 14px;
   left: 5px;
@@ -216,7 +195,6 @@
   margin: 2px;
 }
 
-/* Better alignment for gate penalties container */
 .on-course-display.ledwall .course-gates-container {
   align-items: center;
   justify-content: flex-end;
@@ -224,7 +202,6 @@
   gap: 2px;
 }
 
-/* Ensure proper stacking in the container */
 .stacked-components .on-course-display {
   margin: 0 !important;
   padding: 0 !important;
@@ -232,7 +209,6 @@
   box-shadow: none !important;
 }
 
-/* Add margin between stacked on-course competitors */
 .stacked-components .on-course-display + .on-course-display {
   margin-top: 2px !important;
 }

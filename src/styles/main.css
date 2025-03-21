@@ -1,4 +1,3 @@
-/* main.css */
 /* Main styling for the canoe scoreboard application */
 
 /* Define local fonts */
@@ -43,42 +42,34 @@
 }
 
 :root {
-  /* Color palette - Classic Gen-X Theme */
-  --primary-color: #222222; /* Dark gray background */
-  --primary-light: #2d2d2d; /* Slightly lighter background */
-  --secondary-color: #d0d0d0; /* Medium gray (instead of vibrant colors) */
-  --accent-color: #336699; /* Classic navy blue */
-  --highlight-color: #993333; /* Maroon red */
-  --error-color: #cc3333; /* Standard red */
+  --primary-color: #222222;
+  --primary-light: #2d2d2d;
+  --secondary-color: #d0d0d0;
+  --accent-color: #336699;
+  --highlight-color: #993333;
+  --error-color: #cc3333;
 
-  /* Text colors */
-  --text-primary: #e6e6e6; /* Light gray text */
-  --text-secondary: #222222; /* Dark text */
+  --text-primary: #e6e6e6;
+  --text-secondary: #222222;
 
-  /* Additional accent colors for Gen-X aesthetic */
-  --accent-teal: #336666; /* Muted teal */
-  --accent-yellow: #cc9933; /* Muted gold */
-  --accent-green: #339966; /* Forest green */
-  --accent-blue: #3366aa; /* Navy blue */
-  --accent-gradient: none; /* No gradient */
+  --accent-teal: #336666;
+  --accent-yellow: #cc9933;
+  --accent-green: #339966;
+  --accent-blue: #3366aa;
+  --accent-gradient: none;
 
-  /* Font sizes - Default values for horizontal layout */
   --header-size: 48px;
   --body-size: 32px;
   --small-size: 24px;
 
-  /* Spacing */
   --spacing-unit: 10px;
 
-  /* Layout dimensions - Default values for horizontal layout */
   --content-width: 1920px;
   --content-height: 1080px;
 
-  /* Results grid template - Default values for horizontal layout */
-  --results-grid: 120px 80px 1fr 80px 70px 150px 150px; /* Increased width for time columns */
+  --results-grid: 120px 80px 1fr 80px 70px 150px 150px;
   --row-height: 80px;
 
-  /* Font family */
   --font-primary: "Rajdhani", "Arial", sans-serif;
   --font-display: "Rajdhani", "Arial", sans-serif;
 }
@@ -119,7 +110,7 @@ body {
   --body-size: 32px;
   --small-size: 24px;
   --spacing-unit: 10px;
-  --results-grid: 120px 80px 1fr 80px 70px 150px 150px; /* Increased width for time columns */
+  --results-grid: 120px 80px 1fr 80px 70px 150px 150px;
   --row-height: 80px;
 }
 
@@ -130,18 +121,18 @@ body {
   --body-size: 44px;
   --small-size: 32px;
   --spacing-unit: 12px;
-  --results-grid: 70px 50px 1fr 120px 70px 160px 130px; /* Adjusted columns widths */
+  --results-grid: 70px 50px 1fr 120px 70px 160px 130px;
   --row-height: 48px;
 }
 
 .layout-ledwall {
   --content-width: 768px;
   --content-height: 384px;
-  --header-size: 32px; /* Increased from 30px for better visibility from distance */
-  --body-size: 28px; /* Increased from 24px for better visibility from distance */
-  --small-size: 24px; /* Increased from 20px for better visibility from distance */
+  --header-size: 32px;
+  --body-size: 28px;
+  --small-size: 24px;
   --spacing-unit: 6px;
-  --results-grid: 60px 55px 1fr 70px 60px 110px 90px; /* Adjusted columns widths */
+  --results-grid: 60px 55px 1fr 70px 60px 110px 90px;
   --row-height: 44px;
 }
 
@@ -172,7 +163,6 @@ body {
 
 .glass-effect {
   background: rgba(34, 34, 34, 0.9);
-  /* Removed backdrop filter for gen-x style */
   border: 1px solid rgba(204, 204, 204, 0.2);
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
 }
@@ -190,9 +180,7 @@ body {
   bottom: 0;
   border: 1px solid var(--accent-color);
   border-radius: inherit;
-  /* Removed glow effect for gen-x style */
   pointer-events: none;
-  /* Removed animation for gen-x style */
 }
 
 @keyframes fadeIn {
@@ -239,8 +227,6 @@ body {
   }
 }
 
-/* Removed neonGlow animation for gen-x style */
-
 /* Config panel */
 .config-panel {
   position: fixed;
@@ -266,7 +252,6 @@ body {
   letter-spacing: 1px;
   border-bottom: 1px solid var(--accent-color);
   padding-bottom: 10px;
-  /* Removed text shadow for gen-x style */
 }
 
 .config-panel .form-group {
@@ -334,8 +319,8 @@ body {
 /* Connection status indicator - Base styles */
 .connection-status {
   position: fixed;
-  top: 4px; /* Default position below time display */
-  right: 4px; /* Default align with right edge */
+  top: 4px;
+  right: 4px;
   width: 8px;
   height: 8px;
   border-radius: 50%;
@@ -344,15 +329,15 @@ body {
   transition: all 0.3s ease;
 }
 
-/* Special positioning for ledwall layout - we add a class directly in ConnectionStatus component */
+/* Special positioning for ledwall layout */
 .layout-ledwall ~ .connection-status,
 .connection-status.ledwall-mode {
   top: 5px;
-  left: 7px; /* Move to top-left corner for ledwall */
+  left: 7px;
   right: auto;
-  width: 8px; /* Smaller size */
-  height: 48px; /* Smaller size */
-  opacity: 0.8; /* Slightly transparent */
+  width: 8px;
+  height: 48px;
+  opacity: 0.8;
 }
 
 .connection-status.connected {
@@ -401,7 +386,7 @@ body {
 
 .connection-status .indicator,
 .connection-status .status-text {
-  display: none; /* Hide text and inner indicator */
+  display: none;
 }
 
 /* Utility classes */
@@ -432,7 +417,7 @@ body {
   contain: layout;
 }
 
-/* Stacked components container - complete section */
+/* Stacked components container */
 .stacked-components {
   position: absolute;
   top: calc(var(--top-bar-height) + 5px);
@@ -459,15 +444,13 @@ body {
   padding: 0;
 }
 
-/* ===== COMPONENT SPECIFIC SPACING ===== */
-
 /* InfoText spacing */
 .stacked-components .info-text {
   margin-bottom: 12px !important;
 }
 
 .stacked-components .info-text:not(.ledwall):first-child {
-  margin-top: 22px !important; /* Space for tab */
+  margin-top: 22px !important;
 }
 
 /* CurrentCompetitor spacing */
@@ -476,7 +459,7 @@ body {
 }
 
 .stacked-components .current-competitor:first-child {
-  margin-top: 42px !important; /* Space for tab */
+  margin-top: 42px !important;
 }
 
 /* OnCourseDisplay spacing */
@@ -488,12 +471,12 @@ body {
 .stacked-components
   .info-text:not(.ledwall)
   + .on-course-display:not(.ledwall) {
-  margin-top: 42px !important; /* Space for tab */
+  margin-top: 42px !important;
 }
 
 /* ResultsList spacing - extra space above */
 .stacked-components .results-list {
-  margin-top: 34px !important; /* Extra space above results */
+  margin-top: 34px !important;
 }
 
 .stacked-components .results-list:not(.ledwall) {
@@ -504,12 +487,12 @@ body {
 .stacked-components .info-text.ledwall,
 .stacked-components .current-competitor.ledwall,
 .stacked-components .on-course-display.ledwall {
-  margin-top: 4px !important; /* Less space for LED wall */
+  margin-top: 4px !important;
   margin-bottom: 6px !important;
 }
 
 .stacked-components .results-list.ledwall {
-  margin-top: 10px !important; /* Less space for LED wall */
+  margin-top: 10px !important;
   margin-bottom: 2px !important;
 }
 

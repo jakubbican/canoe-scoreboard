@@ -1,4 +1,3 @@
-/* OnStartDisplay.css */
 /* Styling for the competitors at the start display */
 
 .on-start-display {
@@ -45,17 +44,14 @@
   transform: translateX(-5px);
 }
 
-/* First row styling */
 .start-row:first-child .start-time {
   border-top-right-radius: 5px;
 }
 
-/* Last row styling */
 .start-row:last-child .start-time {
   border-bottom-right-radius: 5px;
 }
 
-/* Cell styling */
 .start-bib {
   display: flex;
   justify-content: center;
@@ -63,7 +59,6 @@
   width: 40px;
   height: 40px;
   text-align: center;
-  /* Background image now handled by inline styles */
   opacity: 0.8;
   font-weight: bold;
   color: var(--text-secondary);
@@ -95,9 +90,8 @@
   box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.2);
 }
 
-/* Layout specific adjustments */
 .on-start-display.horizontal {
-  top: 100px; /* Aligned with OnCourseDisplay */
+  top: 100px;
   right: 2vw;
   font-size: var(--small-size);
 }
@@ -111,7 +105,7 @@
 }
 
 .on-start-display.vertical {
-  top: 120px; /* Aligned with OnCourseDisplay */
+  top: 120px;
   right: 2vw;
 }
 
@@ -135,15 +129,15 @@
 }
 
 .on-start-display.ledwall {
-  top: 70px; /* Positioned below top bar but not overlapping with OnCourseDisplay */
+  top: 70px;
   right: 10px;
-  border: 2px solid rgba(0, 206, 209, 0.5); /* More visible border */
+  border: 2px solid rgba(0, 206, 209, 0.5);
 }
 
 .on-start-display.ledwall .start-header {
-  font-size: 26px; /* Larger for visibility from distance */
-  padding: 8px 15px; /* Larger padding for better visibility */
-  font-weight: 700; /* Bolder for visibility */
+  font-size: 26px;
+  padding: 8px 15px;
+  font-weight: 700;
 }
 
 .on-start-display.ledwall .start-bib,
@@ -153,13 +147,13 @@
 }
 
 .on-start-display.ledwall .start-bib {
-  width: 45px; /* Larger for visibility */
+  width: 45px;
   height: 45px;
-  font-size: 26px; /* Larger for visibility */
+  font-size: 26px;
 }
 
 .on-start-display.ledwall .start-time {
-  min-width: 90px; /* Ensure full time is visible */
-  font-size: 26px; /* Larger for visibility */
-  padding: 0 20px; /* More padding for visibility */
+  min-width: 90px;
+  font-size: 26px;
+  padding: 0 20px;
 }

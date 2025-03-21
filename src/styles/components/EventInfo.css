@@ -1,6 +1,3 @@
-/* EventInfo.css */
-/* Final adjustments - reduced spacing and removed orange border */
-
 /* Top bar with logos */
 .top-bar {
   position: absolute;
@@ -58,11 +55,8 @@
   text-overflow: ellipsis;
   white-space: nowrap;
   text-align: left;
-  /* Removed gradient and animation for gen-x style */
   text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
 }
-
-/* Removed titleGlow animation for gen-x style */
 
 /* Updated Info text marquee to fit into stacked components */
 .info-text {
@@ -75,14 +69,12 @@
   height: 45px !important;
   min-height: 0 !important;
   background-color: rgba(34, 34, 34, 0.9);
-  /* Removed backdrop filter for gen-x style */
 }
 
 .info-marquee {
   font-family: var(--font-display);
   color: var(--accent-yellow);
   white-space: nowrap;
-  /* Removed text shadow for gen-x style */
   letter-spacing: 1px;
   background-color: transparent;
   padding: 0;
@@ -192,7 +184,7 @@
 
 .event-title.ledwall {
   top: 18px;
-  left: 85px; /* Moved closer to the logo */
+  left: 85px;
   width: 65%;
   font-size: 36px;
   font-weight: 700;
@@ -224,5 +216,5 @@
 
 /* Reduce space between top bar/title and first stacked component */
 .stacked-components {
-  top: calc(var(--top-bar-height) + 5px) !important; /* Reduced from 10px */
+  top: calc(var(--top-bar-height) + 5px) !important;
 }
