@@ -238,84 +238,99 @@ function ResultsList({ data, visible, highlightBib }) {
     }
   }, [visible, disableScrolling, displayType, scrollPhase]);
 
-  // Handle highlightBib changes
+  // Handle highlightBib changes - separate implementations by layout type
   useEffect(() => {
     // Skip if nothing to do
-    if (!scrollManagerRef.current || displayType !== "ledwall") return;
+    if (!scrollManagerRef.current) return;
 
-    // Skip if scrolling disabled
-    if (disableScrolling) return;
+    if (displayType === "ledwall") {
+      // LEDWALL specific logic - manages both state and scrolling
+      if (
+        !disableScrolling &&
+        highlightBib &&
+        highlightBib !== lastHighlightBibRef.current
+      ) {
+        console.log(`[Scroll] New highlight detected: ${highlightBib}`);
 
-    // Only process when we have a new highlight
-    if (highlightBib && highlightBib !== lastHighlightBibRef.current) {
-      console.log(`[Scroll] New highlight detected: ${highlightBib}`);
+        // Update our reference
+        lastHighlightBibRef.current = highlightBib;
+        setEffectiveHighlightBib(highlightBib);
 
-      // Update our reference
-      lastHighlightBibRef.current = highlightBib;
-      setEffectiveHighlightBib(highlightBib);
+        // Stop any active scrolling
+        scrollManagerRef.current.stop();
 
-      // Stop any active scrolling
-      scrollManagerRef.current.stop();
+        // Wait for the element to render
+        setTimeout(() => {
+          const highlightElement = document.querySelector(
+            ".result-row.highlight"
+          );
+          if (highlightElement) {
+            console.log(`[Scroll] Found highlight element, scrolling to it`);
 
-      // Wait for the element to render
-      setTimeout(() => {
-        const highlightElement = document.querySelector(
-          ".result-row.highlight"
-        );
-        if (highlightElement) {
-          console.log(`[Scroll] Found highlight element, scrolling to it`);
-
-          // Get the container
-          const container = document.getElementById("results-scroll-container");
-          if (container) {
-            // Calculate center position
-            const targetScrollTop =
-              highlightElement.offsetTop -
-              container.clientHeight / 2 +
-              highlightElement.offsetHeight / 2;
-
-            // Ensure we're within bounds
-            const maxScroll = container.scrollHeight - container.clientHeight;
-            const safeScrollTop = Math.max(
-              0,
-              Math.min(targetScrollTop, maxScroll)
+            // Get the container
+            const container = document.getElementById(
+              "results-scroll-container"
             );
+            if (container) {
+              // Calculate center position
+              const targetScrollTop =
+                highlightElement.offsetTop -
+                container.clientHeight / 2 +
+                highlightElement.offsetHeight / 2;
 
-            // Scroll to highlighted element
-            container.scrollTo({
-              top: safeScrollTop,
-              behavior: "smooth",
-            });
-
-            // Set a single timeout to return to top after 5 seconds
-            console.log(`[Scroll] Setting highlight timeout for EXACTLY 5s`);
-
-            // Clear any existing timeout first
-            if (highlightTimeoutRef.current) {
-              clearTimeout(highlightTimeoutRef.current);
-            }
-
-            highlightTimeoutRef.current = setTimeout(() => {
-              console.log(
-                `[Scroll] Highlight timeout complete, returning to top`
+              // Ensure we're within bounds
+              const maxScroll = container.scrollHeight - container.clientHeight;
+              const safeScrollTop = Math.max(
+                0,
+                Math.min(targetScrollTop, maxScroll)
               );
 
-              // Clear references
-              lastHighlightBibRef.current = null;
-              setEffectiveHighlightBib(null);
-
-              // Return to top
+              // Scroll to highlighted element
               container.scrollTo({
-                top: 0,
+                top: safeScrollTop,
                 behavior: "smooth",
               });
 
-              // Clear the timeout reference
-              highlightTimeoutRef.current = null;
-            }, 5000);
+              // Set a single timeout to return to top after 5 seconds
+              console.log(`[Scroll] Setting highlight timeout for EXACTLY 5s`);
+
+              // Clear any existing timeout first
+              if (highlightTimeoutRef.current) {
+                clearTimeout(highlightTimeoutRef.current);
+              }
+
+              highlightTimeoutRef.current = setTimeout(() => {
+                console.log(
+                  `[Scroll] Highlight timeout complete, returning to top`
+                );
+
+                // Clear references
+                lastHighlightBibRef.current = null;
+                setEffectiveHighlightBib(null);
+
+                // Return to top
+                container.scrollTo({
+                  top: 0,
+                  behavior: "smooth",
+                });
+
+                // Clear the timeout reference
+                highlightTimeoutRef.current = null;
+              }, 5000);
+            }
           }
-        }
-      }, 100);
+        }, 100);
+      }
+    } else {
+      // VERTICAL and HORIZONTAL layouts - only visual highlighting
+      if (highlightBib !== effectiveHighlightBib) {
+        console.log(
+          `[Scroll] ${displayType}: Setting highlight bib to ${
+            highlightBib || "none"
+          }`
+        );
+        setEffectiveHighlightBib(highlightBib);
+      }
     }
   }, [highlightBib, displayType, disableScrolling]);
 
@@ -483,14 +498,8 @@ function ResultsList({ data, visible, highlightBib }) {
     scrollPhase,
   ]);
 
-  // Handle highlight changes with scroll to view - ONLY FOR VERTICAL/HORIZONTAL
-  useEffect(() => {
-    // Skip for LEDWALL - we handle that in the state machine
-    if (displayType === "ledwall") return;
-
-    // The rest applies only to vertical/horizontal layouts
-    // We don't do anything - highlights are only visual and don't affect scrolling
-  }, [effectiveHighlightBib, hasProcessedHighlight, displayType]);
+  // Handle highlightBib changes for vertical and horizontal layouts
+  // This has been integrated into the main highlight effect above
 
   // Detect when to clear highlights and return to top in LED wall mode
   // Not needed anymore - handled by state machine
