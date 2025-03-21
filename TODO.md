@@ -1,12 +1,14 @@
 # TODO
 
+- cleanup komentářů a všech souborů
+- screenshots
+
 - TOP10
 
 - ?OnStart
 - Schedule
-- true responsivita
 
-- cleanup komentářů a všech souborů
+- true responsivita
 
 - korektní výsledky 2 jízd na better score
 - zobrazení umístění po dojetí v aktivní řádce - možná bude muset počkat na zvládnuté závody na 2 jízdy
