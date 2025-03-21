@@ -1,5 +1,5 @@
 // App.jsx
-// Optimized with simplified scrolling interaction logic
+// Optimized with improved scrolling interaction logic
 
 import React, { useState, useEffect, useMemo, useRef } from "react";
 import {
@@ -130,30 +130,20 @@ function ScoreboardContent() {
 
   // State for scroll position in results area
   const [scrollPosition, setScrollPosition] = useState(0);
-  const [isAutoScrolling, setIsAutoScrolling] = useState(false);
-  const autoScrollTimerRef = useRef(null);
 
-  // Setup auto-scrolling timer
-  useEffect(() => {
-    // Only start auto-scrolling if config panel is not open
-    if (!document.querySelector(".config-panel") && !disableScrolling) {
-      // Start the auto-scroll timer after delay
-      autoScrollTimerRef.current = setTimeout(() => {
-        console.log("[Scroll] Initiating auto-scroll");
-        setIsAutoScrolling(true);
-
-        // Dispatch a custom event to notify the ResultsList that it should start scrolling
-        const autoScrollEvent = new CustomEvent("startAutoScroll");
-        window.dispatchEvent(autoScrollEvent);
-      }, 3000); // 3 seconds initial delay
-    }
-
-    return () => {
-      if (autoScrollTimerRef.current) {
-        clearTimeout(autoScrollTimerRef.current);
-      }
-    };
-  }, [disableScrolling]);
+  // Check if we have athletes in current or on-course
+  const hasCurrentCompetitor = competitorData && competitorData.Bib;
+  const hasOnCourseCompetitors =
+    onCourseData &&
+    Array.isArray(onCourseData) &&
+    onCourseData.length > 0 &&
+    onCourseData.some(
+      (athlete) =>
+        athlete.Total &&
+        athlete.Total !== "0:00.00" &&
+        athlete.Total !== "0.00" &&
+        athlete.Total !== "0"
+    );
 
   // Handle simple scroll position updates for header shadow
   const handleScroll = () => {
@@ -181,20 +171,6 @@ function ScoreboardContent() {
       header.classList.remove("shadowed");
     }
   }, [scrollPosition]);
-
-  // Check if we have athletes in current or on-course
-  const hasCurrentCompetitor = competitorData && competitorData.Bib;
-  const hasOnCourseCompetitors =
-    onCourseData &&
-    Array.isArray(onCourseData) &&
-    onCourseData.length > 0 &&
-    onCourseData.some(
-      (athlete) =>
-        athlete.Total &&
-        athlete.Total !== "0:00.00" &&
-        athlete.Total !== "0.00" &&
-        athlete.Total !== "0"
-    );
 
   // Prepare data for ResultsList including current/on-course status
   const resultsData = useMemo(() => {
@@ -283,7 +259,6 @@ function ScoreboardContent() {
             data={resultsData}
             visible={true}
             highlightBib={getHighlightBib()}
-            isAutoScrolling={isAutoScrolling}
           />
         )}
       </div>

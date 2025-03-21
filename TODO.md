@@ -1,7 +1,7 @@
 # TODO
 
 - optimalizovat logování scrollování?
-- disrupted scrolling after data arrives
+- zrušit divný vizuální efekt na celém seznamu vertical po dojetí jezdce mimo obrazovku
 
 - TOP10
 
@@ -29,6 +29,7 @@
 - OK: update images for SKVSCB standard (footer)
 - OK: disable scrolling option
 - OK: disrupted scrolling after data arrives
+- OK> disrupted scrolling after data arrives
 
 # WON'T DO
 
