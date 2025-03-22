@@ -1,6 +1,5 @@
 # TODO
 
-- code review
 - skinovatelnost/vyčištění umístění a parametrizace stylizace
 - true responsivita
 
@@ -28,6 +27,7 @@
 - OK: cleanup komentářů a všech souborů
 - OK: Schedule
 - OK: TOP10
+- OK: code review
 
 # WON'T DO
 
