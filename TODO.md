@@ -1,7 +1,7 @@
 # TODO
 
-- ?OnStart
-
+- code review
+- skinovatelnost/vyčištění umístění a parametrizace stylizace
 - true responsivita
 
 - korektní výsledky 2 jízd na better score
@@ -33,3 +33,4 @@
 
 - ??zobrazit oncourse vedle sebe na ledwall
 - hide incomplete rows from the results scrolling viewport
+- ?OnStart
