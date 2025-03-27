@@ -4,24 +4,21 @@
 // Import the base64-encoded flags
 import { getFlagBase64, emptyFlagBase64 } from "./flagsBase64";
 
-// Cache for config data
-let configCache = null;
-let configLoadPromise = null;
+/**
+ * Get the base URL for assets, accounting for subfolders
+ * @returns {string} The base URL for assets
+ */
+export function getBaseUrl() {
+  // Use relative paths instead of absolute paths
+  return "./assets/";
+}
 
 /**
  * Load asset configuration from JSON
  * @returns {Promise<Object>} - Asset configuration object
  */
 export function loadAssetConfig() {
-  if (configCache) {
-    return Promise.resolve(configCache);
-  }
-
-  if (configLoadPromise) {
-    return configLoadPromise;
-  }
-
-  configLoadPromise = fetch("/assets/config.json")
+  return fetch(`${getBaseUrl()}config.json`)
     .then((response) => {
       if (!response.ok) {
         throw new Error(
@@ -30,17 +27,11 @@ export function loadAssetConfig() {
       }
       return response.json();
     })
-    .then((config) => {
-      configCache = config;
-      return config;
-    })
     .catch((error) => {
       console.error("Error loading asset configuration:", error);
       // Return default empty config on error
       return { assets: {}, settings: {} };
     });
-
-  return configLoadPromise;
 }
 
 /**
@@ -51,7 +42,7 @@ export function loadAssetConfig() {
  */
 export function getFlagPath(countryCode, useBase64 = true) {
   if (!countryCode) {
-    return useBase64 ? emptyFlagBase64 : "/assets/flags/empty.png";
+    return useBase64 ? emptyFlagBase64 : `${getBaseUrl()}flags/empty.png`;
   }
 
   if (useBase64) {
@@ -66,7 +57,7 @@ export function getFlagPath(countryCode, useBase64 = true) {
   }
 
   // Use file path as fallback
-  return `/assets/flags/${countryCode.toLowerCase()}.bmp`;
+  return `${getBaseUrl()}flags/${countryCode.toLowerCase()}.bmp`;
 }
 
 /**
@@ -78,7 +69,7 @@ export function getConfiguredAssetPath(assetKey) {
   return loadAssetConfig().then((config) => {
     if (config.assets && config.assets[assetKey]) {
       const asset = config.assets[assetKey];
-      return `/assets/${asset.path}`;
+      return `${getBaseUrl()}${asset.path}`;
     }
 
     throw new Error(`Asset not found in configuration: ${assetKey}`);
@@ -94,10 +85,10 @@ export function getConfiguredAssetPath(assetKey) {
  */
 export function getAssetPath(assetName, extension = "png", fallback = null) {
   if (!assetName) {
-    return fallback ? `/assets/${fallback}.${extension}` : null;
+    return fallback ? `${getBaseUrl()}${fallback}.${extension}` : null;
   }
 
-  return `/assets/${assetName}.${extension}`;
+  return `${getBaseUrl()}${assetName}.${extension}`;
 }
 
 /**
@@ -120,21 +111,8 @@ export function preloadAsset(src) {
  */
 export function preloadConfiguredAssets() {
   return loadAssetConfig().then((config) => {
-    if (!config.settings || !config.settings.preloadAssets) {
-      return [];
-    }
-
-    const assetPromises = [];
-
-    if (config.assets) {
-      Object.keys(config.assets).forEach((key) => {
-        const asset = config.assets[key];
-        const assetPath = `/assets/${asset.path}`;
-        assetPromises.push(preloadAsset(assetPath));
-      });
-    }
-
-    return Promise.all(assetPromises);
+    // Skip preloading to avoid unnecessary requests
+    return [];
   });
 }
 

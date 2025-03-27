@@ -1,6 +1,6 @@
 # TODO
 
-- assets referencing when app in folder!!
+- výsledky code review ...
 
 - skinovatelnost/vyčištění umístění a parametrizace stylizace
 - true responsivita
@@ -30,6 +30,7 @@
 - OK: Schedule
 - OK: TOP10
 - OK: code review
+- OK: assets referencing when app in folder!!
 
 # WON'T DO
 

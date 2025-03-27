@@ -7,12 +7,13 @@ import {
   getConfiguredAssetPath,
   getAssetPath,
   handleImageError,
+  getBaseUrl,
 } from "../../utils/assetUtils";
 import "../../styles/components/Footer.css";
 
 function Footer({ visible }) {
   const { displayType } = useLayout();
-  const [footerSrc, setFooterSrc] = useState("/assets/footer.png"); // Default fallback
+  const [footerSrc, setFooterSrc] = useState(`${getBaseUrl()}footer.png`); // Default fallback
 
   // Load configured asset path
   useEffect(() => {
@@ -22,7 +23,7 @@ function Footer({ visible }) {
       })
       .catch(() => {
         // Fallback to default path if configuration fails
-        setFooterSrc("/assets/footer.png");
+        setFooterSrc(`${getBaseUrl()}footer.png`);
       });
   }, []);
 

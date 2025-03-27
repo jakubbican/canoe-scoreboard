@@ -8,6 +8,7 @@ import {
   getConfiguredAssetPath,
   getAssetPath,
   handleImageError,
+  getBaseUrl,
 } from "../../utils/assetUtils";
 import "../../styles/components/EventInfo.css";
 
@@ -47,20 +48,20 @@ function EventInfo({
   };
 
   // State for dynamic asset paths
-  const [logoSrc, setLogoSrc] = useState("/assets/logo.png");
-  const [partnersSrc, setPartnersSrc] = useState("/assets/partners.png");
+  const [logoSrc, setLogoSrc] = useState(`${getBaseUrl()}logo.png`);
+  const [partnersSrc, setPartnersSrc] = useState(`${getBaseUrl()}partners.png`);
 
   // Load configured asset paths
   useEffect(() => {
     // Load logo
     getConfiguredAssetPath("logo")
       .then((path) => setLogoSrc(path))
-      .catch(() => setLogoSrc("/assets/logo.png"));
+      .catch(() => setLogoSrc(`${getBaseUrl()}logo.png`));
 
     // Load partners
     getConfiguredAssetPath("partners")
       .then((path) => setPartnersSrc(path))
-      .catch(() => setPartnersSrc("/assets/partners.png"));
+      .catch(() => setPartnersSrc(`${getBaseUrl()}partners.png`));
   }, []);
 
   // Render the top bar and title

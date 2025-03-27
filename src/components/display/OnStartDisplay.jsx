@@ -7,12 +7,13 @@ import {
   getConfiguredAssetPath,
   getAssetPath,
   handleImageError,
+  getBaseUrl,
 } from "../../utils/assetUtils";
 import "../../styles/components/OnStartDisplay.css";
 
 function OnStartDisplay({ data, visible }) {
   const { displayType } = useLayout();
-  const [bibSrc, setBibSrc] = useState("/assets/bib.png");
+  const [bibSrc, setBibSrc] = useState(`${getBaseUrl()}bib.png`);
 
   // Load bib image from configuration
   useEffect(() => {
@@ -22,7 +23,7 @@ function OnStartDisplay({ data, visible }) {
       })
       .catch(() => {
         // Fallback to default path if configuration fails
-        setBibSrc("/assets/bib.png");
+        setBibSrc(`${getBaseUrl()}bib.png`);
       });
   }, []);
 
