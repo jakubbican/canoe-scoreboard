@@ -1,5 +1,7 @@
 # TODO
 
+- assets referencing when app in folder!!
+
 - skinovatelnost/vyčištění umístění a parametrizace stylizace
 - true responsivita
 
