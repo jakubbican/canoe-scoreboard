@@ -24,6 +24,14 @@ export default defineConfig({
     chunkSizeWarningLimit: 1000,
     // Asset handling
     assetsInlineLimit: 4096, // 4kb
+    // Recommended for Vite 6+ to ensure proper code splitting
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          react: ['react', 'react-dom'],
+        },
+      },
+    },
   },
 
   server: {
