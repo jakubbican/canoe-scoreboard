@@ -40,6 +40,7 @@
   font-size: 14px;
   text-shadow: 0 0 5px rgba(255, 196, 0, 0.7);
   animation: pulseGlyph 1.5s infinite;
+  /* Animation defined in shared/animations.css */
 }
 
 @keyframes pulseGlyph {

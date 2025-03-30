@@ -11,64 +11,35 @@
   font-family: var(--font-primary);
   color: var(--text-primary);
   z-index: 100;
-  background-color: rgba(
-    10,
-    10,
-    10,
-    0.98
-  ); /* Darker background for better contrast */
-  border-radius: 8px; /* Slightly larger radius */
-  box-shadow: 0 15px 50px rgba(0, 0, 0, 0.8), 0 0 30px rgba(51, 102, 153, 0.6); /* Enhanced shadow with stronger accent glow */
+  background-color: rgba(10, 10, 10, 0.98);
+  border-radius: 8px;
+  box-shadow: 0 15px 50px rgba(0, 0, 0, 0.8), 0 0 30px rgba(51, 102, 153, 0.6);
   overflow: hidden;
-  border: 3px solid var(--accent-blue); /* Thicker border for more prominence */
+  border: 3px solid var(--accent-blue);
+  /* Animation names now defined in shared/animations.css */
   animation: scheduleAppear 0.5s ease-out forwards,
     borderGlow 3s infinite ease-in-out;
   max-height: 90vh;
 }
 
-@keyframes scheduleAppear {
-  from {
-    opacity: 0;
-    transform: translate(-50%, -50%) scale(0.9);
-    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
-  }
-  to {
-    opacity: 1;
-    transform: translate(-50%, -50%) scale(1);
-    box-shadow: 0 15px 50px rgba(0, 0, 0, 0.8), 0 0 30px rgba(51, 102, 153, 0.6);
-  }
-}
-
-@keyframes borderGlow {
-  0% {
-    box-shadow: 0 0 10px rgba(51, 102, 153, 0.4);
-  }
-  50% {
-    box-shadow: 0 0 20px rgba(51, 102, 153, 0.7);
-  }
-  100% {
-    box-shadow: 0 0 10px rgba(51, 102, 153, 0.4);
-  }
-}
-
 /* Header section */
 .schedule-header {
-  padding: 15px 18px; /* Larger padding */
+  padding: 15px 18px;
   background: linear-gradient(
     to bottom,
     var(--accent-blue),
     var(--primary-color)
-  ); /* Gradient background */
-  color: #ffffff; /* Brighter white text */
-  font-size: calc(var(--header-size) * 0.8); /* Larger text */
+  );
+  color: #ffffff;
+  font-size: calc(var(--header-size) * 0.8);
   text-align: center;
-  font-weight: 700; /* Bolder text */
+  font-weight: 700;
   letter-spacing: 0.6px;
   text-transform: uppercase;
   position: relative;
   overflow: hidden;
   border-bottom: 3px solid var(--accent-blue);
-  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.4); /* Text shadow for better readability */
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
 }
 
 /* Body section */
@@ -233,14 +204,14 @@
   justify-content: center;
   font-weight: 600;
   padding: 4px 6px;
-  color: #00ffff !important; /* Brighter cyan color for time values */
+  color: #00ffff !important;
   font-weight: 700;
 }
 
 /* Make all time columns match in style */
 .schedule-row:not(.header) .schedule-col.start-time,
 .schedule-row:not(.header) .schedule-col.end-time {
-  color: var(--text-primary); /* Using primary text color instead of teal */
+  color: var(--text-primary);
 }
 
 /* Fix for LED wall layout - ensure consistent alignment */
@@ -266,8 +237,8 @@
 /* Layout specific adjustments */
 /* Horizontal layout - enhanced styling */
 .schedule-display.horizontal {
-  width: 850px; /* Slightly wider */
-  background-color: rgba(10, 10, 10, 0.97); /* Darker for contrast */
+  width: 850px;
+  background-color: rgba(10, 10, 10, 0.97);
   border: 3px solid var(--accent-blue);
 }
 
@@ -279,7 +250,7 @@
     var(--primary-color)
   );
   font-weight: 700;
-  font-size: 26px; /* Increased header font size */
+  font-size: 26px;
   text-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
 }
 
@@ -294,25 +265,25 @@
 }
 
 .schedule-display.horizontal .schedule-row {
-  min-height: 44px; /* Taller rows for prominence */
+  min-height: 44px;
 }
 
 .schedule-display.horizontal .schedule-col {
-  font-size: 24px; /* Larger font size for all columns */
-  padding: 10px 14px; /* More padding */
-  font-weight: 500; /* Slightly bolder text */
+  font-size: 24px;
+  padding: 10px 14px;
+  font-weight: 500;
 }
 
 .schedule-display.horizontal .schedule-row.header .schedule-col {
-  font-size: 24px; /* Larger header font size */
+  font-size: 24px;
   font-weight: 700;
-  color: #ffd700; /* Brighter yellow for header text */
+  color: #ffd700;
 }
 
 .schedule-display.horizontal .schedule-footer {
   border-top: 2px solid var(--accent-blue);
   font-weight: 600;
-  font-size: 18px; /* Larger footer text */
+  font-size: 18px;
   padding: 12px;
   background: linear-gradient(
     to top,
@@ -323,8 +294,8 @@
 
 /* Vertical layout - enhanced styling */
 .schedule-display.vertical {
-  width: 800px; /* Slightly wider */
-  background-color: rgba(10, 10, 10, 0.97); /* Darker for contrast */
+  width: 800px;
+  background-color: rgba(10, 10, 10, 0.97);
   border: 3px solid var(--accent-blue);
 }
 
@@ -336,8 +307,8 @@
     var(--primary-color)
   );
   font-weight: 700;
-  font-size: 28px; /* Increased header font size */
-  padding: 15px 18px; /* More padding */
+  font-size: 28px;
+  padding: 15px 18px;
   text-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
 }
 
@@ -352,25 +323,25 @@
 }
 
 .schedule-display.vertical .schedule-row {
-  min-height: 46px; /* Taller rows for prominence */
+  min-height: 46px;
 }
 
 .schedule-display.vertical .schedule-col {
-  font-size: 26px; /* Larger font size for all columns */
-  padding: 10px 16px; /* More padding */
+  font-size: 26px;
+  padding: 10px 16px;
   font-weight: 500;
 }
 
 .schedule-display.vertical .schedule-row.header .schedule-col {
-  font-size: 26px; /* Larger header font size */
+  font-size: 26px;
   font-weight: 700;
-  color: #ffd700; /* Brighter yellow for header text */
+  color: #ffd700;
 }
 
 .schedule-display.vertical .schedule-footer {
   border-top: 2px solid var(--accent-blue);
   font-weight: 600;
-  font-size: 20px; /* Larger footer text */
+  font-size: 20px;
   padding: 12px;
   background: linear-gradient(
     to top,
@@ -384,45 +355,45 @@
   width: 700px;
   transform: translate(-50%, -50%) scale(0.9);
   max-height: 320px;
-  background-color: rgba(18, 18, 18, 0.98); /* Darker, more opaque background */
-  border: 2px solid var(--accent-blue); /* More prominent border */
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.7), 0 0 20px rgba(51, 102, 153, 0.4); /* Enhanced shadow with accent color glow */
+  background-color: rgba(18, 18, 18, 0.98);
+  border: 2px solid var(--accent-blue);
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.7), 0 0 20px rgba(51, 102, 153, 0.4);
 }
 
 .schedule-display.ledwall .schedule-header {
   padding: 10px;
-  font-size: 22px; /* Larger font size */
-  font-weight: 700; /* Bolder text */
+  font-size: 22px;
+  font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.5px;
-  height: 40px; /* Taller header */
+  height: 40px;
   display: flex;
   align-items: center;
   justify-content: center;
   background-color: var(--primary-color);
-  border-bottom: 3px solid var(--accent-blue); /* More prominent separator */
+  border-bottom: 3px solid var(--accent-blue);
 }
 
 .schedule-display.ledwall .schedule-row {
-  height: 36px; /* Taller rows */
+  height: 36px;
   min-height: 36px;
 }
 
 .schedule-display.ledwall .schedule-row.header {
-  height: 32px; /* Taller header row */
+  height: 32px;
   min-height: 32px;
   background-color: var(--primary-color);
   display: grid;
   width: 100%;
-  border-bottom: 2px solid rgba(51, 102, 153, 0.5); /* More visible separator */
+  border-bottom: 2px solid rgba(51, 102, 153, 0.5);
 }
 
 .schedule-display.ledwall .schedule-row.header .schedule-col {
   text-align: center;
   color: var(--accent-yellow);
   padding: 4px 6px;
-  font-size: 18px; /* Larger header font */
-  font-weight: 700; /* Bolder text */
+  font-size: 18px;
+  font-weight: 700;
   letter-spacing: 0.7px;
   line-height: 20px;
   background-color: var(--primary-color);
@@ -435,7 +406,7 @@
 }
 
 .schedule-display.ledwall .schedule-row:not(.header) .schedule-col {
-  font-size: 20px; /* Larger data font */
+  font-size: 20px;
   padding: 4px 6px;
   font-weight: 600;
   height: 100%;
@@ -456,9 +427,9 @@
 
 .schedule-display.ledwall .schedule-footer {
   padding: 6px;
-  font-size: 16px; /* Larger footer font */
+  font-size: 16px;
   font-weight: 600;
-  border-top: 2px solid rgba(51, 102, 153, 0.5); /* More visible separator */
+  border-top: 2px solid rgba(51, 102, 153, 0.5);
 }
 
 /* LED Wall layout - compact 2-column design */
@@ -470,11 +441,11 @@
 
 .schedule-display.ledwall .schedule-header {
   padding: 8px 10px;
-  font-size: 20px; /* Reduce this to match other headers */
+  font-size: 20px;
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.5px;
-  height: 36px; /* Set a fixed height to match other components */
+  height: 36px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -488,10 +459,8 @@
 .schedule-display.ledwall .schedule-row.header {
   height: 28px;
   min-height: 28px;
-  background-color: var(
-    --primary-color
-  ); /* Match header background on LED wall */
-  display: grid; /* Ensure grid layout is correctly applied */
+  background-color: var(--primary-color);
+  display: grid;
   width: 100%;
 }
 
@@ -499,16 +468,16 @@
   text-align: center;
   color: var(--accent-yellow);
   padding: 4px 6px;
-  font-size: 16px; /* Consistent font size for all header columns */
+  font-size: 16px;
   font-weight: 600;
   letter-spacing: 0.5px;
-  line-height: 20px; /* Fixed line height to prevent inconsistencies */
-  background-color: var(--primary-color); /* Ensure background is consistent */
-  width: 100%; /* Fill the cell width */
-  height: 100%; /* Fill the cell height */
-  display: flex; /* Use flexbox for content alignment */
-  align-items: center; /* Center vertically */
-  justify-content: center; /* Center horizontally for header */
+  line-height: 20px;
+  background-color: var(--primary-color);
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   overflow: hidden;
 }
 
@@ -521,7 +490,7 @@
 }
 
 .schedule-display.ledwall .schedule-row.header .schedule-col.competition {
-  justify-content: center; /* Center headers */
+  justify-content: center;
 }
 
 .schedule-display.ledwall .schedule-row.header .schedule-col.boats {
@@ -534,7 +503,7 @@
 
 .schedule-display.ledwall .schedule-row:not(.header) {
   display: grid;
-  grid-template-columns: 2fr 0.7fr 1fr; /* Match the parent grid */
+  grid-template-columns: 2fr 0.7fr 1fr;
   width: 100%;
 }
 
@@ -572,7 +541,7 @@
   text-align: center;
   justify-content: center;
   padding: 4px 6px;
-  color: var(--accent-yellow); /* Keep header color consistent */
+  color: var(--accent-yellow);
 }
 
 /* Fix alignment of data cells to match Boats column */
@@ -580,7 +549,7 @@
   text-align: center;
   justify-content: center;
   padding: 4px 6px;
-  color: var(--text-primary); /* Using primary text color instead of teal */
+  color: var(--text-primary);
   font-weight: 600;
 }
 
@@ -591,9 +560,16 @@
   justify-content: center;
 }
 
-/* Scrollbar styling to match results list */
+/* Apply utility classes for scrollbars */
+.schedule-body {
+  /* Using custom scrollbar classes from utils.css */
+  scrollbar-width: thin;
+  scrollbar-color: var(--accent-color) var(--primary-light);
+  max-height: 60vh;
+}
+
 .schedule-body::-webkit-scrollbar {
-  width: var(--scrollbar-width, 10px); /* Wider scrollbar */
+  width: var(--scrollbar-width, 10px);
 }
 
 .schedule-body::-webkit-scrollbar-track {
@@ -608,37 +584,18 @@
 }
 
 /* Hide scrollbar for LED wall */
+.schedule-display.ledwall .schedule-body {
+  max-height: 250px;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
 .schedule-display.ledwall .schedule-body::-webkit-scrollbar {
   width: 4px;
 }
 
-/* Prevent too tall schedule tables */
-.schedule-body {
-  max-height: 60vh;
-}
-
-.schedule-display.ledwall .schedule-body {
-  max-height: 250px;
-}
-
-/* Ensure consistent layout for the column containers */
-.schedule-display.ledwall .schedule-body.ledwall-layout .schedule-column {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  border-right: 1px solid rgba(51, 102, 153, 0.2);
-  overflow: hidden;
-}
-
-/* Ensure grid structure of schedule rows is consistently applied */
-.schedule-body.ledwall-layout .schedule-row {
-  display: grid;
-  grid-template-columns: 2fr 0.7fr 1fr;
-  width: 100%;
-}
-
 /* Enhance the focus on data with highlighted effects */
 .schedule-row:not(.header):hover {
-  background-color: rgba(51, 102, 153, 0.3) !important; /* Highlight on hover */
+  background-color: rgba(51, 102, 153, 0.3) !important;
   transition: background-color 0.2s ease;
 }

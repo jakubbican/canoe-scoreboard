@@ -4,7 +4,7 @@
   right: 0;
   width: 280px;
   max-height: 100vh;
-  background-color: rgba(18, 18, 18, 0.9);
+  background-color: var(--bg-dark);
   color: var(--text-primary);
   padding: 15px;
   z-index: 1000;
@@ -29,7 +29,7 @@
   letter-spacing: 1px;
   border-bottom: 1px solid var(--accent-color);
   padding-bottom: 8px;
-  text-shadow: 0 0 10px rgba(138, 43, 226, 0.5);
+  text-shadow: 0 0 10px var(--purple-light);
   font-size: 20px;
 }
 
@@ -70,8 +70,8 @@
   width: 100%;
   padding: 8px;
   border-radius: 6px;
-  border: 1px solid rgba(138, 43, 226, 0.3);
-  background-color: rgba(18, 18, 18, 0.8);
+  border: 1px solid var(--purple-light);
+  background-color: var(--bg-dark);
   color: var(--text-primary);
   font-family: var(--font-primary);
   transition: all 0.3s ease;
@@ -94,8 +94,8 @@
   width: 100%;
   padding: 8px;
   border-radius: 6px;
-  border: 1px solid rgba(138, 43, 226, 0.3);
-  background-color: rgba(18, 18, 18, 0.8);
+  border: 1px solid var(--purple-light);
+  background-color: var(--bg-dark);
   color: var(--text-primary);
   cursor: pointer;
   font-size: 14px;
@@ -143,11 +143,11 @@
 }
 
 .custom-select .option:hover {
-  background-color: rgba(138, 43, 226, 0.3);
+  background-color: var(--purple-light);
 }
 
 .custom-select .option.selected {
-  background-color: rgba(138, 43, 226, 0.5);
+  background-color: var(--purple-dark);
   font-weight: bold;
 }
 
@@ -155,7 +155,7 @@
 .custom-select .selected-option:focus {
   border-color: var(--accent-color);
   outline: none;
-  box-shadow: 0 0 10px rgba(138, 43, 226, 0.5);
+  box-shadow: 0 0 10px var(--purple-light);
 }
 
 .config-panel button {
@@ -171,7 +171,7 @@
   letter-spacing: 0.5px;
   text-transform: uppercase;
   transition: all 0.3s ease;
-  box-shadow: 0 4px 10px rgba(138, 43, 226, 0.3);
+  box-shadow: 0 4px 10px var(--purple-light);
   font-size: 14px;
 }
 
@@ -185,12 +185,12 @@
 
 .config-panel button:hover {
   transform: translateY(-2px);
-  box-shadow: 0 6px 15px rgba(138, 43, 226, 0.5);
+  box-shadow: 0 6px 15px var(--purple-dark);
 }
 
 .config-panel button:active {
   transform: translateY(1px);
-  box-shadow: 0 2px 5px rgba(138, 43, 226, 0.3);
+  box-shadow: 0 2px 5px var(--purple-light);
 }
 
 .keyboard-shortcuts {

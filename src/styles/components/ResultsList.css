@@ -58,18 +58,6 @@
   animation: subtlePulse 3s infinite;
 }
 
-@keyframes subtlePulse {
-  0% {
-    background-color: rgba(51, 102, 153, 0.4);
-  }
-  50% {
-    background-color: rgba(51, 102, 153, 0.6);
-  }
-  100% {
-    background-color: rgba(51, 102, 153, 0.4);
-  }
-}
-
 /* Results cells */
 .result-rank {
   text-align: center;

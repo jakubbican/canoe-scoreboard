@@ -102,6 +102,7 @@
   padding-left: 100%; /* Start offscreen */
   will-change: transform;
   animation: marquee-scroll-left linear infinite;
+  /* Animation now defined in shared/animations.css */
 }
 
 /* Tab for info text to match other components */

@@ -276,9 +276,11 @@
 
 /* Hide scrollbar for LED wall layout */
 .layout-ledwall .scoreboard-results {
-  ::-webkit-scrollbar {
-    display: none;
-  }
+  -webkit-scrollbar: none;
   scrollbar-width: none;
   -ms-overflow-style: none;
+}
+
+.layout-ledwall .scoreboard-results::-webkit-scrollbar {
+  display: none;
 }

@@ -1,0 +1,131 @@
+/* Base layout styles for the canoe scoreboard application */
+
+/* CSS Reset */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background-color: #000000;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  font-family: var(--font-primary);
+  color: var(--text-primary);
+}
+
+/* Main scoreboard container */
+.scoreboard-layout {
+  position: relative;
+  width: var(--content-width);
+  height: var(--content-height);
+  background-color: var(--primary-color);
+  color: var(--text-primary);
+  overflow: hidden;
+  transform-origin: top left;
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
+  display: flex;
+  flex-direction: column;
+}
+
+/* Scoreboard container with flexbox layout */
+.scoreboard-container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+
+/* HEADER SECTION */
+.scoreboard-header {
+  position: relative;
+  flex-shrink: 0;
+  width: 100%;
+  z-index: 20;
+  background-color: var(--primary-color);
+  transition: box-shadow 0.3s ease;
+}
+
+/* Add subtle shadow when scrolled to indicate header separation */
+.scoreboard-header.shadowed {
+  box-shadow: 0 4px 8px var(--header-shadow-color, rgba(0, 0, 0, 0.3));
+}
+
+/* Header components container */
+.header-components {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  padding-bottom: 2px;
+  margin-top: var(--header-components-margin-top, 100px);
+}
+
+/* Container for EventInfo, Title, TopBar */
+.header-top {
+  position: relative;
+  width: 100%;
+  z-index: 21;
+}
+
+/* RESULTS SECTION - scrollable with snap scrolling */
+.scoreboard-results {
+  flex-grow: 1;
+  width: 100%;
+  overflow-y: auto;
+  overflow-x: hidden;
+  position: relative;
+  scrollbar-width: thin;
+  scrollbar-color: var(--accent-color) var(--primary-light);
+  z-index: 8;
+  padding-top: var(--results-top-padding, 15px);
+  margin-top: var(--results-top-margin, 10px);
+  scroll-snap-type: y mandatory;
+  scroll-behavior: smooth;
+}
+
+/* Connection status indicator - Base styles */
+.connection-status {
+  position: fixed;
+  top: 4px;
+  right: 4px;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  z-index: 1000;
+  padding: 0;
+  transition: all 0.3s ease;
+}
+
+.connection-status.connected {
+  background-color: var(--accent-green);
+  box-shadow: 0 0 10px var(--accent-green);
+  border: none;
+  animation: pulseLight 2s infinite;
+}
+
+.connection-status.disconnected {
+  background-color: var(--error-color);
+  box-shadow: 0 0 10px var(--error-color);
+  border: none;
+  animation: disconnectedLight 1.5s infinite;
+}
+
+/* Stacked components container */
+.stacked-components {
+  position: absolute;
+  top: calc(var(--top-bar-height) + 5px);
+  left: 0;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  z-index: 5;
+}
+
+/* Direct children of stacked-components - base styles */
+.stacked-components > div {
+  margin: 0;
+  padding: 0;
+}

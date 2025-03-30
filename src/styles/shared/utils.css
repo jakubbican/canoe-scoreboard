@@ -1,0 +1,78 @@
+/* Utility classes for the canoe scoreboard application */
+
+/* Visibility utilities */
+.hidden {
+  display: none !important;
+}
+
+.transparent {
+  opacity: 0 !important;
+}
+
+/* Visual effect utilities */
+.glass-effect {
+  background: rgba(34, 34, 34, 0.9);
+  border: 1px solid rgba(204, 204, 204, 0.2);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+}
+
+.neon-border {
+  position: relative;
+}
+
+.neon-border::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  border: 1px solid var(--accent-color);
+  border-radius: inherit;
+  pointer-events: none;
+}
+
+/* Performance optimizations */
+.will-change {
+  will-change: transform, opacity;
+  transform: translateZ(0);
+}
+
+/* Layout containment */
+.contain-layout {
+  contain: layout;
+}
+
+/* Custom scrollbars */
+.custom-scrollbar::-webkit-scrollbar {
+  width: var(--scrollbar-width, 8px);
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: var(--primary-light);
+  border-radius: 4px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background-color: var(--accent-color);
+  border-radius: 4px;
+  border: 2px solid var(--primary-light);
+}
+
+.custom-scrollbar:hover::-webkit-scrollbar-thumb {
+  background-color: var(--accent-blue);
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:active {
+  background-color: var(--accent-yellow);
+}
+
+/* Hide scrollbar utility */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.no-scrollbar {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}

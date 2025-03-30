@@ -18,7 +18,7 @@
 
 ### Velmi doporučené (Should Have)
 
--   [ ] **Refaktorovat CSS architekturu** - vytvořit sdílené styly (`animations.css`, `variables.css`, `layout.css`, `utils.css`), odstranit duplicitu v komponentách.
+-   [X] **Refaktorovat CSS architekturu** - vytvořit sdílené styly (`animations.css`, `variables.css`, `layout.css`, `utils.css`), odstranit duplicitu v komponentách.
 -   [-] **Integrovat asset optimalizaci** (obrázky, flagy) do build procesu (`prebuild` skript).
 -   [-] **Revidovat přístupnost** - doplnit ARIA atributy, zkontrolovat kontrast barev, zajistit základní ovladatelnost klávesnicí.
 -   [ ] **Implementovat základní sadu unit testů** pro utility a klíčové komponenty (např. pomocí Jest a React Testing Library).

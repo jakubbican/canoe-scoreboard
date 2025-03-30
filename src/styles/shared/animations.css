@@ -1,23 +1,207 @@
-/* animations.css - Shared animation definitions */
+/* Shared animations for the canoe scoreboard application */
 
-/* Marquee scroll animation (left-to-right) */
-@keyframes marquee-scroll-left {
+/* Main animations */
+@keyframes fadeIn {
   from {
-    transform: translateX(0);
+    opacity: 0;
+    transform: translateY(10px);
   }
   to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeOut {
+  from {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+}
+
+@keyframes slideInRight {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slideOutLeft {
+  from {
+    transform: translateX(0);
+    opacity: 1;
+  }
+  to {
+    transform: translateX(-100%);
+    opacity: 0;
+  }
+}
+
+/* Top10Display animations */
+@keyframes top10Appear {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.9);
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+    box-shadow: 0 15px 50px rgba(0, 0, 0, 0.8), 0 0 30px rgba(51, 102, 153, 0.6);
+  }
+}
+
+@keyframes borderGlow {
+  0% {
+    box-shadow: 0 0 10px rgba(51, 102, 153, 0.4);
+  }
+  50% {
+    box-shadow: 0 0 20px rgba(51, 102, 153, 0.7);
+  }
+  100% {
+    box-shadow: 0 0 10px rgba(51, 102, 153, 0.4);
+  }
+}
+
+@keyframes scheduleAppear {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.9);
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+    box-shadow: 0 15px 50px rgba(0, 0, 0, 0.8), 0 0 30px rgba(51, 102, 153, 0.6);
+  }
+}
+
+/* Pulse animations */
+@keyframes pulseGlyph {
+  0% {
+    opacity: 0.7;
+    text-shadow: 0 0 3px rgba(255, 196, 0, 0.5);
+  }
+  50% {
+    opacity: 1;
+    text-shadow: 0 0 8px rgba(255, 196, 0, 0.8), 0 0 12px rgba(255, 196, 0, 0.4);
+  }
+  100% {
+    opacity: 0.7;
+    text-shadow: 0 0 3px rgba(255, 196, 0, 0.5);
+  }
+}
+
+@keyframes pulseLight {
+  0% {
+    opacity: 0.7;
+    box-shadow: 0 0 5px var(--accent-green);
+  }
+  50% {
+    opacity: 1;
+    box-shadow: 0 0 15px var(--accent-green);
+  }
+  100% {
+    opacity: 0.7;
+    box-shadow: 0 0 5px var(--accent-green);
+  }
+}
+
+@keyframes disconnectedLight {
+  0% {
+    opacity: 0.7;
+    box-shadow: 0 0 5px var(--error-color);
+  }
+  50% {
+    opacity: 1;
+    box-shadow: 0 0 15px var(--error-color);
+  }
+  100% {
+    opacity: 0.7;
+    box-shadow: 0 0 5px var(--error-color);
+  }
+}
+
+@keyframes subtlePulse {
+  0% {
+    background-color: rgba(51, 102, 153, 0.4);
+  }
+  50% {
+    background-color: rgba(51, 102, 153, 0.6);
+  }
+  100% {
+    background-color: rgba(51, 102, 153, 0.4);
+  }
+}
+
+/* Marquee animation for info text */
+@keyframes marquee-scroll-left {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
     transform: translateX(-100%);
   }
 }
 
-/* Optional: Different speed variants if needed
-@keyframes marquee-scroll-left-slow {
-  from { transform: translateX(0); }
-  to { transform: translateX(-100%); }
+/* Position change animations */
+@keyframes positionUp {
+  0%,
+  20% {
+    background-color: rgba(51, 153, 102, 0.3);
+  }
+  100% {
+    background-color: inherit;
+  }
 }
 
-@keyframes marquee-scroll-left-fast {
-  from { transform: translateX(0); }
-  to { transform: translateX(-100%); }
+@keyframes positionDown {
+  0%,
+  20% {
+    background-color: rgba(204, 51, 51, 0.3);
+  }
+  100% {
+    background-color: inherit;
+  }
 }
-*/
+
+@keyframes newCompetitorHighlight {
+  0%,
+  15% {
+    background-color: rgba(204, 153, 51, 0.4);
+    box-shadow: 0 0 15px rgba(204, 153, 51, 0.4);
+  }
+  100% {
+    background-color: rgba(51, 102, 153, 0.2);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+  }
+}
+
+/* Animation classes */
+.fade-in {
+  animation: fadeIn 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  will-change: transform, opacity;
+}
+
+.fade-out {
+  animation: fadeOut 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  will-change: transform, opacity;
+}
+
+.slide-in-right {
+  animation: slideInRight 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  will-change: transform, opacity;
+}
+
+.slide-out-left {
+  animation: slideOutLeft 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  will-change: transform, opacity;
+}

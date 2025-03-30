@@ -1,0 +1,118 @@
+/* CSS Variables for the canoe scoreboard application */
+
+:root {
+  /* Base colors */
+  --primary-color: #222222;
+  --primary-light: #2d2d2d;
+  --secondary-color: #d0d0d0;
+  --accent-color: #336699;
+  --highlight-color: #993333;
+  --error-color: #cc3333;
+
+  --text-primary: #e6e6e6;
+  --text-secondary: #222222;
+
+  /* Accent colors */
+  --accent-teal: #336666;
+  --accent-yellow: #cc9933;
+  --accent-green: #339966;
+  --accent-blue: #3366aa;
+  --accent-gradient: none;
+
+  /* Extended color palette */
+  --color-white: #ffffff;
+  --color-black: #000000;
+  --color-cyan: #00ffff;
+  --color-silver: #c0c0c0;
+  --color-bronze: #cd7f32;
+  --color-gold: #ffd700;
+  --color-teal: #00ced1;
+  --color-purple: #8a2be2;
+
+  /* Common transparent backgrounds */
+  --bg-darkest: rgba(0, 0, 0, 0.9);
+  --bg-darker: rgba(10, 10, 10, 0.98);
+  --bg-dark: rgba(18, 18, 18, 0.9);
+  --bg-primary-transparent: rgba(34, 34, 34, 0.9);
+  --bg-row-even: rgba(20, 20, 20, 0.98);
+  --bg-row-odd: rgba(35, 35, 35, 0.98);
+  --bg-highlight: rgba(51, 102, 153, 0.4);
+
+  /* Common transparent accents */
+  --accent-yellow-transparent: rgba(204, 153, 51, 0.4);
+  --accent-blue-transparent: rgba(51, 102, 153, 0.3);
+  --accent-red-transparent: rgba(204, 51, 51, 0.5);
+  --accent-teal-transparent-light: rgba(0, 206, 209, 0.1);
+  --accent-teal-transparent: rgba(0, 206, 209, 0.2);
+  --accent-teal-transparent-medium: rgba(0, 206, 209, 0.3);
+  --accent-teal-transparent-strong: rgba(0, 206, 209, 0.5);
+  --accent-purple-transparent-light: rgba(138, 43, 226, 0.3);
+  --accent-purple-transparent: rgba(138, 43, 226, 0.3);
+  --accent-purple-transparent-medium: rgba(138, 43, 226, 0.5);
+  --accent-purple-transparent-strong: rgba(138, 43, 226, 0.7);
+
+  /* Text with transparency */
+  --text-muted: rgba(255, 255, 255, 0.7);
+
+  /* Size variables */
+  --header-size: 48px;
+  --body-size: 32px;
+  --small-size: 24px;
+
+  --spacing-unit: 10px;
+
+  --content-width: 1920px;
+  --content-height: 1080px;
+
+  --results-grid: 120px 80px 1fr 80px 70px 150px 150px;
+  --row-height: 80px;
+
+  --font-primary: "Rajdhani", "Arial", sans-serif;
+  --font-display: "Rajdhani", "Arial", sans-serif;
+
+  /* Other layout variables */
+  --top-bar-height: 70px;
+  --header-shadow-color: rgba(0, 0, 0, 0.3);
+  --header-components-margin-top: 100px;
+  --results-top-padding: 15px;
+  --results-top-margin: 10px;
+  --scrollbar-width: 8px;
+}
+
+/* Different layouts */
+.layout-horizontal {
+  --content-width: 1920px;
+  --content-height: 1080px;
+  --header-size: 48px;
+  --body-size: 32px;
+  --small-size: 24px;
+  --spacing-unit: 10px;
+  --results-grid: 120px 80px 1fr 80px 70px 150px 150px;
+  --row-height: 80px;
+}
+
+.layout-vertical {
+  --content-width: 1080px;
+  --content-height: 1920px;
+  --header-size: 56px;
+  --body-size: 44px;
+  --small-size: 32px;
+  --spacing-unit: 12px;
+  --results-grid: 70px 50px 1fr 120px 70px 160px 130px;
+  --row-height: 48px;
+}
+
+.layout-ledwall {
+  --content-width: 768px;
+  --content-height: 384px;
+  --header-size: 32px;
+  --body-size: 28px;
+  --small-size: 24px;
+  --spacing-unit: 6px;
+  --results-grid: 60px 55px 1fr 70px 60px 110px 90px;
+  --row-height: 44px;
+}
+
+.layout-custom {
+  /* Custom layout uses values set in LayoutManager.jsx */
+}

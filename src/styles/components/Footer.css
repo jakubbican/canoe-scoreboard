@@ -1,5 +1,11 @@
 /* Styling for the footer component */
 
+:root {
+  --bg-dark: rgba(18, 18, 18, 0.8);
+  --border-color: rgba(138, 43, 226, 0.3);
+  --hover-shadow-color: rgba(138, 43, 226, 0.5);
+}
+
 .footer {
   position: absolute;
   bottom: 0;
@@ -7,9 +13,9 @@
   width: 100%;
   transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
   z-index: 10;
-  background-color: rgba(18, 18, 18, 0.8);
+  background-color: var(--bg-dark);
   backdrop-filter: blur(10px);
-  border-top: 1px solid rgba(138, 43, 226, 0.3);
+  border-top: 1px solid var(--border-color);
   box-shadow: 0 -5px 20px rgba(0, 0, 0, 0.4);
 }
 
@@ -38,7 +44,7 @@
 }
 
 .sponsor-logo:hover {
-  filter: drop-shadow(0 3px 8px rgba(138, 43, 226, 0.5));
+  filter: drop-shadow(0 3px 8px var(--hover-shadow-color));
   transform: translateY(-2px);
 }
 
