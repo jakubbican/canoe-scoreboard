@@ -3,6 +3,7 @@
 
 import React, { useEffect, useRef, useState } from "react";
 import { useLayout } from "../core/LayoutManager";
+import { formatName, formatGatePenaltyData } from "../../utils/formatUtils";
 import "../../styles/components/CurrentCompetitor.css";
 
 function CurrentCompetitor({ data, visible }) {
@@ -58,40 +59,14 @@ function CurrentCompetitor({ data, visible }) {
   }
 
   // Process gates penalties if available
-  const gatesPenalties = data.Gates
-    ? data.Gates.split(",")
-        .map((penalty, index) => {
-          if (!penalty || penalty === "0") return null;
-
-          // Determine penalty class (50 second penalty or 2 second penalty)
-          const penaltyClass =
-            parseInt(penalty, 10) >= 50 ? "penalty-50" : "penalty-2";
-
-          // Ensure double-digit gate numbers display properly
-          const gateNumber = index + 1;
-
-          return (
-            <span key={index} className={`gate-penalty ${penaltyClass}`}>
-              {gateNumber}
-            </span>
-          );
-        })
-        .filter(Boolean)
-    : [];
-
-  // Format competitor name
-  const formatName = (name) => {
-    if (!name) return "";
-
-    // Handle double events (e.g. "SMITH John/JONES Mike")
-    const nameArr = name.split("/");
-    if (nameArr.length < 2) return name;
-
-    // For doubles, just show the family names
-    const firstNameArr = nameArr[0].split(" ");
-    const secondNameArr = nameArr[1].split(" ");
-    return `${firstNameArr[0]}/${secondNameArr[0]}`;
-  };
+  const gatesPenalties = formatGatePenaltyData(data.Gates).map((penalty) => (
+    <span
+      key={penalty.gateNumber - 1}
+      className={`gate-penalty ${penalty.penaltyClass}`}
+    >
+      {penalty.gateNumber}
+    </span>
+  ));
 
   // Check if there are penalties
   const hasPenalties = data.Pen && data.Pen !== "0";

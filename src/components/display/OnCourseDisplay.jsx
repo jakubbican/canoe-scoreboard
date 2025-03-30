@@ -3,6 +3,7 @@
 
 import React, { useMemo, useEffect, useRef } from "react";
 import { useLayout } from "../core/LayoutManager";
+import { formatName, formatGatePenaltyData } from "../../utils/formatUtils";
 import "../../styles/components/OnCourseDisplay.css";
 
 function OnCourseDisplay({ data, visible }) {
@@ -68,47 +69,6 @@ function OnCourseDisplay({ data, visible }) {
     return null;
   }
 
-  // Format competitor name
-  const formatName = (name) => {
-    if (!name) return "";
-
-    // Handle double events (e.g. "SMITH John/JONES Mike")
-    const nameArr = name.split("/");
-    if (nameArr.length < 2) return name;
-
-    // For doubles, just show the family names
-    const firstNameArr = nameArr[0].split(" ");
-    const secondNameArr = nameArr[1].split(" ");
-    return `${firstNameArr[0]}/${secondNameArr[0]}`;
-  };
-
-  // Process gates penalties
-  const processGatePenalties = (gates) => {
-    if (!gates) return [];
-
-    return gates
-      .split(",")
-      .map((penalty, index) => {
-        if (!penalty || penalty === "0") return null;
-
-        // Determine penalty class (50 second penalty or 2 second penalty)
-        const penaltyClass =
-          parseInt(penalty, 10) >= 50
-            ? "course-penalty-50"
-            : "course-penalty-2";
-
-        // Ensure double-digit gate numbers display properly
-        const gateNumber = index + 1;
-
-        return (
-          <span key={index} className={`course-gate-penalty ${penaltyClass}`}>
-            {gateNumber}
-          </span>
-        );
-      })
-      .filter(Boolean);
-  };
-
   // Create separate onCourseDisplay components for each competitor
   return (
     <>
@@ -124,7 +84,14 @@ function OnCourseDisplay({ data, visible }) {
               <div className="course-name">{formatName(competitor.Name)}</div>
 
               <div className="course-gates-container">
-                {processGatePenalties(competitor.Gates)}
+                {formatGatePenaltyData(competitor.Gates).map((penalty) => (
+                  <span
+                    key={penalty.gateNumber - 1}
+                    className={`course-gate-penalty course-${penalty.penaltyClass}`}
+                  >
+                    {penalty.gateNumber}
+                  </span>
+                ))}
                 <div
                   className={`course-pen ${
                     competitor.Pen && competitor.Pen !== "0"

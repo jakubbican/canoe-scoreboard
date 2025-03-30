@@ -3,6 +3,7 @@
 
 import React, { useMemo, useEffect, useRef, useState } from "react";
 import { useLayout } from "../core/LayoutManager";
+import { formatName } from "../../utils/formatUtils";
 import {
   ResultsScrollManager,
   getScrollSettingsForLayout,
@@ -79,7 +80,7 @@ function ResultsList({ data, visible, highlightBib }) {
       scrollManagerRef.current.setContainer(container);
       console.log("[Scroll] Container reference established");
 
-      // Try to initialize scrolling if we already have data
+      // Try to initialize scrolling if ready
       initializeScrollingIfReady();
     }
   }, []);
@@ -496,20 +497,6 @@ function ResultsList({ data, visible, highlightBib }) {
   if (!visible || !data || !data.list || data.list.length === 0) {
     return null;
   }
-
-  // Format the competitor name
-  const formatName = (name) => {
-    if (!name) return "";
-
-    // Handle double events (e.g. "SMITH John/JONES Mike")
-    const nameArr = name.split("/");
-    if (nameArr.length < 2) return name;
-
-    // For doubles, just show the family names
-    const firstNameArr = nameArr[0].split(" ");
-    const secondNameArr = nameArr[1].split(" ");
-    return `${firstNameArr[0]}/${secondNameArr[0]}`;
-  };
 
   return (
     <div

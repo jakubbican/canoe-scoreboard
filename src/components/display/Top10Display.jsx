@@ -4,6 +4,7 @@
 import React from "react";
 import { useLayout } from "../core/LayoutManager";
 import { getFlagPath } from "../../utils/assetUtils";
+import { formatName } from "../../utils/formatUtils";
 import "../../styles/components/Top10Display.css";
 
 function Top10Display({ data, visible }) {
@@ -12,20 +13,6 @@ function Top10Display({ data, visible }) {
   if (!visible || !data || !data.list || !data.list.length) {
     return null;
   }
-
-  // Format competitor name
-  const formatName = (name) => {
-    if (!name) return "";
-
-    // Handle double events (e.g., "SMITH John/JONES Mike")
-    const nameArr = name.split("/");
-    if (nameArr.length < 2) return name;
-
-    // For doubles, show the family names
-    const firstNameArr = nameArr[0].split(" ");
-    const secondNameArr = nameArr[1].split(" ");
-    return `${firstNameArr[0]}/${secondNameArr[0]}`;
-  };
 
   // For LED wall, ensure we have a reasonable number of competitors
   // that will fit well on the screen (max 10, min 5)

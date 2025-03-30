@@ -9,6 +9,7 @@ import {
   handleImageError,
   getBaseUrl,
 } from "../../utils/assetUtils";
+import { formatTimeToStart } from "../../utils/formatUtils";
 import "../../styles/components/OnStartDisplay.css";
 
 function OnStartDisplay({ data, visible }) {
@@ -30,19 +31,6 @@ function OnStartDisplay({ data, visible }) {
   if (!visible || !data || data.length === 0) {
     return null;
   }
-
-  // Format time to start
-  const formatTimeToStart = (seconds) => {
-    const stsToMinutes = seconds / 60;
-
-    if (stsToMinutes < 1) {
-      return `${seconds} sec`;
-    } else if (stsToMinutes < 60) {
-      return `${Math.floor(stsToMinutes)} min`;
-    } else {
-      return `${Math.floor(stsToMinutes / 60)} hrs`;
-    }
-  };
 
   return (
     <div className={`on-start-display ${displayType}`}>
