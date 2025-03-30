@@ -1,6 +1,6 @@
 # TODO
 
-- [ ] výsledky code review ... 
+- [ ] výsledky code review ... ....
 
 - [ ] skinovatelnost/vyčištění umístění a parametrizace stylizace
 - [ ] true responsivita
