@@ -11,6 +11,7 @@ import {
   getBaseUrl,
 } from "../../utils/assetUtils";
 import "../../styles/components/EventInfo.css";
+import "../../styles/shared/animations.css"; // Import animations
 
 function EventInfo({
   title,
@@ -107,17 +108,22 @@ function EventInfo({
 // Export both the main component and the info text renderer
 export default EventInfo;
 
-// Info text component with marquee animation
+// Info text component with CSS animation replacing marquee
 export const InfoText = ({ infoText, visible }) => {
   const { displayType } = useLayout();
 
   if (!visible || !infoText) return null;
 
-  // Calculate marquee speed based on text length
-  const getMarqueeSpeed = (text) => {
-    if (!text) return 10;
-    const baseSpeed = Math.min(10, Math.max(5, Math.floor(text.length / 20)));
-    return displayType === "ledwall" ? baseSpeed * 0.7 : baseSpeed;
+  // Calculate animation duration based on text length
+  const getAnimationDuration = (text) => {
+    if (!text) return "10s";
+    // Base calculation for animation duration (longer text = longer duration)
+    const baseLength = text.length;
+    // Speed factor (adjust as needed)
+    const speedFactor = displayType === "ledwall" ? 0.15 : 0.12;
+    // Calculate duration in seconds, with min/max limits
+    const duration = Math.max(8, Math.min(45, baseLength * speedFactor));
+    return `${duration}s`;
   };
 
   // Get font size based on display type
@@ -138,20 +144,19 @@ export const InfoText = ({ infoText, visible }) => {
     <div className={`info-text ${displayType}`}>
       <div className="info-tab">Info</div>
       <div className={`info-marquee ${displayType}`}>
-        <marquee
-          scrollamount={getMarqueeSpeed(infoText)}
-          behavior="scroll"
-          direction="left"
-          loop="infinite"
-          style={{
-            fontSize: getMarqueeFontSize(),
-            fontWeight: 800,
-            letterSpacing: "2px",
-            height: "100%",
-          }}
-        >
-          {infoText}
-        </marquee>
+        <div className="info-marquee-container">
+          <div
+            className="info-marquee-content"
+            style={{
+              fontSize: getMarqueeFontSize(),
+              fontWeight: 800,
+              letterSpacing: "2px",
+              animationDuration: getAnimationDuration(infoText)
+            }}
+          >
+            {infoText}
+          </div>
+        </div>
       </div>
     </div>
   );

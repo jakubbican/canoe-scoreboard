@@ -87,6 +87,23 @@
   border-bottom: 1px solid var(--accent-yellow);
 }
 
+/* CSS-based marquee replacement */
+.info-marquee-container {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+}
+
+.info-marquee-content {
+  display: inline-block;
+  padding-left: 100%; /* Start offscreen */
+  will-change: transform;
+  animation: marquee-scroll-left linear infinite;
+}
+
 /* Tab for info text to match other components */
 .info-tab {
   position: absolute;
@@ -113,13 +130,6 @@
   display: none;
 }
 
-/* Force font sizes for marquee element */
-.info-marquee marquee {
-  font-size: inherit !important;
-  line-height: 1.2 !important;
-  height: 100%;
-}
-
 /* Horizontal layout specifics */
 .event-title.horizontal {
   top: 10px;
@@ -132,10 +142,6 @@
   font-size: 36px;
 }
 
-.info-marquee.horizontal marquee {
-  font-size: 36px !important;
-}
-
 /* Vertical layout specifics */
 .event-title.vertical {
   top: 24px;
@@ -146,10 +152,6 @@
 
 .info-marquee.vertical {
   font-size: 32px;
-}
-
-.info-marquee.vertical marquee {
-  font-size: 32px !important;
 }
 
 /* LED wall layout specifics */
@@ -194,10 +196,6 @@
   font-size: 28px;
   font-weight: 800;
   letter-spacing: 4px;
-}
-
-.info-marquee.ledwall marquee {
-  font-size: 28px !important;
 }
 
 /* Ensure proper stacking in the container */

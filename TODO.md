@@ -12,7 +12,7 @@
 
 ### Nezbytné (Must Have)
 
--   [ ] **Nahradit zastaralý `<marquee>` tag** CSS animacemi.
+-   [X] **Nahradit zastaralý `<marquee>` tag** CSS animacemi.
 -   [ ] **Odstranit duplikaci formátovacích funkcí** - centralizovat do `src/utils/formatUtils.js`.
 -   [ ] **Refaktorovat stavové řízení v `ScrollManager`** - použít např. reducer pattern pro zjednodušení logiky a zlepšení testovatelnosti.
 -   [ ] **Posílit typovou kontrolu** - přidat alespoň základní `PropTypes` ke všem komponentám.

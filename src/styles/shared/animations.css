@@ -1,0 +1,23 @@
+/* animations.css - Shared animation definitions */
+
+/* Marquee scroll animation (left-to-right) */
+@keyframes marquee-scroll-left {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-100%);
+  }
+}
+
+/* Optional: Different speed variants if needed
+@keyframes marquee-scroll-left-slow {
+  from { transform: translateX(0); }
+  to { transform: translateX(-100%); }
+}
+
+@keyframes marquee-scroll-left-fast {
+  from { transform: translateX(0); }
+  to { transform: translateX(-100%); }
+}
+*/
