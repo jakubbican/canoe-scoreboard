@@ -1,12 +1,12 @@
 # TODO
 
-- výsledky code review ... 
+- [ ] výsledky code review ... 
 
-- skinovatelnost/vyčištění umístění a parametrizace stylizace
-- true responsivita
+- [ ] skinovatelnost/vyčištění umístění a parametrizace stylizace
+- [ ] true responsivita
 
-- korektní výsledky 2 jízd na better score
-- zobrazení umístění po dojetí v aktivní řádce - možná bude muset počkat na zvládnuté závody na 2 jízdy
+- [ ] korektní výsledky 2 jízd na better score
+- [ ] zobrazení umístění po dojetí v aktivní řádce - možná bude muset počkat na zvládnuté závody na 2 jízdy
 
 ## Kroky z code review 2025/03
 
@@ -43,30 +43,30 @@
 
 # DONE
 
-- OK: stacking záhlaví + info text na LED (DONE)
-- OK: logo SK VS CB
-- OK: kategorie z oncourse do title
-- OK: filtrovat oncourse jen na ty, co mají čas
-- OK: více než 30 výsledků
-- OK: update recommended resolution of images in README
-- OK: vyhodit hover animace
-- OK: klik na status do konfigurace
-- OK: tvrdý refresh v konfig panelu
-- OK: scrollování výsledků a najíždění na dojetého závodníka
-- OK: update images for SKVSCB standard (footer)
-- OK: disable scrolling option
-- OK: disrupted scrolling after data arrives
-- OK: disrupted scrolling after data arrives
-- OK: zrušit divný vizuální efekt na celém seznamu vertical po dojetí jezdce na nějaké nižší obrazovce
-- OK: screenshots
-- OK: cleanup komentářů a všech souborů
-- OK: Schedule
-- OK: TOP10
-- OK: code review
-- OK: assets referencing when app in folder!!
+- [X] stacking záhlaví + info text na LED (DONE)
+- [X] logo SK VS CB
+- [X] kategorie z oncourse do title
+- [X] filtrovat oncourse jen na ty, co mají čas
+- [X] více než 30 výsledků
+- [X] update recommended resolution of images in README
+- [X] vyhodit hover animace
+- [X] klik na status do konfigurace
+- [X] tvrdý refresh v konfig panelu
+- [X] scrollování výsledků a najíždění na dojetého závodníka
+- [X] update images for SKVSCB standard (footer)
+- [X] disable scrolling option
+- [X] disrupted scrolling after data arrives
+- [X] disrupted scrolling after data arrives
+- [X] zrušit divný vizuální efekt na celém seznamu vertical po dojetí jezdce na nějaké nižší obrazovce
+- [X] screenshots
+- [X] cleanup komentářů a všech souborů
+- [X] Schedule
+- [X] TOP10
+- [X] code review
+- [X] assets referencing when app in folder!!
 
 # WON'T DO
 
-- ??zobrazit oncourse vedle sebe na ledwall
-- hide incomplete rows from the results scrolling viewport
-- ?OnStart
+- [ ] ??zobrazit oncourse vedle sebe na ledwall
+- [ ] hide incomplete rows from the results scrolling viewport
+- [ ] ?OnStart
