@@ -3,118 +3,164 @@
 
 import React, { useEffect, useState, useContext, createContext } from "react";
 
-// Create a single WebSocket instance that persists outside of React's lifecycle
-let globalWebSocket = null;
-let reconnectTimer = null;
-let messageListeners = [];
-let connectionListeners = [];
-let lastMessageTimestamp = null;
+/**
+ * Singleton WebSocket service that maintains connection state
+ * outside of React's component lifecycle
+ */
+class WebSocketService {
+  // Private instance variables
+  #webSocket = null;
+  #reconnectTimer = null;
+  #messageListeners = [];
+  #connectionListeners = [];
+  #lastMessageTimestamp = null;
+  #reconnectAttempts = 0;
+  #maxReconnectDelay = 30000; // 30 seconds max delay
+  #url = null;
 
-// WebSocket manager to handle connection state outside React lifecycle
-const WebSocketManager = {
+  // Private singleton instance
+  static #instance = null;
+
+  // Private constructor
+  constructor() {
+    if (WebSocketService.#instance) {
+      throw new Error("Use WebSocketService.getInstance() instead of new operator");
+    }
+  }
+
+  // Public method to get singleton instance
+  static getInstance() {
+    if (!WebSocketService.#instance) {
+      WebSocketService.#instance = new WebSocketService();
+    }
+    return WebSocketService.#instance;
+  }
+
   // Initialize the WebSocket connection
   connect(url) {
+    // Store URL for reconnection
+    this.#url = url;
+
     // Close existing socket if it exists
     this.disconnect();
 
     console.log(`Connecting to WebSocket server at ${url}...`);
 
     try {
-      globalWebSocket = new WebSocket(url);
+      this.#webSocket = new WebSocket(url);
 
-      globalWebSocket.onopen = () => {
+      this.#webSocket.onopen = () => {
         console.log("WebSocket connection established");
-        connectionListeners.forEach((listener) => listener(true, null));
+        this.#reconnectAttempts = 0; // Reset reconnect attempts on successful connection
+        this.#connectionListeners.forEach((listener) => listener(true, null));
       };
 
-      globalWebSocket.onclose = (event) => {
+      this.#webSocket.onclose = (event) => {
         console.log(
           `WebSocket connection closed: ${event.code} ${event.reason}`
         );
-        connectionListeners.forEach((listener) =>
+        this.#connectionListeners.forEach((listener) =>
           listener(false, "Connection closed")
         );
 
         // Don't reconnect if the close was intentional
         if (event.code !== 1000) {
-          this.scheduleReconnect(url);
+          this.#scheduleReconnect();
         }
       };
 
-      globalWebSocket.onerror = (error) => {
+      this.#webSocket.onerror = (error) => {
         console.error("WebSocket error:", error);
-        connectionListeners.forEach((listener) =>
+        this.#connectionListeners.forEach((listener) =>
           listener(false, "Connection error occurred")
         );
       };
 
-      globalWebSocket.onmessage = (event) => {
+      this.#webSocket.onmessage = (event) => {
         try {
-          lastMessageTimestamp = new Date();
+          this.#lastMessageTimestamp = new Date();
           const message = JSON.parse(event.data);
-          messageListeners.forEach((listener) => listener(message));
+          this.#messageListeners.forEach((listener) => listener(message));
         } catch (error) {
           console.error("Error processing message:", error);
         }
       };
     } catch (error) {
       console.error("Error connecting to WebSocket:", error);
-      connectionListeners.forEach((listener) => listener(false, error.message));
-      this.scheduleReconnect(url);
+      this.#connectionListeners.forEach((listener) => listener(false, error.message));
+      this.#scheduleReconnect();
     }
-  },
+  }
 
   // Disconnect and cleanup WebSocket
   disconnect() {
-    if (reconnectTimer) {
-      clearTimeout(reconnectTimer);
-      reconnectTimer = null;
+    if (this.#reconnectTimer) {
+      clearTimeout(this.#reconnectTimer);
+      this.#reconnectTimer = null;
     }
 
-    if (globalWebSocket && globalWebSocket.readyState < 2) {
+    if (this.#webSocket && this.#webSocket.readyState < 2) {
       // Use a clean 1000 code for intentional disconnects
-      globalWebSocket.close(1000, "Intentional disconnect");
+      this.#webSocket.close(1000, "Intentional disconnect");
     }
-    globalWebSocket = null;
-  },
+    this.#webSocket = null;
+  }
 
-  // Schedule a reconnection attempt
-  scheduleReconnect(url) {
-    if (reconnectTimer) {
-      clearTimeout(reconnectTimer);
+  // Private method to schedule a reconnection attempt with exponential back-off
+  #scheduleReconnect() {
+    if (this.#reconnectTimer) {
+      clearTimeout(this.#reconnectTimer);
     }
 
-    reconnectTimer = setTimeout(() => {
-      this.connect(url);
-    }, 5000); // 5 second delay before reconnect
-  },
+    // Calculate delay with exponential back-off
+    const baseDelay = 1000; // Start with 1 second
+    const delay = Math.min(
+      baseDelay * Math.pow(2, this.#reconnectAttempts),
+      this.#maxReconnectDelay
+    );
+
+    this.#reconnectAttempts++;
+
+    console.log(`Scheduling reconnect attempt ${this.#reconnectAttempts} in ${delay}ms`);
+
+    this.#reconnectTimer = setTimeout(() => {
+      if (this.#url) {
+        this.connect(this.#url);
+      }
+    }, delay);
+  }
 
   // Add a message listener
   addMessageListener(listener) {
-    messageListeners.push(listener);
+    this.#messageListeners.push(listener);
     return () => {
-      messageListeners = messageListeners.filter((l) => l !== listener);
+      this.#messageListeners = this.#messageListeners.filter((l) => l !== listener);
     };
-  },
+  }
 
   // Add a connection status listener
   addConnectionListener(listener) {
-    connectionListeners.push(listener);
+    this.#connectionListeners.push(listener);
     return () => {
-      connectionListeners = connectionListeners.filter((l) => l !== listener);
+      this.#connectionListeners = this.#connectionListeners.filter((l) => l !== listener);
     };
-  },
+  }
 
   // Check if currently connected
   isConnected() {
-    return globalWebSocket && globalWebSocket.readyState === WebSocket.OPEN;
-  },
+    return this.#webSocket && this.#webSocket.readyState === WebSocket.OPEN;
+  }
 
   // Get last message timestamp
   getLastMessageTime() {
-    return lastMessageTimestamp;
-  },
-};
+    return this.#lastMessageTimestamp;
+  }
+
+  // Get count of registered listeners
+  getMessageListenersCount() {
+    return this.#messageListeners.length;
+  }
+}
 
 // Create context to provide WebSocket state throughout the app
 const WebSocketContext = createContext({
@@ -153,11 +199,14 @@ export function WebSocketProvider({
   children,
   serverUrl = "ws://localhost:8081/",
 }) {
+  // Get the singleton instance
+  const wsService = WebSocketService.getInstance();
+
   // Connection state
-  const [connected, setConnected] = useState(WebSocketManager.isConnected());
+  const [connected, setConnected] = useState(wsService.isConnected());
   const [connectionError, setConnectionError] = useState(null);
   const [lastMessageTime, setLastMessageTime] = useState(
-    WebSocketManager.getLastMessageTime()
+    wsService.getLastMessageTime()
   );
 
   // Data states for different message types
@@ -186,13 +235,13 @@ export function WebSocketProvider({
 
   // Initialize WebSocket connection on mount or server URL change
   useEffect(() => {
-    // Only connect if we're not already connected to the right URL
-    if (!globalWebSocket || globalWebSocket.url !== serverUrl) {
-      WebSocketManager.connect(serverUrl);
+    // Only connect if we're not already connected or URL changed
+    if (!wsService.isConnected()) {
+      wsService.connect(serverUrl);
     }
 
     // Add connection status listener
-    const removeConnectionListener = WebSocketManager.addConnectionListener(
+    const removeConnectionListener = wsService.addConnectionListener(
       (isConnected, error) => {
         setConnected(isConnected);
         setConnectionError(error);
@@ -200,10 +249,10 @@ export function WebSocketProvider({
     );
 
     // Add message listener
-    const removeMessageListener = WebSocketManager.addMessageListener(
+    const removeMessageListener = wsService.addMessageListener(
       (message) => {
         // Update last message time
-        setLastMessageTime(WebSocketManager.getLastMessageTime());
+        setLastMessageTime(wsService.getLastMessageTime());
 
         // Process message based on type
         const { msg, data } = message;
@@ -271,22 +320,17 @@ export function WebSocketProvider({
       }
     );
 
-    // Cleanup function - remove listeners but don't disconnect
+    // Cleanup function - remove listeners but don't disconnect by default
     return () => {
       removeConnectionListener();
       removeMessageListener();
-    };
-  }, [serverUrl]);
 
-  // Cleanup WebSocket on component unmount
-  useEffect(() => {
-    return () => {
-      // Only disconnect if this is the last WebSocketProvider
-      if (messageListeners.length <= 1) {
-        WebSocketManager.disconnect();
+      // Only disconnect if this is the last WebSocketProvider using the service
+      if (wsService.getMessageListenersCount() === 0) {
+        wsService.disconnect();
       }
     };
-  }, []);
+  }, [serverUrl]);
 
   // Provide all WebSocket data and state to children
   const contextValue = {

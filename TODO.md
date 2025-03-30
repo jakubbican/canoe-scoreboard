@@ -22,7 +22,7 @@
 -   [-] **Integrovat asset optimalizaci** (obrázky, flagy) do build procesu (`prebuild` skript).
 -   [-] **Revidovat přístupnost** - doplnit ARIA atributy, zkontrolovat kontrast barev, zajistit základní ovladatelnost klávesnicí.
 -   [ ] **Implementovat základní sadu unit testů** pro utility a klíčové komponenty (např. pomocí Jest a React Testing Library).
--   [ ] **Refaktorovat `WebSocketClient`** na Singleton třídu s lepším řízením reconnectů.
+-   [X] **Refaktorovat `WebSocketClient`** na Singleton třídu s lepším řízením reconnectů.
 
 ### Doporučené (Could Have)
 
