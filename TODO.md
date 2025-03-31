@@ -3,8 +3,9 @@
 - [ ] skinovatelnost/vyčištění umístění a parametrizace stylizace
 - [ ] true responsivita
 
-- [ ] korektní výsledky 2 jízd na better score
+- [ ] ! korektní výsledky 2 jízd na better score
 - [ ] zobrazení umístění po dojetí v aktivní řádce - možná bude muset počkat na zvládnuté závody na 2 jízdy
+
 - [ ] h2r graphics
 
 ## Kroky z code review 2025/03
