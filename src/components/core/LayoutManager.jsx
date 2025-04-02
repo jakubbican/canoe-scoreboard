@@ -114,6 +114,8 @@ const LayoutContext = createContext({
   scale: 1,
   disableScrolling: false,
   setDisableScrolling: () => {},
+  ledwallExactSize: false,
+  setLedwallExactSize: () => {},
 });
 
 /**
@@ -128,6 +130,7 @@ function getUrlParams() {
     height: parseInt(params.get("height"), 10) || null,
     server: params.get("server") || null,
     disableScroll: params.get("disableScroll") === "true",
+    ledwallExactSize: params.get("ledwallExactSize") === "true",
   };
 }
 
@@ -161,6 +164,9 @@ export function LayoutProvider({
   const [scale, setScale] = useState(1);
   const [disableScrolling, setDisableScrolling] = useState(
     urlParams.disableScroll || false
+  );
+  const [ledwallExactSize, setLedwallExactSize] = useState(
+    urlParams.ledwallExactSize || false
   );
   const { controlState } = useWebSocket();
 
@@ -204,12 +210,17 @@ export function LayoutProvider({
       const windowWidth = window.innerWidth;
       const windowHeight = window.innerHeight;
 
-      // Calculate scaling factors for width and height
-      const widthScale = windowWidth / config.width;
-      const heightScale = windowHeight / config.height;
+      let newScale = 1;
 
-      // Use the smaller scale to ensure everything fits on screen
-      const newScale = Math.min(widthScale, heightScale);
+      // Only scale if not in exact size mode or not in ledwall layout
+      if (!(ledwallExactSize && displayType === "ledwall")) {
+        // Calculate scaling factors for width and height
+        const widthScale = windowWidth / config.width;
+        const heightScale = windowHeight / config.height;
+
+        // Use the smaller scale to ensure everything fits on screen
+        newScale = Math.min(widthScale, heightScale);
+      }
 
       setScale(newScale);
 
@@ -225,7 +236,7 @@ export function LayoutProvider({
     // Update on window resize
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
-  }, [config, config.width, config.height]);
+  }, [config, config.width, config.height, ledwallExactSize, displayType]);
 
   // Update custom configuration
   const updateCustomConfig = (newConfig) => {
@@ -249,18 +260,35 @@ export function LayoutProvider({
     scale,
     disableScrolling,
     setDisableScrolling,
+    ledwallExactSize,
+    setLedwallExactSize,
   };
+
+  // Apply special styling for exact size LEDWALL mode
+  const containerStyle = {
+    width: `${config.width}px`,
+    height: `${config.height}px`,
+    transform: `scale(${scale})`,
+    transformOrigin: "top left",
+  };
+
+  // If in exact-size ledwall mode, use fixed position at top-left
+  if (ledwallExactSize && displayType === "ledwall") {
+    containerStyle.position = "fixed";
+    containerStyle.top = "0";
+    containerStyle.left = "0";
+    containerStyle.transform = "none"; // No transform needed for 1:1 pixel mapping
+    containerStyle.margin = "0";
+    containerStyle.boxShadow = "none"; // Remove shadow to avoid any overflow
+  }
 
   return (
     <LayoutContext.Provider value={contextValue}>
       <div
-        className={`scoreboard-layout ${config.className}`}
-        style={{
-          width: `${config.width}px`,
-          height: `${config.height}px`,
-          transform: `scale(${scale})`,
-          transformOrigin: "top left",
-        }}
+        className={`scoreboard-layout ${config.className} ${
+          ledwallExactSize && displayType === "ledwall" ? "exact-size" : ""
+        }`}
+        style={containerStyle}
       >
         {children}
       </div>

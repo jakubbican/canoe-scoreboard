@@ -1,5 +1,5 @@
 // ConfigPanel.jsx
-// Configuration panel with settings for display type, server connection, and scrolling options
+// Configuration panel with settings for display type, server connection, and scrolling options. Includes positioning updates for LED wall display.
 
 import React, { useState } from "react";
 import { useLayout } from "../core/LayoutManager";
@@ -13,6 +13,8 @@ function ConfigPanel({ onClose, onServerChange, currentServer }) {
     setCustomConfig,
     disableScrolling,
     setDisableScrolling,
+    ledwallExactSize,
+    setLedwallExactSize,
   } = useLayout();
 
   // State for form inputs
@@ -22,6 +24,7 @@ function ConfigPanel({ onClose, onServerChange, currentServer }) {
   const [selectedDisplayType, setSelectedDisplayType] = useState(displayType);
   const [showTypeOptions, setShowTypeOptions] = useState(false);
   const [scrollingDisabled, setScrollingDisabled] = useState(disableScrolling);
+  const [exactSizeLedwall, setExactSizeLedwall] = useState(ledwallExactSize);
 
   // Handle form submission and apply settings
   const handleSubmit = (e) => {
@@ -32,6 +35,9 @@ function ConfigPanel({ onClose, onServerChange, currentServer }) {
 
     // Update scrolling setting
     setDisableScrolling(scrollingDisabled);
+
+    // Update ledwall exact size setting
+    setLedwallExactSize(exactSizeLedwall);
 
     // Update server URL if changed
     if (serverUrl !== currentServer) {
@@ -51,6 +57,7 @@ function ConfigPanel({ onClose, onServerChange, currentServer }) {
     url.searchParams.set("type", selectedDisplayType);
     url.searchParams.set("server", serverUrl);
     url.searchParams.set("disableScroll", scrollingDisabled.toString());
+    url.searchParams.set("ledwallExactSize", exactSizeLedwall.toString());
 
     if (selectedDisplayType === "custom") {
       url.searchParams.set("width", customWidth);
@@ -183,6 +190,22 @@ function ConfigPanel({ onClose, onServerChange, currentServer }) {
               />
             </div>
           </>
+        )}
+
+        {selectedDisplayType === "ledwall" && (
+          <div className="form-group">
+            <label className="checkbox-label">
+              <input
+                type="checkbox"
+                checked={exactSizeLedwall}
+                onChange={(e) => setExactSizeLedwall(e.target.checked)}
+              />
+              Exact Size Mode (768×384)
+            </label>
+            <div className="option-description">
+              Displays at exact resolution at the top-left corner of the screen (ideal for LED walls)
+            </div>
+          </div>
         )}
 
         <div className="form-group">

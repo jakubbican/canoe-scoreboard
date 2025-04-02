@@ -59,6 +59,30 @@
   opacity: 0.8;
 }
 
+/* LEDWALL exact size mode styles - removing borders/effects for pixel-perfect display */
+.scoreboard-layout.layout-ledwall.exact-size {
+  border: none;
+  box-shadow: none;
+}
+
+/* Remove any decorative elements for exact-size mode to ensure clean LED wall output */
+.scoreboard-layout.layout-ledwall.exact-size::before {
+  display: none;
+}
+
+/* Background styles for when using exact size mode */
+body.has-exact-size-ledwall {
+  background-color: #000;
+  background-image: none;
+}
+
+/* Special case for config panel in exact size ledwall - move it for visibility */
+.scoreboard-layout.layout-ledwall.exact-size ~ .config-panel {
+  top: 0;
+  right: 0;
+  border-color: var(--accent-green);
+}
+
 .connection-status .indicator,
 .connection-status .status-text {
   display: none;

@@ -30,6 +30,16 @@ body {
   flex-direction: column;
 }
 
+/* Remove box-shadow and adjust for exact size ledwall mode */
+.scoreboard-layout.layout-ledwall.exact-size {
+  box-shadow: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  margin: 0;
+  padding: 0;
+}
+
 /* Scoreboard container with flexbox layout */
 .scoreboard-container {
   display: flex;

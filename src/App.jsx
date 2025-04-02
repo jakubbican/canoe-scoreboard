@@ -50,6 +50,17 @@ function App() {
         // Still set as true to continue app loading even if preloading fails
         setAssetsPreloaded(true);
       });
+
+    // Check URL for ledwallExactSize parameter to set body class
+    const params = new URLSearchParams(window.location.search);
+    const isLedwall = params.get("type") === "ledwall";
+    const isExactSize = params.get("ledwallExactSize") === "true";
+
+    if (isLedwall && isExactSize) {
+      document.body.classList.add("has-exact-size-ledwall");
+    } else {
+      document.body.classList.remove("has-exact-size-ledwall");
+    }
   }, []);
 
   // Handle server URL change

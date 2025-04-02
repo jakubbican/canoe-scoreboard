@@ -116,11 +116,12 @@ You can configure the scoreboard through URL parameters:
 - `?width=1280&height=720` - Set custom dimensions when type is `custom`
 - `?config=true` - Show configuration panel on load
 - `?autoScroll=false` - Disable auto-scrolling of results (default is enabled)
+- `?ledwallExactSize=true` - Use exact 768×384 pixel size for LED wall displays (default is false)
 
 Example:
 
 ```
-http://localhost:3000/?type=vertical&server=ws://192.168.1.100:8081/&autoScroll=false
+http://localhost:3000/?type=vertical&server=ws://192.168.1.100:8081/&autoScroll=false&ledwallExactSize=true
 ```
 
 ### Configuration Panel
@@ -405,7 +406,7 @@ This script:
 
 ## License
 
-This project is licensed under the ?????
+This project is licensed under the ?????.
 
 ## Acknowledgments
 

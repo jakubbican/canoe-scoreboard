@@ -64,6 +64,7 @@
 - [X] TOP10
 - [X] code review
 - [X] assets referencing when app in folder!!
+- [X] přesné rozlišení 768x384
 
 # WON'T DO
 
