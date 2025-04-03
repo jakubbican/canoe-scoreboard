@@ -55,7 +55,7 @@
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  font-weight: bold;
+  font-weight: 700; /* Increased from bold to ensure consistency */
 }
 
 .competitor-gates-container {
@@ -73,15 +73,17 @@
   width: 24px;
   height: 24px;
   font-size: calc(var(--small-size) - 8px);
-  font-weight: bold;
+  font-weight: 500; /* Reduced from bold */
   margin-right: 2px;
   border-radius: 4px;
   opacity: 0.9;
+  font-family: var(--font-time);
+  font-variant-numeric: tabular-nums;
 }
 
 .penalty-2 {
   color: var(--text-secondary);
-  background-color: rgba(255, 164, 0, 0.8);
+  background-color: rgba(255, 164, 0, 8);
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
 }
 
@@ -94,10 +96,13 @@
 .competitor-pen {
   text-align: right;
   white-space: nowrap;
-  font-weight: bold;
+  font-weight: 500; /* Reduced from bold */
   padding: 0 10px;
   margin-left: 5px;
   color: var(--text-primary);
+  font-family: var(--font-time);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.02em;
 }
 
 .competitor-pen.has-penalty {
@@ -112,9 +117,12 @@
 .competitor-total {
   text-align: right;
   white-space: nowrap;
-  font-weight: bold;
+  font-weight: 500; /* Reduced from bold */
   color: var(--accent-yellow);
   padding: 0 15px;
+  font-family: var(--font-time);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.02em;
 }
 
 .current-competitor.horizontal .competitor-row {
@@ -168,9 +176,30 @@
   line-height: normal;
 }
 
+/* More specific selectors to ensure the time styling takes precedence */
+.current-competitor.ledwall .competitor-row > div.competitor-total {
+  font-size: 24px;
+  font-weight: 500 !important; /* Explicitly lighter than the name */
+  color: var(--accent-yellow);
+  font-family: var(--font-time);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.02em;
+}
+
+.current-competitor.ledwall .competitor-row > div.competitor-pen {
+  font-weight: 500;
+  font-family: var(--font-time);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.02em;
+}
+
+.current-competitor.ledwall .competitor-row > div.competitor-name {
+  font-weight: 700; /* Explicitly heavier than time displays */
+}
+
 .current-competitor.ledwall .competitor-total {
-  font-size: 26px;
-  font-weight: 900 !important;
+  font-size: 24px;
+  font-weight: 600 !important; /* Reduced from 900 */
   color: var(--accent-yellow);
 }
 

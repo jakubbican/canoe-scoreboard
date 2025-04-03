@@ -78,24 +78,30 @@
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  font-weight: bold;
+  font-weight: 700; /* Increased from bold (which is 700) to ensure consistency */
 }
 
 .result-pen {
   text-align: right;
   white-space: nowrap;
-  font-weight: bold;
+  font-weight: 500; /* Reduced from bold */
   padding: 0 10px;
   margin-left: 5px;
   color: var(--text-primary);
+  font-family: var(--font-time);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.02em;
 }
 
 .result-total {
   text-align: right;
   white-space: nowrap;
-  font-weight: bold;
+  font-weight: 500; /* Reduced from bold */
   color: var(--text-primary);
   padding: 0 15px;
+  font-family: var(--font-time);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.02em;
 }
 
 .result-behind {
@@ -103,9 +109,12 @@
   white-space: nowrap;
   color: rgba(245, 245, 245, 0.7);
   font-size: 0.85em;
-  font-weight: normal;
+  font-weight: 400; /* Explicit normal weight */
   padding-right: 15px;
   font-style: italic;
+  font-family: var(--font-time);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.02em;
 }
 
 /* Horizontal layout */
@@ -159,27 +168,47 @@
   background-color: var(--primary-light);
 }
 
+/* General styling for all cells in the row */
 .results-list.ledwall .result-row > div {
   font-size: 24px;
   padding: 0 5px;
   font-weight: 600;
 }
 
-.results-list.ledwall .result-rank {
+/* More specific selectors to override the general styling above */
+.results-list.ledwall .result-row > div.result-rank {
   font-weight: 700;
   color: #ffffff;
 }
 
-.results-list.ledwall .result-total {
-  font-size: 26px;
-  font-weight: 700;
-  color: #ffffff;
+.results-list.ledwall .result-row > div.result-name {
+  font-weight: 700; /* Explicitly heavier than the time */
 }
 
-.results-list.ledwall .result-behind {
+.results-list.ledwall .result-row > div.result-pen {
+  font-weight: 500; /* Explicitly lighter than the name */
+  font-family: var(--font-time);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.02em;
+}
+
+.results-list.ledwall .result-row > div.result-total {
+  font-size: 24px;
+  font-weight: 500; /* Explicitly lighter than the name */
+  color: #ffffff;
+  font-family: var(--font-time);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.02em;
+}
+
+.results-list.ledwall .result-row > div.result-behind {
   font-size: 18px;
+  font-weight: 400; /* Explicitly lighter than the name */
   color: rgba(245, 245, 245, 0.85);
   padding-right: 15px;
+  font-family: var(--font-time);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.02em;
 }
 
 /* Enhanced highlighting for LED wall - consistent with other display types */

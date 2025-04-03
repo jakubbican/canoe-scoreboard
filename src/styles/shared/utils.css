@@ -76,3 +76,33 @@
   scrollbar-width: none;
   -ms-overflow-style: none;
 }
+
+/* Time display styling with Fira Code font */
+.time-font {
+  font-family: var(--font-time);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.02em;
+  font-weight: 400; /* Reduced from default weight */
+}
+
+/* Using time font with different emphasis */
+.time-font-normal {
+  font-family: var(--font-time);
+  font-weight: 400;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.02em;
+}
+
+.time-font-medium {
+  font-family: var(--font-time);
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.02em;
+}
+
+.time-font-bold {
+  font-family: var(--font-time);
+  font-weight: 600; /* Reduced from 700 */
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.02em;
+}

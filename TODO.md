@@ -6,8 +6,6 @@
 - [ ] ! korektní výsledky 2 jízd na better score
 - [ ] zobrazení umístění po dojetí v aktivní řádce - možná bude muset počkat na zvládnuté závody na 2 jízdy
 
-- [ ] h2r graphics
-
 ## Kroky z code review 2025/03
 
 ### Nezbytné (Must Have)
@@ -65,6 +63,7 @@
 - [X] code review
 - [X] assets referencing when app in folder!!
 - [X] přesné rozlišení 768x384
+- [X] h2r graphics - WORKS!
 
 # WON'T DO
 

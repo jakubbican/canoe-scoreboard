@@ -86,8 +86,11 @@
   min-width: 90px;
   background-color: var(--primary-light);
   color: var(--accent-teal);
-  font-weight: bold;
+  font-weight: 500; /* Reduced from bold */
   box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.2);
+  font-family: var(--font-time);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.02em;
 }
 
 .on-start-display.horizontal {

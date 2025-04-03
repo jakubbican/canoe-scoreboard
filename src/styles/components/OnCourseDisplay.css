@@ -70,7 +70,7 @@
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  font-weight: bold;
+  font-weight: 700; /* Increased from bold to ensure consistency */
 }
 
 .course-gates-container {
@@ -88,10 +88,12 @@
   width: 24px;
   height: 24px;
   font-size: calc(var(--small-size) - 8px);
-  font-weight: bold;
+  font-weight: 500; /* Reduced from bold */
   margin-right: 2px;
   border-radius: 4px;
   opacity: 0.9;
+  font-family: var(--font-time);
+  font-variant-numeric: tabular-nums;
 }
 
 .course-penalty-2 {
@@ -109,10 +111,13 @@
 .course-pen {
   text-align: right;
   white-space: nowrap;
-  font-weight: bold;
+  font-weight: 500; /* Reduced from bold */
   padding: 0 10px;
   margin-left: 5px;
   color: var(--text-primary);
+  font-family: var(--font-time);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.02em;
 }
 
 .course-pen.has-penalty {
@@ -127,9 +132,12 @@
 .course-total {
   text-align: right;
   white-space: nowrap;
-  font-weight: bold;
+  font-weight: 500; /* Reduced from bold */
   color: var(--accent-yellow);
   padding: 0 15px;
+  font-family: var(--font-time);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.02em;
 }
 
 .on-course-display.horizontal .course-row {
@@ -183,9 +191,30 @@
   line-height: normal;
 }
 
+/* More specific selectors to ensure the time styling takes precedence */
+.on-course-display.ledwall .course-row > div.course-total {
+  font-size: 24px;
+  font-weight: 500 !important; /* Explicitly lighter than the name */
+  color: var(--accent-yellow);
+  font-family: var(--font-time);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.02em;
+}
+
+.on-course-display.ledwall .course-row > div.course-pen {
+  font-weight: 500;
+  font-family: var(--font-time);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.02em;
+}
+
+.on-course-display.ledwall .course-row > div.course-name {
+  font-weight: 700; /* Explicitly heavier than time displays */
+}
+
 .on-course-display.ledwall .course-total {
-  font-size: 26px;
-  font-weight: 900 !important;
+  font-size: 24px;
+  font-weight: 600 !important; /* Reduced from 900 */
   color: var(--accent-yellow);
 }
 

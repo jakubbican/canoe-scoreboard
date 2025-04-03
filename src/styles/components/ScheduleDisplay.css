@@ -202,10 +202,12 @@
 .schedule-col.end-time {
   text-align: center;
   justify-content: center;
-  font-weight: 600;
+  font-weight: 500; /* Reduced from 600 */
   padding: 4px 6px;
   color: #00ffff !important;
-  font-weight: 700;
+  font-family: var(--font-time);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.02em;
 }
 
 /* Make all time columns match in style */

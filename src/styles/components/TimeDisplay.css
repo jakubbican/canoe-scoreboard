@@ -1,7 +1,8 @@
 .time-display {
   position: absolute;
-  font-family: var(--font-primary, "Rajdhani", Arial, sans-serif);
-  font-weight: 600;
+  font-family: var(--font-time);
+  font-weight: 500; /* Reduced from 600 */
+  font-variant-numeric: tabular-nums;
   z-index: 20;
   background-color: transparent;
   color: var(--accent-yellow);
@@ -10,6 +11,7 @@
   top: 90px;
   right: 20px;
   text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+  letter-spacing: -0.02em;
 }
 
 /* Horizontal layout specifics */
@@ -26,8 +28,8 @@
 
 /* LED wall layout specifics */
 .time-display.ledwall {
-  font-size: 36px;
-  top: 16px;
+  font-size: 32px;
+  top: 20px;
   left: auto;
   right: 100px;
   color: var(--accent-yellow);
