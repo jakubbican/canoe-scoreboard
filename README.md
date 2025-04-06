@@ -1,6 +1,6 @@
 # Canoe Scoreboard
 
-A web application for displaying canoe competition scoreboards, compatible with the existing control application CanoeLiveInterface by Martin „Mako" Šlachta (STiming) . This application is designed to work with different display types, including standard horizontal monitors, vertical displays, and custom LED walls.
+A web application for displaying canoe competition scoreboards, compatible with the existing control application CanoeLiveInterface by Martin „Mako" Šlachta (STiming) over Canoe123 system by Siwidata. This application is designed to work with different display types, including standard horizontal monitors, vertical displays, and custom LED walls.
 
 <div align="center">
   <a href="preview_lcd.png" target="_blank">
@@ -412,6 +412,7 @@ This project is licensed under the ?????.
 
 - Standa Ježek from Czech Canoe Union
 - Original CanoeLiveInterface scoreboard system by Martin „Mako" Šlachta (STiming)
+- Canoe123 core system for timing and scoring canoe races by Siwidata
 - React framework and community
 - Vite.js build tool
 - ...and especially my AI buddy Claude Sonnet 3.7
