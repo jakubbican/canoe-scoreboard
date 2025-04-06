@@ -194,7 +194,7 @@
 /* More specific selectors to ensure the time styling takes precedence */
 .on-course-display.ledwall .course-row > div.course-total {
   font-size: 24px;
-  font-weight: 500 !important; /* Explicitly lighter than the name */
+  font-weight: 700 !important; /* Explicitly lighter than the name */
   color: var(--accent-yellow);
   font-family: var(--font-time);
   font-variant-numeric: tabular-nums;

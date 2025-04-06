@@ -6,7 +6,7 @@
   font-family: var(--font-primary);
   color: var(--text-primary);
   z-index: 8;
-  background-color: rgba(34, 34, 34, 0.9);
+ /* background-color: rgba(34, 34, 34, 0.9);*/
   overflow: visible;
   border: none;
   box-shadow: none;
@@ -31,7 +31,7 @@
 .result-row {
   display: grid;
   align-items: center;
-  background-color: rgba(30, 30, 30, 0.7);
+ /* background-color: rgba(30, 30, 30, 0.7);*/
   padding: 0;
   margin: 2px 0;
   transition: background-color 0.3s ease;
@@ -107,7 +107,7 @@
 .result-behind {
   text-align: right;
   white-space: nowrap;
-  color: rgba(245, 245, 245, 0.7);
+  color: var(--text-primary);
   font-size: 0.85em;
   font-weight: 400; /* Explicit normal weight */
   padding-right: 15px;
@@ -151,7 +151,7 @@
 
 /* LED Wall layout - gen-x styled */
 .results-list.ledwall {
-  background-color: rgba(34, 34, 34, 0.9);
+  /*background-color: rgba(34, 34, 34, 0.9);*/
 }
 
 .results-list.ledwall .result-row {
@@ -178,7 +178,7 @@
 /* More specific selectors to override the general styling above */
 .results-list.ledwall .result-row > div.result-rank {
   font-weight: 700;
-  color: #ffffff;
+  color: var(--text-primary);
 }
 
 .results-list.ledwall .result-row > div.result-name {
@@ -194,8 +194,8 @@
 
 .results-list.ledwall .result-row > div.result-total {
   font-size: 24px;
-  font-weight: 500; /* Explicitly lighter than the name */
-  color: #ffffff;
+  font-weight: 600; /* Explicitly lighter than the name */
+  color: var(--text-primary);
   font-family: var(--font-time);
   font-variant-numeric: tabular-nums;
   letter-spacing: -0.02em;
@@ -204,7 +204,7 @@
 .results-list.ledwall .result-row > div.result-behind {
   font-size: 18px;
   font-weight: 400; /* Explicitly lighter than the name */
-  color: rgba(245, 245, 245, 0.85);
+  color: var(--text-primary);
   padding-right: 15px;
   font-family: var(--font-time);
   font-variant-numeric: tabular-nums;

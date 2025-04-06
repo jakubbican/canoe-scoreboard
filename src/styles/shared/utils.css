@@ -81,7 +81,7 @@
 .time-font {
   font-family: var(--font-time);
   font-variant-numeric: tabular-nums;
-  letter-spacing: -0.02em;
+  letter-spacing: 0;
   font-weight: 400; /* Reduced from default weight */
 }
 
@@ -90,19 +90,19 @@
   font-family: var(--font-time);
   font-weight: 400;
   font-variant-numeric: tabular-nums;
-  letter-spacing: -0.02em;
+  letter-spacing: 0;
 }
 
 .time-font-medium {
   font-family: var(--font-time);
-  font-weight: 500;
+  font-weight: 700;
   font-variant-numeric: tabular-nums;
-  letter-spacing: -0.02em;
+  letter-spacing: 0;
 }
 
 .time-font-bold {
   font-family: var(--font-time);
-  font-weight: 600; /* Reduced from 700 */
+  font-weight: 800; /* Reduced from 700 */
   font-variant-numeric: tabular-nums;
-  letter-spacing: -0.02em;
+  letter-spacing: 0;
 }
