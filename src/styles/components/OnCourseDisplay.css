@@ -88,7 +88,7 @@
   width: 24px;
   height: 24px;
   font-size: calc(var(--small-size) - 8px);
-  font-weight: 500; /* Reduced from bold */
+  font-weight: 800; /* Reduced from bold */
   margin-right: 2px;
   border-radius: 4px;
   opacity: 0.9;
@@ -166,9 +166,13 @@
   font-size: calc(var(--small-size) - 8px);
 }
 
+.on-course-display.ledwall {
+  height: 60px !important; /* Adjusted from 40px */
+}
+
 .on-course-display.ledwall .course-row {
-  grid-template-columns: 80px minmax(200px, 1fr) minmax(100px, auto) 80px;
-  height: 40px !important;
+  grid-template-columns: 80px minmax(200px, 1fr) minmax(100px, auto) 100px;
+  height: 60px !important; /* Increased from 40px */
   background-color: rgba(51, 102, 153, 0.2);
   border-left: 3px solid var(--accent-yellow);
   border-right: 1px solid var(--accent-yellow);
@@ -185,15 +189,15 @@
 }
 
 .on-course-display.ledwall .course-row > div {
-  font-size: 24px;
-  padding: 0 10px;
+  font-size: 36px; /* Increased from 24px */
+  padding: 0 7px;
   font-weight: 600;
   line-height: normal;
 }
 
 /* More specific selectors to ensure the time styling takes precedence */
 .on-course-display.ledwall .course-row > div.course-total {
-  font-size: 24px;
+  /*font-size: 24px;*/
   font-weight: 700 !important; /* Explicitly lighter than the name */
   color: var(--accent-yellow);
   font-family: var(--font-time);
@@ -221,7 +225,7 @@
 .on-course-display.ledwall .course-gate-penalty {
   width: 28px;
   height: 28px;
-  font-size: calc(var(--small-size) - 8px);
+  font-size: 24px;
   margin: 2px;
 }
 

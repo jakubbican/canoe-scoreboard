@@ -151,9 +151,13 @@
   font-size: calc(var(--small-size) - 8px);
 }
 
+.current-competitor.ledwall {
+  height: 60px !important; /* Increased from 45px */
+}
+
 .current-competitor.ledwall .competitor-row {
-  grid-template-columns: 80px minmax(200px, 1fr) minmax(100px, auto) 80px;
-  height: 40px !important;
+  grid-template-columns: 80px minmax(200px, 1fr) minmax(100px, auto) 100px;
+  height: 60px !important; /* Increased from 40px */
   background-color: rgba(51, 102, 153, 0.2);
   border-left: 3px solid var(--accent-yellow);
   border-right: 1px solid var(--accent-yellow);
@@ -170,15 +174,15 @@
 }
 
 .current-competitor.ledwall .competitor-row > div {
-  font-size: 24px;
-  padding: 0 10px;
+  font-size: 36px; /* Increased from 24px */
+  padding: 0 7px;
   font-weight: 600;
   line-height: normal;
 }
 
 /* More specific selectors to ensure the time styling takes precedence */
 .current-competitor.ledwall .competitor-row > div.competitor-total {
-  font-size: 24px;
+  /*font-size: 36px;*/
   font-weight: 500 !important; /* Explicitly lighter than the name */
   color: var(--accent-yellow);
   font-family: var(--font-time);
@@ -206,7 +210,7 @@
 .current-competitor.ledwall .gate-penalty {
   width: 28px;
   height: 28px;
-  font-size: calc(var(--small-size) - 8px);
+  font-size: 24px;
   margin: 2px;
 }
 

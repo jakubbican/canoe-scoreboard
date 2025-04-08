@@ -64,12 +64,29 @@
   white-space: nowrap;
   font-weight: bold;
   padding-left: 15px;
+  font-family: var(--font-time); /* Use monospace font */
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.02em;
 }
 
 .result-bib {
   text-align: center;
   white-space: nowrap;
   font-weight: bold;
+  font-family: var(--font-time); /* Use monospace font */
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.02em;
+  background-color: #33669933;/*var(--primary-light); /* Add a background color */
+  color: var(--text-primary); /* Text color for contrast */
+  padding: 2px 6px; /* Add padding for the box */
+  border-radius: 4px; /* Rounded corners for the box */
+  display: inline-block; /* Ensure it behaves like a box */
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2); /* Add a subtle shadow */
+}
+
+.results-list.ledwall .result-row > div.result-bib {
+  font-size: 22px; /* Make it smaller */
+  padding: 2px 2px; /* Add padding for the box */
 }
 
 .result-name {
@@ -82,7 +99,7 @@
 }
 
 .result-pen {
-  text-align: right;
+  text-align: center;
   white-space: nowrap;
   font-weight: 500; /* Reduced from bold */
   padding: 0 10px;
@@ -91,6 +108,28 @@
   font-family: var(--font-time);
   font-variant-numeric: tabular-nums;
   letter-spacing: -0.02em;
+  background-color: var(--bg-primary-transparent);
+  border-radius: 4px;
+  display: inline-block;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+}
+
+/* Horizontal layout adjustments */
+.results-list.horizontal .result-row > div.result-pen {
+  font-size: 22px; /* Adjust font size for horizontal layout */
+  padding: 2px 4px; /* Adjust padding */
+}
+
+/* Vertical layout adjustments */
+.results-list.vertical .result-row > div.result-pen {
+  font-size: 24px; /* Adjust font size for vertical layout */
+  padding: 2px 5px; /* Adjust padding */
+}
+
+/* LED Wall layout adjustments */
+.results-list.ledwall .result-row > div.result-pen {
+  font-size: 22px; /* Adjust font size for LED wall layout */
+  padding: 2px 4px; /* Adjust padding */
 }
 
 .result-total {
@@ -135,7 +174,7 @@
 /* Vertical layout */
 .results-list.vertical .result-row {
   height: 40px;
-  grid-template-columns: 60px 60px minmax(80px, 1fr) 80px 140px 140px;
+  grid-template-columns: 90px 40px minmax(80px, 1fr) 60px 140px 140px;
 }
 
 .results-list.vertical .result-row > div {
@@ -149,14 +188,30 @@
   white-space: nowrap;
 }
 
+.results-list.vertical .result-row > div.result-behind {
+  font-size: 24px;
+  font-weight: 400; /* Explicitly lighter than the name */
+  padding-right: 20px;
+  white-space: nowrap;
+  font-family: var(--font-time);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.02em;
+}
+
+.results-list.vertical .result-row > div.result-bib {
+  font-size: 24px;
+  padding: 2px 2px;
+}
+
+
 /* LED Wall layout - gen-x styled */
 .results-list.ledwall {
   /*background-color: rgba(34, 34, 34, 0.9);*/
 }
 
 .results-list.ledwall .result-row {
-  height: 40px;
-  grid-template-columns: 50px 60px minmax(60px, 1fr) 60px 100px 120px;
+  height: 56px; /* Increased from 40px */
+  grid-template-columns: 80px 40px minmax(60px, 1fr) 40px 100px 45px;
   border-left: 3px solid var(--accent-green);
 }
 
@@ -170,14 +225,14 @@
 
 /* General styling for all cells in the row */
 .results-list.ledwall .result-row > div {
-  font-size: 24px;
-  padding: 0 5px;
+  font-size: 36px; /* Increased from 24px */
+  padding: 0 10px;
   font-weight: 600;
 }
 
 /* More specific selectors to override the general styling above */
 .results-list.ledwall .result-row > div.result-rank {
-  font-weight: 700;
+  font-weight: 500;
   color: var(--text-primary);
 }
 
@@ -193,8 +248,8 @@
 }
 
 .results-list.ledwall .result-row > div.result-total {
-  font-size: 24px;
-  font-weight: 600; /* Explicitly lighter than the name */
+  /*font-size: 24px;*/
+  font-weight: 500; /* Explicitly lighter than the name */
   color: var(--text-primary);
   font-family: var(--font-time);
   font-variant-numeric: tabular-nums;
@@ -202,13 +257,14 @@
 }
 
 .results-list.ledwall .result-row > div.result-behind {
-  font-size: 18px;
+  font-size: 22px;
   font-weight: 400; /* Explicitly lighter than the name */
   color: var(--text-primary);
   padding-right: 15px;
   font-family: var(--font-time);
   font-variant-numeric: tabular-nums;
   letter-spacing: -0.02em;
+  display: none;
 }
 
 /* Enhanced highlighting for LED wall - consistent with other display types */
@@ -227,18 +283,7 @@
 }
 
 /* Adding a scroll hint indicator at the bottom of the results area */
-.scoreboard-results::after {
-  content: "";
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  height: 20px;
-  background: linear-gradient(to top, var(--primary-color), transparent);
-  pointer-events: none;
-  z-index: 50;
-  opacity: 0.7;
-}
+
 
 /* Improved alignment for penalty cell */
 .result-row .result-pen {

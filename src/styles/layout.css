@@ -215,19 +215,7 @@
   margin-bottom: 0 !important;
 }
 
-/* Help with scrolling indicators */
-.scoreboard-results::after {
-  content: "";
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  height: 20px;
-  background: linear-gradient(to top, var(--primary-color), transparent);
-  pointer-events: none;
-  opacity: 0.7;
-  z-index: 9;
-}
+
 
 /* Adjustments for the result item height based on layout */
 .layout-horizontal .result-row {

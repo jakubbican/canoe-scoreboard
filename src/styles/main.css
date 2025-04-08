@@ -7,76 +7,100 @@
 @import './shared/layout-base.css';
 @import './shared/component-base.css';
 
-/* Define local fonts */
+/* Define Inter font family */
 @font-face {
-  font-family: "Rajdhani";
-  src: url("../fonts/Rajdhani-Light.ttf") format("truetype");
-  font-weight: 300;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: "Rajdhani";
-  src: url("../fonts/Rajdhani-Regular.ttf") format("truetype");
+  font-family: "Inter";
+  src: url("../fonts/Inter_18pt-Regular.ttf") format("truetype");
   font-weight: 400;
   font-style: normal;
   font-display: swap;
 }
 
 @font-face {
-  font-family: "Rajdhani";
-  src: url("../fonts/Rajdhani-Medium.ttf") format("truetype");
-  font-weight: 500;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: "Rajdhani";
-  src: url("../fonts/Rajdhani-SemiBold.ttf") format("truetype");
-  font-weight: 600;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: "Rajdhani";
-  src: url("../fonts/Rajdhani-Bold.ttf") format("truetype");
+  font-family: "Inter";
+  src: url("../fonts/Inter_18pt-Bold.ttf") format("truetype");
   font-weight: 700;
   font-style: normal;
   font-display: swap;
 }
 
-/* Import monospace font for time displays */
 @font-face {
-  font-family: "Ubuntu Mono";
-  src: url("../fonts/UbuntuMono-Regular.ttf") format("truetype");
-  font-weight: 400;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: "Ubuntu Mono";
-  src: url("../fonts/UbuntuMono-Italic.ttf") format("truetype");
+  font-family: "Inter";
+  src: url("../fonts/Inter_18pt-Italic.ttf") format("truetype");
   font-weight: 400;
   font-style: italic;
   font-display: swap;
 }
 
 @font-face {
-  font-family: "Ubuntu Mono";
-  src: url("../fonts/UbuntuMono-Bold.ttf") format("truetype");
+  font-family: "Inter";
+  src: url("../fonts/Inter_18pt-BoldItalic.ttf") format("truetype");
+  font-weight: 700;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Inter";
+  src: url("../fonts/Inter_18pt-Light.ttf") format("truetype");
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Inter";
+  src: url("../fonts/Inter_18pt-LightItalic.ttf") format("truetype");
+  font-weight: 300;
+  font-style: italic;
+  font-display: swap;
+}
+
+/* Define JetBrains Mono font family */
+@font-face {
+  font-family: "JetBrains Mono";
+  src: url("../fonts/JetBrainsMono-Regular.ttf") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "JetBrains Mono";
+  src: url("../fonts/JetBrainsMono-Bold.ttf") format("truetype");
   font-weight: 700;
   font-style: normal;
   font-display: swap;
 }
 
 @font-face {
-  font-family: "Ubuntu Mono";
-  src: url("../fonts/UbuntuMono-BoldItalic.ttf") format("truetype");
+  font-family: "JetBrains Mono";
+  src: url("../fonts/JetBrainsMono-Italic.ttf") format("truetype");
+  font-weight: 400;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "JetBrains Mono";
+  src: url("../fonts/JetBrainsMono-BoldItalic.ttf") format("truetype");
   font-weight: 700;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "JetBrains Mono";
+  src: url("../fonts/JetBrainsMono-Light.ttf") format("truetype");
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "JetBrains Mono";
+  src: url("../fonts/JetBrainsMono-LightItalic.ttf") format("truetype");
+  font-weight: 300;
   font-style: italic;
   font-display: swap;
 }
