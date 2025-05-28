@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LED Wall Wrapper</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #000000;
+            overflow: hidden; /* Prevent scrollbars */
+        }
+        #content-frame {
+            position: absolute;
+            top: 0;
+            left: 0;
+            border: none; /* Remove iframe border */
+        }
+    </style>
+</head>
+<body>
+    <iframe id="content-frame" title="LED Wall Content"></iframe>
+
+    <script>
+        (function() {
+            // Default values
+            const defaultUrl = 'about:blank';
+            const defaultWidth = '1280';
+            const defaultHeight = '720';
+            
+            // Get URL parameters
+            const urlParams = new URLSearchParams(window.location.search);
+            const contentUrl = urlParams.get('url') || defaultUrl;
+            const width = urlParams.get('width') || defaultWidth;
+            const height = urlParams.get('height') || defaultHeight;
+            
+            const iframe = document.getElementById('content-frame');
+            
+            // Set iframe dimensions
+            iframe.width = width;
+            iframe.height = height;
+            
+            // Set iframe source with cache-busting parameter
+            // Add timestamp to prevent caching
+            const cacheBuster = `cache=${Date.now()}`;
+            const hasQuery = contentUrl.includes('?');
+            const separator = hasQuery ? '&' : '?';
+            
+            iframe.src = `${contentUrl}${separator}${cacheBuster}`;
+            
+            // Prevent iframe content caching with headers (note: this works client-side only)
+            iframe.onload = function() {
+                try {
+                    // Attempt to set cache control for iframe content (limited by same-origin policy)
+                    if (iframe.contentDocument) {
+                        iframe.contentDocument.querySelector('meta[http-equiv="Cache-Control"]')?.remove();
+                        const meta = iframe.contentDocument.createElement('meta');
+                        meta.setAttribute('http-equiv', 'Cache-Control');
+                        meta.setAttribute('content', 'no-cache, no-store, must-revalidate');
+                        iframe.contentDocument.head.appendChild(meta);
+                    }
+                } catch (e) {
+                    // Cross-origin restrictions may prevent this from working
+                    console.log('Could not modify iframe headers due to same-origin policy');
+                }
+            };
+        })();
+    </script>
+</body>
+</html>
