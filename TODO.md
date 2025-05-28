@@ -1,7 +1,14 @@
 # TODO
 
+- [ ] fix screenshots for new layout and fonts
+- [ ] total time on OnCourse and CurrentCompetitor with teths and hudredths of seconds does not fit into line
+- [ ] more contrast into current/oncourse running time and penalties
+
+
 - [ ] skinovatelnost/vyčištění umístění a parametrizace stylizace
 - [ ] true responsivita
+
+- [ ] consider keeping header and title always on
 
 - [ ] ! korektní výsledky 2 jízd na better score
 - [ ] zobrazení umístění po dojetí v aktivní řádce - možná bude muset počkat na zvládnuté závody na 2 jízdy

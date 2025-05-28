@@ -2,8 +2,8 @@
 
 :root {
   /* Base colors */
-  --primary-color: #222222;
-  --primary-light: #2d2d2d;
+  --primary-color: #111111;
+  --primary-light: #1d1d1d;
   --secondary-color: #d0d0d0;
   --accent-color: #336699;
   --highlight-color: #993333;
@@ -67,9 +67,9 @@
   --results-grid: 120px 80px 1fr 80px 70px 150px 150px;
   --row-height: 80px;
 
-  --font-primary: "Rajdhani", "Arial", sans-serif;
-  --font-display: "Rajdhani", "Arial", sans-serif;
-  --font-time: "Ubuntu Mono", monospace;
+  --font-primary: "Inter", "Arial", sans-serif;
+  --font-display: "Inter", "Arial", sans-serif;
+  --font-time: "JetBrains Mono", monospace;
 
   /* Other layout variables */
   --top-bar-height: 70px;
@@ -107,11 +107,11 @@
   --content-width: 768px;
   --content-height: 384px;
   --header-size: 32px;
-  --body-size: 28px;
+  --body-size: 36px; /* Increased from 28px */
   --small-size: 24px;
   --spacing-unit: 6px;
   --results-grid: 60px 55px 1fr 70px 60px 110px 90px;
-  --row-height: 44px;
+  --row-height: 60px; /* Increased from 44px */
 }
 
 .layout-custom {
