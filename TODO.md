@@ -1,8 +1,6 @@
 # TODO
 
 - [ ] fix screenshots for new layout and fonts
-- [ ] total time on OnCourse and CurrentCompetitor with teths and hudredths of seconds does not fit into line
-- [ ] more contrast into current/oncourse running time and penalties
 
 
 - [ ] skinovatelnost/vyčištění umístění a parametrizace stylizace
@@ -71,6 +69,8 @@
 - [X] assets referencing when app in folder!!
 - [X] přesné rozlišení 768x384
 - [X] h2r graphics - WORKS!
+- [X] total time on OnCourse and CurrentCompetitor with teths and hudredths of seconds does not fit into line
+- [X] more contrast into current/oncourse running time and penalties
 
 # WON'T DO
 

@@ -156,7 +156,7 @@
 }
 
 .current-competitor.ledwall .competitor-row {
-  grid-template-columns: 80px minmax(200px, 1fr) minmax(100px, auto) 100px;
+  grid-template-columns: 80px minmax(200px, 1fr) minmax(100px, auto) 100px 45px;
   height: 60px !important; /* Increased from 40px */
   background-color: rgba(51, 102, 153, 0.2);
   border-left: 3px solid var(--accent-yellow);

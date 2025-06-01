@@ -97,7 +97,7 @@
 }
 
 .course-penalty-2 {
-  color: var(--text-secondary);
+  color: var(--text-primary);
   background-color: rgba(255, 164, 0, 0.8);
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
 }
@@ -171,7 +171,7 @@
 }
 
 .on-course-display.ledwall .course-row {
-  grid-template-columns: 80px minmax(200px, 1fr) minmax(100px, auto) 100px;
+  grid-template-columns: 80px minmax(200px, 1fr) minmax(100px, auto) 100px 45px;
   height: 60px !important; /* Increased from 40px */
   background-color: rgba(51, 102, 153, 0.2);
   border-left: 3px solid var(--accent-yellow);
